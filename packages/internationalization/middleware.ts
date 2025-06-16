@@ -1,5 +1,3 @@
-import { match as matchLocale } from '@formatjs/intl-localematcher';
-import Negotiator from 'negotiator';
 import { createI18nMiddleware } from 'next-international/middleware';
 import type { NextRequest } from 'next/server';
 import languine from './languine.json';
@@ -10,28 +8,9 @@ const I18nMiddleware = createI18nMiddleware({
   locales,
   defaultLocale: 'en',
   urlMappingStrategy: 'rewriteDefault',
-  resolveLocaleFromRequest: (request: NextRequest) => {
-    try {
-      const headers = Object.fromEntries(request.headers.entries());
-      const negotiator = new Negotiator({ headers });
-      const acceptedLanguages = negotiator.languages();
-
-      // Filter out invalid locales and ensure we have valid locale codes
-      const validLanguages = acceptedLanguages
-        .map(lang => lang.split('-')[0]) // Take only the language part (e.g., 'en' from 'en-US')
-        .filter(lang => /^[a-z]{2}$/.test(lang)) // Only accept 2-letter language codes
-        .filter(lang => locales.includes(lang)); // Only accept supported locales
-
-      if (validLanguages.length === 0) {
-        return 'en'; // Default fallback
-      }
-
-      const matchedLocale = matchLocale(validLanguages, locales, 'en');
-      return matchedLocale;
-    } catch (error) {
-      console.warn('Error in locale resolution, falling back to default:', error);
-      return 'en';
-    }
+  resolveLocaleFromRequest: () => {
+    // Since we only support English now, always return 'en'
+    return 'en';
   },
 });
 

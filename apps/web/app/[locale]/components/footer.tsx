@@ -3,11 +3,10 @@ import { legal } from '@repo/cms';
 import { Feed } from '@repo/cms/components/feed';
 import { Status } from '@repo/observability/status';
 import Link from 'next/link';
-import { LanguageSwitcher } from './header/language-switcher';
 
 export const Footer = () => (
   <Feed queries={[legal.postsQuery]}>
-    {async ([data]) => {
+    {async ([data]: [any]) => {
       'use server';
 
       const navigationItems = [
@@ -59,10 +58,6 @@ export const Footer = () => (
                   </div>
                   <div className="flex flex-col gap-4">
                     <Status />
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm text-foreground/75">Language:</span>
-                      <LanguageSwitcher />
-                    </div>
                   </div>
                 </div>
                 <div className="grid items-start gap-10 lg:grid-cols-3">
