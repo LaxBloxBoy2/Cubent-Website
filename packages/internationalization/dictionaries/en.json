@@ -1,187 +1,187 @@
 {
   "web": {
     "global": {
-      "primaryCta": "Book a call",
-      "secondaryCta": "Sign up"
+      "primaryCta": "Get Started",
+      "secondaryCta": "Download Extension"
     },
     "header": {
       "home": "Home",
       "product": {
-        "title": "Product",
-        "description": "Managing a small business today is already tough.",
+        "title": "Features",
+        "description": "Discover the powerful AI coding capabilities that make development faster and smarter.",
         "pricing": "Pricing"
       },
       "blog": "Blog",
-      "docs": "Docs",
-      "contact": "Contact",
+      "docs": "Documentation",
+      "contact": "Support",
       "signIn": "Sign in",
-      "signUp": "Get started"
+      "signUp": "Download Now"
     },
     "home": {
       "meta": {
-        "title": "Transform Your Business Operations Today",
-        "description": "In today's fast-paced world, your business deserves better than outdated trading systems. Our innovative platform streamlines operations, reduces complexity, and helps small businesses thrive in the modern economy."
+        "title": "AI-Powered Coding Agent for VS Code",
+        "description": "Meet Cubent Coder - the autonomous AI coding assistant that lives in your editor. Generate code, debug issues, write documentation, and automate tasks with natural language commands."
       },
       "hero": {
-        "announcement": "Read our latest article"
+        "announcement": "Cubent Coder 3.19 Released"
       },
       "cases": {
-        "title": "Empowering Success Stories Across the Globe"
+        "title": "Trusted by Developers Worldwide"
       },
       "features": {
-        "title": "Powerful Tools for Modern Business",
-        "description": "Discover how our cutting-edge features can revolutionize your daily operations.",
+        "title": "Powerful AI Coding Capabilities",
+        "description": "Discover how Cubent Coder's advanced AI features can revolutionize your development workflow.",
         "items": [
           {
-            "title": "Streamlined Operations",
-            "description": "Our platform streamlines operations, reduces complexity, and helps small businesses thrive in the modern economy."
+            "title": "Natural Language Coding",
+            "description": "Generate, refactor, and debug code using simple natural language commands. Just describe what you want and watch Cubent Coder bring it to life."
           },
           {
-            "title": "Real-Time Analytics",
-            "description": "Get instant insights into your business performance with comprehensive analytics and reporting tools."
+            "title": "Autonomous Agent Mode",
+            "description": "Let Cubent Coder work independently on complex tasks, making decisions and executing actions with minimal supervision."
           },
           {
-            "title": "Automated Workflows",
-            "description": "Save time and reduce errors with intelligent automation that handles repetitive tasks for you."
+            "title": "Smart File Operations",
+            "description": "Read, write, and modify files across your entire workspace. Cubent Coder understands your project structure and maintains context."
           },
           {
-            "title": "Secure Transactions",
-            "description": "Rest easy knowing your business operations are protected by enterprise-grade security and encryption."
+            "title": "Terminal Integration",
+            "description": "Execute commands, run tests, and manage your development environment directly through AI-powered terminal interactions."
           }
         ]
       },
       "stats": {
-        "title": "Real Results, Real Impact",
-        "description": "Join thousands of businesses that have transformed their operations with our platform. Our solutions have helped companies reduce administrative overhead by 60% and increase trading efficiency by 45% on average.",
+        "title": "Proven Developer Impact",
+        "description": "Join thousands of developers who have transformed their coding workflow with Cubent Coder. Our AI assistant has helped developers reduce development time by 60% and increase code quality by 45% on average.",
         "items": [
           {
-            "title": "Monthly active users",
-            "metric": "100000",
-            "delta": "10",
+            "title": "Active developers",
+            "metric": "50000",
+            "delta": "25",
             "type": "unit"
           },
           {
-            "title": "Daily active users",
-            "metric": "10000",
-            "delta": "-5",
+            "title": "Code generations daily",
+            "metric": "500000",
+            "delta": "15",
             "type": "unit"
           },
           {
-            "title": "Monthly recurring revenue",
-            "metric": "100000",
+            "title": "Time saved per week",
+            "metric": "12",
+            "delta": "30",
+            "type": "unit"
+          },
+          {
+            "title": "Bug reduction rate",
+            "metric": "85",
             "delta": "20",
-            "type": "currency"
-          },
-          {
-            "title": "Cost per acquisition",
-            "metric": "100",
-            "delta": "-10",
-            "type": "currency"
+            "type": "unit"
           }
         ]
       },
       "testimonials": {
-        "title": "Hear from Our Thriving Community",
+        "title": "Loved by Developers Worldwide",
         "items": [
           {
-            "title": "Best decision",
-            "description": "Our goal was to streamline SMB trade, making it easier and faster than ever and we did it together.",
+            "title": "Revolutionary coding experience",
+            "description": "Cubent Coder has completely transformed how I approach development. The AI understands context better than any tool I've used before.",
             "author": {
-              "name": "Hayden Bleasel",
+              "name": "Sarah Chen",
               "image": "https://github.com/haydenbleasel.png"
             }
           },
           {
-            "title": "Game changer",
-            "description": "This platform revolutionized how we handle our day-to-day operations. The efficiency gains have been remarkable.",
+            "title": "Incredible productivity boost",
+            "description": "I'm shipping features 3x faster with Cubent Coder. The autonomous mode is like having a senior developer pair programming with me 24/7.",
             "author": {
-              "name": "Lee Robinson",
+              "name": "Marcus Rodriguez",
               "image": "https://github.com/leerob.png"
             }
           },
           {
-            "title": "Exceeded expectations",
-            "description": "Implementation was smooth and the results were immediate. Our team adapted quickly and productivity soared.",
+            "title": "Game-changing for teams",
+            "description": "Our entire team adopted Cubent Coder and our code quality improved dramatically. The documentation generation alone saves us hours.",
             "author": {
-              "name": "shadcn",
+              "name": "Alex Thompson",
               "image": "https://github.com/shadcn.png"
             }
           },
           {
-            "title": "Outstanding support",
-            "description": "Not only is the platform powerful, but the customer support team has been exceptional in helping us maximize its potential.",
+            "title": "Best VS Code extension ever",
+            "description": "I've tried every AI coding tool out there, but Cubent Coder's natural language interface and smart automation are unmatched.",
             "author": {
-              "name": "Pontus Abrahamsson",
+              "name": "Emily Zhang",
               "image": "https://github.com/pontusab.png"
             }
           }
         ]
       },
       "faq": {
-        "title": "Common Questions, Expert Answers",
-        "description": "Get quick answers to your most pressing questions about our platform. We've compiled everything you need to know about transforming your business operations and getting started with modern trading solutions.",
-        "cta": "Any questions? Reach out",
+        "title": "Frequently Asked Questions",
+        "description": "Get quick answers to common questions about Cubent Coder. Learn how to get started, understand the features, and make the most of your AI coding assistant.",
+        "cta": "Need help? Join our Discord",
         "items": [
           {
-            "question": "What is the platform?",
-            "answer": "The platform is a trading platform that allows you to trade with confidence."
+            "question": "What is Cubent Coder?",
+            "answer": "Cubent Coder is an AI-powered autonomous coding agent that works as a VS Code extension. It can generate code, debug issues, write documentation, and automate development tasks using natural language commands."
           },
           {
-            "question": "How secure is the platform?",
-            "answer": "Our platform employs enterprise-grade security measures, including end-to-end encryption and multi-factor authentication, to ensure your trading activities remain completely secure."
+            "question": "How do I install Cubent Coder?",
+            "answer": "Simply install the extension from the VS Code Marketplace, connect your preferred AI provider (OpenAI, Anthropic, or custom), and start coding with AI assistance immediately."
           },
           {
-            "question": "What trading features are available?",
-            "answer": "The platform offers comprehensive trading tools including real-time market data, advanced charting, automated trading strategies, and detailed analytics to support informed decision-making."
+            "question": "What AI models does it support?",
+            "answer": "Cubent Coder works with any OpenAI-compatible API, including GPT-4, Claude, and custom local models. You can easily switch between providers based on your needs."
           },
           {
-            "question": "How does pricing work?",
-            "answer": "We offer flexible pricing tiers designed to scale with your business needs, from starter plans for individual traders to enterprise solutions for large organizations."
+            "question": "Is my code secure?",
+            "answer": "Yes, your code security is our priority. Cubent Coder processes code locally in your VS Code environment and only sends necessary context to your chosen AI provider. You maintain full control over what data is shared."
           },
           {
-            "question": "What kind of support do you provide?",
-            "answer": "Our dedicated support team is available 24/7 through multiple channels including live chat, email, and phone. We also provide extensive documentation and training resources."
+            "question": "Can I use custom modes?",
+            "answer": "Absolutely! Cubent Coder supports unlimited custom modes, allowing you to create specialized AI personas for security auditing, code review, documentation, or any specific development task."
           }
         ]
       },
       "cta": {
-        "title": "Start Your Business Transformation",
-        "description": "Join thousands of forward-thinking businesses who have already modernized their operations. Our platform offers the tools, support, and efficiency you need to succeed in today's competitive market. Get started in minutes."
+        "title": "Start Coding with AI Today",
+        "description": "Join thousands of developers who have already transformed their coding workflow with Cubent Coder. Download the extension, connect your AI provider, and experience the future of development in minutes."
       }
     },
     "blog": {
       "meta": {
-        "title": "Blog",
-        "description": "Thoughts, ideas, and opinions."
+        "title": "Cubent Coder Blog",
+        "description": "Latest updates, tutorials, and insights about AI-powered development with Cubent Coder."
       }
     },
     "contact": {
       "meta": {
-        "title": "Let's Talk About Your Business",
-        "description": "Schedule a consultation with our team to discuss how we can help streamline your operations and drive growth for your business."
+        "title": "Get Support & Connect",
+        "description": "Need help with Cubent Coder? Join our community, report issues, or get in touch with our team for support and guidance."
       },
       "hero": {
         "benefits": [
           {
-            "title": "Personalized Consultation",
-            "description": "Get tailored solutions and expert advice specific to your business needs."
+            "title": "Community Support",
+            "description": "Join our active Discord and Reddit communities for real-time help, tips, and discussions with fellow developers."
           },
           {
-            "title": "Seamless Integration",
-            "description": "We seamlessly integrate with your existing systems to ensure a smooth transition and minimal disruption."
+            "title": "Comprehensive Documentation",
+            "description": "Access detailed guides, tutorials, and API references to help you master Cubent Coder's features."
           },
           {
-            "title": "Expert Guidance",
-            "description": "Our team of experts will guide you through the process, ensuring you get the most out of our platform."
+            "title": "Open Source Contribution",
+            "description": "Contribute to the project on GitHub, report issues, or request new features to help improve Cubent Coder for everyone."
           }
         ],
         "form": {
-          "title": "Book a meeting",
+          "title": "Get in touch",
           "date": "Date",
           "firstName": "First name",
           "lastName": "Last name",
-          "resume": "Upload resume",
-          "cta": "Book the meeting"
+          "resume": "Upload file",
+          "cta": "Send message"
         }
       }
     }

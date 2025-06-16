@@ -3,6 +3,7 @@ import { legal } from '@repo/cms';
 import { Feed } from '@repo/cms/components/feed';
 import { Status } from '@repo/observability/status';
 import Link from 'next/link';
+import { LanguageSwitcher } from './header/language-switcher';
 
 export const Footer = () => (
   <Feed queries={[legal.postsQuery]}>
@@ -45,18 +46,24 @@ export const Footer = () => (
       return (
         <section className="dark border-foreground/10 border-t">
           <div className="w-full bg-background py-20 text-foreground lg:py-40">
-            <div className="container mx-auto">
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
               <div className="grid items-center gap-10 lg:grid-cols-2">
                 <div className="flex flex-col items-start gap-8">
                   <div className="flex flex-col gap-2">
                     <h2 className="max-w-xl text-left font-regular text-3xl tracking-tighter md:text-5xl">
-                      next-forge
+                      Cubent
                     </h2>
                     <p className="max-w-lg text-left text-foreground/75 text-lg leading-relaxed tracking-tight">
-                      This is the start of something new.
+                      The future of AI-powered coding.
                     </p>
                   </div>
-                  <Status />
+                  <div className="flex flex-col gap-4">
+                    <Status />
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm text-foreground/75">Language:</span>
+                      <LanguageSwitcher />
+                    </div>
+                  </div>
                 </div>
                 <div className="grid items-start gap-10 lg:grid-cols-3">
                   {navigationItems.map((item) => (

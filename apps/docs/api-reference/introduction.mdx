@@ -1,23 +1,51 @@
 ---
-title: 'Introduction'
-description: 'Example section for showcasing API endpoints'
+title: 'API Reference'
+description: 'Cubent Coder Extension API and Integration Guide'
 ---
 
-<Note>
-  If you're not looking to build API reference documentation, you can delete
-  this section by removing the api-reference folder.
-</Note>
+## Overview
 
-## Welcome
+Cubent Coder provides a comprehensive API for extension developers and advanced users who want to integrate with or extend the functionality of the AI coding agent.
 
-There are two ways to build API documentation: [OpenAPI](https://mintlify.com/docs/api-playground/openapi/setup) and [MDX components](https://mintlify.com/docs/api-playground/mdx/configuration). For the starter kit, we are using the following OpenAPI specification.
+## Extension API
+
+The Cubent Coder extension exposes several APIs that allow other VS Code extensions to interact with it:
+
+### Core API
+
+- **Message Handling**: Send and receive messages from the AI agent
+- **Mode Management**: Programmatically switch between different AI modes
+- **Task Execution**: Trigger autonomous tasks and monitor their progress
+- **Context Management**: Access and modify the AI's context window
+
+### Integration Points
+
+- **Custom Tools**: Register new tools that the AI can use
+- **Model Providers**: Add support for additional AI models
+- **Workflow Hooks**: Integrate with existing development workflows
+
+## MCP (Model Context Protocol)
+
+Cubent Coder supports MCP for extending AI capabilities:
 
 <Card
-  title="Plant Store Endpoints"
-  icon="leaf"
-  href="https://github.com/mintlify/starter/blob/main/api-reference/openapi.json"
+  title="MCP Integration Guide"
+  icon="plug"
+  href="/advanced/mcp-integration"
 >
-  View the OpenAPI specification file
+  Learn how to create custom tools and integrations
+</Card>
+
+## WebView API
+
+For custom UI components and advanced interactions:
+
+<Card
+  title="WebView Development"
+  icon="code"
+  href="https://github.com/LaxBloxBoy2/Cubent/tree/main/webview-ui"
+>
+  Explore the WebView UI source code and examples
 </Card>
 
 ## Authentication

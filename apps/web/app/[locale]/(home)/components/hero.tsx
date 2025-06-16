@@ -12,7 +12,7 @@ type HeroProps = {
 
 export const Hero = async ({ dictionary }: HeroProps) => (
   <div className="w-full">
-    <div className="container mx-auto">
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8">
       <div className="flex flex-col items-center justify-center gap-8 py-20 lg:py-40">
         <div>
           <Feed queries={[blog.latestPostQuery]}>

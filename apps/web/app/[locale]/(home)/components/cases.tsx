@@ -35,7 +35,7 @@ export const Cases = ({ dictionary }: CasesProps) => {
 
   return (
     <div className="w-full py-20 lg:py-40">
-      <div className="container mx-auto">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col gap-10">
           <h2 className="text-left font-regular text-xl tracking-tighter md:text-5xl lg:max-w-xl">
             {dictionary.web.home.cases.title}

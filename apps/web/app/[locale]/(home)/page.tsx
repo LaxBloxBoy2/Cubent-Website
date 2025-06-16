@@ -7,6 +7,7 @@ import { CTA } from './components/cta';
 import { FAQ } from './components/faq';
 import { Features } from './components/features';
 import { Hero } from './components/hero';
+import { Mockup } from './components/mockup';
 import { Stats } from './components/stats';
 import { Testimonials } from './components/testimonials';
 
@@ -38,6 +39,7 @@ const Home = async ({ params }: HomeProps) => {
         </div>
       )}
       <Hero dictionary={dictionary} />
+      <Mockup />
       <Cases dictionary={dictionary} />
       <Features dictionary={dictionary} />
       <Stats dictionary={dictionary} />

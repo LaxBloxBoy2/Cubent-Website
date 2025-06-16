@@ -7,7 +7,7 @@ type StatsProps = {
 
 export const Stats = ({ dictionary }: StatsProps) => (
   <div className="w-full py-20 lg:py-40">
-    <div className="container mx-auto">
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8">
       <div className="grid grid-cols-1 gap-10 lg:grid-cols-2">
         <div className="flex flex-col items-start gap-4">
           <div className="flex flex-col gap-2">

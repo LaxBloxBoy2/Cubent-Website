@@ -1,8 +1,9 @@
 {
-  "name": "next-forge",
-  "version": "5.0.2",
+  "name": "cubent-coder-web",
+  "version": "3.19.0",
+  "description": "AI-Powered Autonomous Coding Agent - Website and Documentation",
   "bin": {
-    "next-forge": "dist/index.js"
+    "cubent-web": "dist/index.js"
   },
   "files": [
     "dist/index.js"

@@ -15,7 +15,7 @@ type FAQProps = {
 
 export const FAQ = ({ dictionary }: FAQProps) => (
   <div className="w-full py-20 lg:py-40">
-    <div className="container mx-auto">
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8">
       <div className="grid gap-10 lg:grid-cols-2">
         <div className="flex flex-col gap-10">
           <div className="flex flex-col gap-4">

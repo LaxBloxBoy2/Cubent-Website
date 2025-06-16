@@ -1,0 +1,125 @@
+---
+title: Installation & Setup
+description: 'Get started with Cubent Coder in just a few minutes'
+---
+
+## Prerequisites
+
+Before installing Cubent Coder, make sure you have:
+
+- **Visual Studio Code** (version 1.70.0 or higher)
+- An **AI provider account** (OpenAI, Anthropic, or custom API)
+- **Internet connection** for AI model access
+
+## Step 1: Install the Extension
+
+### From VS Code Marketplace
+
+1. Open Visual Studio Code
+2. Go to the Extensions view (`Ctrl+Shift+X` or `Cmd+Shift+X`)
+3. Search for "Cubent Coder"
+4. Click **Install** on the official Cubent Coder extension
+
+### From Command Line
+
+```bash
+code --install-extension cubent.cubent
+```
+
+### Manual Installation
+
+1. Download the `.vsix` file from [GitHub Releases](https://github.com/LaxBloxBoy2/Cubent/releases)
+2. In VS Code, go to Extensions view
+3. Click the "..." menu and select "Install from VSIX..."
+4. Select the downloaded `.vsix` file
+
+## Step 2: Connect Your AI Provider
+
+After installation, you'll need to configure your AI provider:
+
+### OpenAI Setup
+
+1. Get your API key from [OpenAI Platform](https://platform.openai.com/api-keys)
+2. Open Cubent Coder settings in VS Code
+3. Enter your OpenAI API key
+4. Select your preferred model (GPT-4 recommended)
+
+### Anthropic (Claude) Setup
+
+1. Get your API key from [Anthropic Console](https://console.anthropic.com/)
+2. In Cubent Coder settings, select "Anthropic" as provider
+3. Enter your Anthropic API key
+4. Choose your Claude model
+
+### Custom API Setup
+
+For local models or custom APIs:
+
+1. Select "Custom" as your provider
+2. Enter your API endpoint URL
+3. Configure authentication if required
+4. Test the connection
+
+## Step 3: First Configuration
+
+### Basic Settings
+
+Configure these essential settings for optimal experience:
+
+- **Auto-approval**: Set approval preferences for different actions
+- **Context window**: Adjust based on your model's capabilities
+- **Custom instructions**: Add project-specific guidelines
+
+### Workspace Setup
+
+1. Open your project in VS Code
+2. Cubent Coder will automatically index your codebase
+3. Wait for the initial indexing to complete
+4. You're ready to start coding with AI!
+
+## Verification
+
+To verify your installation:
+
+1. Open the Cubent Coder panel (sidebar icon)
+2. Try a simple command: "Hello, can you help me?"
+3. You should receive a response from your AI provider
+
+<Note>
+If you encounter any issues during installation, check our [troubleshooting guide](/community/troubleshooting) or join our [Discord community](https://discord.gg/cubent) for help.
+</Note>
+
+## Next Steps
+
+Now that you have Cubent Coder installed:
+
+<CardGroup cols={2}>
+  <Card
+    title="Take Your First Steps"
+    icon="play"
+    href="/first-steps"
+  >
+    Learn the basics with a guided tutorial
+  </Card>
+  <Card
+    title="Explore Chat Mode"
+    icon="comments"
+    href="/features/chat-mode"
+  >
+    Start with simple questions and code generation
+  </Card>
+  <Card
+    title="Try Agent Mode"
+    icon="robot"
+    href="/features/agent-mode"
+  >
+    Let Cubent Coder work autonomously on tasks
+  </Card>
+  <Card
+    title="Create Custom Modes"
+    icon="gear"
+    href="/features/custom-modes"
+  >
+    Customize AI behavior for specific workflows
+  </Card>
+</CardGroup>

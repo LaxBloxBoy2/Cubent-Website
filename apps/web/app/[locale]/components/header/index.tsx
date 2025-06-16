@@ -17,7 +17,7 @@ import { useState } from 'react';
 
 import type { Dictionary } from '@repo/internationalization';
 import Image from 'next/image';
-import { LanguageSwitcher } from './language-switcher';
+
 import Logo from './logo.svg';
 
 type HeaderProps = {
@@ -32,18 +32,31 @@ export const Header = ({ dictionary }: HeaderProps) => {
       description: '',
     },
     {
-      title: dictionary.web.header.product.title,
-      description: dictionary.web.header.product.description,
+      title: 'Features',
+      description: 'Discover what makes Cubent Coder powerful',
       items: [
         {
-          title: dictionary.web.header.product.pricing,
-          href: '/pricing',
+          title: 'Chat Mode',
+          href: '/features/chat',
+        },
+        {
+          title: 'Agent Mode',
+          href: '/features/agent',
+        },
+        {
+          title: 'Custom Modes',
+          href: '/features/custom',
         },
       ],
     },
     {
       title: dictionary.web.header.blog,
       href: '/blog',
+      description: '',
+    },
+    {
+      title: 'Support',
+      href: 'https://discord.gg/cubent',
       description: '',
     },
   ];
@@ -59,10 +72,20 @@ export const Header = ({ dictionary }: HeaderProps) => {
   const [isOpen, setOpen] = useState(false);
   return (
     <header className="sticky top-0 left-0 z-40 w-full border-b bg-background">
-      <div className="container relative mx-auto flex min-h-20 flex-row items-center gap-4 lg:grid lg:grid-cols-3">
-        <div className="hidden flex-row items-center justify-start gap-4 lg:flex">
-          <NavigationMenu className="flex items-start justify-start">
-            <NavigationMenuList className="flex flex-row justify-start gap-4">
+      <div className="relative w-full max-w-none flex min-h-20 flex-row items-center justify-between" style={{paddingInline: 'clamp(1rem, 2.5%, 2rem)'}}>
+        <div className="flex items-center gap-2">
+          <Image
+            src={Logo}
+            alt="Cubent Logo"
+            width={32}
+            height={32}
+            className="dark:invert"
+          />
+          <p className="whitespace-nowrap font-semibold">Cubent</p>
+        </div>
+        <div className="hidden flex-row items-center justify-center gap-3 lg:flex absolute left-1/2 transform -translate-x-1/2 top-1/2 -translate-y-1/2">
+          <NavigationMenu className="flex items-center justify-center">
+            <NavigationMenuList className="flex flex-row justify-center gap-3">
               {navigationItems.map((item) => (
                 <NavigationMenuItem key={item.title}>
                   {item.href ? (
@@ -88,8 +111,8 @@ export const Header = ({ dictionary }: HeaderProps) => {
                               </p>
                             </div>
                             <Button size="sm" className="mt-10" asChild>
-                              <Link href="/contact">
-                                {dictionary.web.global.primaryCta}
+                              <Link href="https://marketplace.visualstudio.com/items?itemName=cubent.cubent">
+                                Download Extension
                               </Link>
                             </Button>
                           </div>
@@ -114,35 +137,21 @@ export const Header = ({ dictionary }: HeaderProps) => {
             </NavigationMenuList>
           </NavigationMenu>
         </div>
-        <div className="flex items-center gap-2 lg:justify-center">
-          <Image
-            src={Logo}
-            alt="Logo"
-            width={24}
-            height={24}
-            className="dark:invert"
-          />
-          <p className="whitespace-nowrap font-semibold">next-forge</p>
-        </div>
-        <div className="flex w-full justify-end gap-4">
-          <Button variant="ghost" className="hidden md:inline" asChild>
-            <Link href="/contact">{dictionary.web.header.contact}</Link>
-          </Button>
-          <div className="hidden border-r md:inline" />
-          <div className="hidden md:inline">
-            <LanguageSwitcher />
-          </div>
+        <div className="flex justify-end gap-2">
           <div className="hidden md:inline">
             <ModeToggle />
           </div>
-          <Button variant="outline" asChild className="hidden md:inline">
-            <Link href={`${env.NEXT_PUBLIC_APP_URL}/sign-in`}>
-              {dictionary.web.header.signIn}
+          <Button variant="outline" asChild className="hidden md:inline-flex h-10">
+            <Link href="https://marketplace.visualstudio.com/items?itemName=cubent.cubent" className="flex flex-row items-center gap-2 px-4 py-2 whitespace-nowrap">
+              <svg className="h-4 w-4 shrink-0" viewBox="0 0 88 88" fill="currentColor">
+                <path d="M0 12.402l35.687-4.86.016 34.423L0 45.194zm35.67 33.529l.028 34.453L.028 75.48.026 45.7zm4.326-39.025L87.314 0v41.527l-47.318 4.425zm47.329 39.349v41.527L40.028 81.441l.016-34.486z"/>
+              </svg>
+              <span className="shrink-0 text-sm">Download</span>
             </Link>
           </Button>
           <Button asChild>
-            <Link href={`${env.NEXT_PUBLIC_APP_URL}/sign-up`}>
-              {dictionary.web.header.signUp}
+            <Link href={`${env.NEXT_PUBLIC_DOCS_URL || 'https://docs.cubent.com'}`}>
+              Sign In
             </Link>
           </Button>
         </div>
@@ -151,7 +160,7 @@ export const Header = ({ dictionary }: HeaderProps) => {
             {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </Button>
           {isOpen && (
-            <div className="container absolute top-20 right-0 flex w-full flex-col gap-8 border-t bg-background py-4 shadow-lg">
+            <div className="container absolute top-20 right-0 flex w-full flex-col gap-8 border-t bg-background py-4 shadow-lg px-4 sm:px-6 lg:px-8">
               {navigationItems.map((item) => (
                 <div key={item.title}>
                   <div className="flex flex-col gap-2">
