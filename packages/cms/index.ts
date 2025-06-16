@@ -1,4 +1,4 @@
-import { basehub as basehubClient, fragmentOn } from 'basehub';
+import { basehub as basehubClient, fragmentOn } from './.basehub';
 import { keys } from './keys';
 
 const basehub = basehubClient({
