@@ -1,3 +1,5 @@
+'use client';
+
 import Image from 'next/image';
 
 export const Mockup = () => (
@@ -12,7 +14,7 @@ export const Mockup = () => (
                 alt="Cubent Editor Interface - Code editing with AI assistance"
                 width={1200}
                 height={800}
-                className="w-full h-auto object-cover"
+                className="w-full h-auto object-cover rounded-lg"
                 priority
               />
               {/* Gradient overlay for better integration */}
