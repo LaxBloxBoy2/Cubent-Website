@@ -256,3 +256,92 @@ export async function GET() {
     );
   }
 }
+
+/**
+ * Terminate extension session
+ */
+export async function DELETE(request: NextRequest) {
+  try {
+    const { userId } = await auth();
+
+    if (!userId) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      );
+    }
+
+    const { searchParams } = new URL(request.url);
+    const sessionId = searchParams.get('sessionId');
+    const terminateAll = searchParams.get('all') === 'true';
+
+    // Get user from database
+    const dbUser = await database.user.findUnique({
+      where: { clerkId: userId },
+    });
+
+    if (!dbUser) {
+      return NextResponse.json(
+        { error: 'User not found' },
+        { status: 404 }
+      );
+    }
+
+    if (terminateAll) {
+      // Terminate all active sessions
+      const result = await database.extensionSession.updateMany({
+        where: {
+          userId: dbUser.id,
+          isActive: true,
+        },
+        data: {
+          isActive: false,
+          lastActiveAt: new Date(),
+        },
+      });
+
+      return NextResponse.json({
+        success: true,
+        message: `Terminated ${result.count} active sessions`,
+        terminatedSessions: result.count,
+      });
+    } else if (sessionId) {
+      // Terminate specific session
+      const session = await database.extensionSession.update({
+        where: {
+          userId_sessionId: {
+            userId: dbUser.id,
+            sessionId,
+          },
+        },
+        data: {
+          isActive: false,
+          lastActiveAt: new Date(),
+        },
+      });
+
+      return NextResponse.json({
+        success: true,
+        message: 'Session terminated successfully',
+        session: {
+          id: session.id,
+          sessionId: session.sessionId,
+          isActive: session.isActive,
+          lastActiveAt: session.lastActiveAt,
+        },
+      });
+    } else {
+      return NextResponse.json(
+        { error: 'Session ID required or use ?all=true to terminate all sessions' },
+        { status: 400 }
+      );
+    }
+
+  } catch (error) {
+    console.error('Session termination error:', error);
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    );
+  }
+}
