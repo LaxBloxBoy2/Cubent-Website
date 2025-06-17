@@ -72,89 +72,21 @@ const data = {
       url: '/profile',
       icon: SquareTerminalIcon,
       isActive: true,
-      items: [
-        {
-          title: 'Overview',
-          url: '/profile',
-        },
-        {
-          title: 'Extension',
-          url: '/profile/extension',
-        },
-        {
-          title: 'Usage Analytics',
-          url: '/profile/usage',
-        },
-        {
-          title: 'Settings',
-          url: '/profile/settings',
-        },
-      ],
     },
     {
       title: 'Extension',
       url: '/profile/extension',
       icon: BotIcon,
-      items: [
-        {
-          title: 'Connection',
-          url: '/profile/extension',
-        },
-        {
-          title: 'API Keys',
-          url: '/profile/extension#api-keys',
-        },
-        {
-          title: 'Sessions',
-          url: '/profile/extension#sessions',
-        },
-      ],
     },
     {
-      title: 'Analytics',
+      title: 'Usage Analytics',
       url: '/profile/usage',
       icon: PieChartIcon,
-      items: [
-        {
-          title: 'Usage Overview',
-          url: '/profile/usage',
-        },
-        {
-          title: 'Token Usage',
-          url: '/profile/usage#tokens',
-        },
-        {
-          title: 'Cost Tracking',
-          url: '/profile/usage#costs',
-        },
-        {
-          title: 'Export Data',
-          url: '/profile/usage#export',
-        },
-      ],
     },
     {
       title: 'Settings',
       url: '/profile/settings',
       icon: Settings2Icon,
-      items: [
-        {
-          title: 'Extension Settings',
-          url: '/profile/settings',
-        },
-        {
-          title: 'Preferences',
-          url: '/profile/settings#preferences',
-        },
-        {
-          title: 'Account',
-          url: '/profile/settings#account',
-        },
-        {
-          title: 'Sync Settings',
-          url: '/profile/settings#sync',
-        },
-      ],
     },
   ],
   navSecondary: [
@@ -174,23 +106,7 @@ const data = {
       icon: SendIcon,
     },
   ],
-  projects: [
-    {
-      name: 'VS Code Extension',
-      url: '/profile/extension',
-      icon: FrameIcon,
-    },
-    {
-      name: 'Usage Dashboard',
-      url: '/profile/usage',
-      icon: PieChartIcon,
-    },
-    {
-      name: 'Account Settings',
-      url: '/profile/settings',
-      icon: MapIcon,
-    },
-  ],
+  projects: [],
 };
 
 export const GlobalSidebar = ({ children }: GlobalSidebarProperties) => {
