@@ -289,7 +289,7 @@ export async function PATCH(request: NextRequest) {
             name: oldKey.name,
             description: oldKey.description,
             keyHash: newKeyHash,
-            permissions: oldKey.permissions,
+            permissions: oldKey.permissions as any,
             expiresAt: oldKey.expiresAt,
             isActive: true,
             lastUsedAt: null,
