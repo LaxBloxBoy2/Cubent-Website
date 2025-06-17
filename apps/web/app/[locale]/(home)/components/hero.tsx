@@ -13,7 +13,7 @@ type HeroProps = {
 export const Hero = async ({ dictionary }: HeroProps) => (
   <div className="w-full">
     <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="flex flex-col items-center justify-center gap-8 pt-20 pb-8 lg:pt-40 lg:pb-12">
+      <div className="flex flex-col items-center justify-center gap-8 pt-12 pb-8 lg:pt-24 lg:pb-12">
         <div>
           <Feed queries={[blog.latestPostQuery]}>
             {/* biome-ignore lint/suspicious/useAwait: "Server Actions must be async" */}
