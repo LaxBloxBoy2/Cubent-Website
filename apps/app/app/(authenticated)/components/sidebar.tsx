@@ -68,95 +68,99 @@ const data = {
   },
   navMain: [
     {
-      title: 'Playground',
-      url: '#',
+      title: 'Profile',
+      url: '/profile',
       icon: SquareTerminalIcon,
       isActive: true,
       items: [
         {
-          title: 'History',
-          url: '#',
+          title: 'Overview',
+          url: '/profile',
         },
         {
-          title: 'Starred',
-          url: '#',
+          title: 'Extension',
+          url: '/profile/extension',
+        },
+        {
+          title: 'Usage Analytics',
+          url: '/profile/usage',
         },
         {
           title: 'Settings',
-          url: '#',
+          url: '/profile/settings',
         },
       ],
     },
     {
-      title: 'Models',
-      url: '#',
+      title: 'Extension',
+      url: '/profile/extension',
       icon: BotIcon,
       items: [
         {
-          title: 'Genesis',
-          url: '#',
+          title: 'Connection',
+          url: '/profile/extension',
         },
         {
-          title: 'Explorer',
-          url: '#',
+          title: 'API Keys',
+          url: '/profile/extension#api-keys',
         },
         {
-          title: 'Quantum',
-          url: '#',
+          title: 'Sessions',
+          url: '/profile/extension#sessions',
         },
       ],
     },
     {
-      title: 'Documentation',
-      url: '#',
-      icon: BookOpenIcon,
+      title: 'Analytics',
+      url: '/profile/usage',
+      icon: PieChartIcon,
       items: [
         {
-          title: 'Introduction',
-          url: '#',
+          title: 'Usage Overview',
+          url: '/profile/usage',
         },
         {
-          title: 'Get Started',
-          url: '#',
+          title: 'Token Usage',
+          url: '/profile/usage#tokens',
         },
         {
-          title: 'Tutorials',
-          url: '#',
+          title: 'Cost Tracking',
+          url: '/profile/usage#costs',
         },
         {
-          title: 'Changelog',
-          url: '#',
+          title: 'Export Data',
+          url: '/profile/usage#export',
         },
       ],
     },
     {
       title: 'Settings',
-      url: '#',
+      url: '/profile/settings',
       icon: Settings2Icon,
       items: [
         {
-          title: 'General',
-          url: '#',
+          title: 'Extension Settings',
+          url: '/profile/settings',
         },
         {
-          title: 'Team',
-          url: '#',
+          title: 'Preferences',
+          url: '/profile/settings#preferences',
         },
         {
-          title: 'Billing',
-          url: '#',
+          title: 'Account',
+          url: '/profile/settings#account',
         },
         {
-          title: 'Limits',
-          url: '#',
+          title: 'Sync Settings',
+          url: '/profile/settings#sync',
         },
       ],
     },
   ],
   navSecondary: [
     {
-      title: 'Webhooks',
-      url: '/webhooks',
+      title: 'Terms & Privacy',
+      url: '/terms',
       icon: AnchorIcon,
     },
     {
@@ -172,18 +176,18 @@ const data = {
   ],
   projects: [
     {
-      name: 'Design Engineering',
-      url: '#',
+      name: 'VS Code Extension',
+      url: '/profile/extension',
       icon: FrameIcon,
     },
     {
-      name: 'Sales & Marketing',
-      url: '#',
+      name: 'Usage Dashboard',
+      url: '/profile/usage',
       icon: PieChartIcon,
     },
     {
-      name: 'Travel',
-      url: '#',
+      name: 'Account Settings',
+      url: '/profile/settings',
       icon: MapIcon,
     },
   ],
@@ -206,7 +210,7 @@ export const GlobalSidebar = ({ children }: GlobalSidebarProperties) => {
               >
                 <OrganizationSwitcher
                   hidePersonal
-                  afterSelectOrganizationUrl="/"
+                  afterSelectOrganizationUrl="/profile"
                 />
               </div>
             </SidebarMenuItem>
@@ -215,7 +219,7 @@ export const GlobalSidebar = ({ children }: GlobalSidebarProperties) => {
         <Search />
         <SidebarContent>
           <SidebarGroup>
-            <SidebarGroupLabel>Platform</SidebarGroupLabel>
+            <SidebarGroupLabel>Profile</SidebarGroupLabel>
             <SidebarMenu>
               {data.navMain.map((item) => (
                 <Collapsible
@@ -259,7 +263,7 @@ export const GlobalSidebar = ({ children }: GlobalSidebarProperties) => {
             </SidebarMenu>
           </SidebarGroup>
           <SidebarGroup className="group-data-[collapsible=icon]:hidden">
-            <SidebarGroupLabel>Projects</SidebarGroupLabel>
+            <SidebarGroupLabel>Quick Access</SidebarGroupLabel>
             <SidebarMenu>
               {data.projects.map((item) => (
                 <SidebarMenuItem key={item.name}>
