@@ -23,12 +23,15 @@ model User {
   // Extension connection
   extensionApiKey String?
   lastExtensionSync DateTime?
+  lastSettingsSync DateTime?
+  extensionEnabled Boolean @default(true)
+  lastActiveAt DateTime?
   termsAccepted Boolean @default(false)
   termsAcceptedAt DateTime?
 
   // Subscription (sync with extension)
-  subscriptionTier    String @default("FREE_TRIAL")
-  subscriptionStatus  String @default("TRIAL")
+  subscriptionTier    String @default("FREE")
+  subscriptionStatus  String @default("ACTIVE")
 
   // Settings sync
   extensionSettings   Json?
@@ -37,6 +40,8 @@ model User {
   // Relations
   extensionSessions ExtensionSession[]
   usageMetrics     UsageMetrics[]
+  apiKeys          ApiKey[]
+  usageAnalytics   UsageAnalytics[]
 
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -47,13 +52,25 @@ model ExtensionSession {
   userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  sessionId String   @unique
+  sessionId String
   isActive  Boolean  @default(true)
-  lastSeen  DateTime @default(now())
+  lastActiveAt DateTime @default(now())
+
+  // Extension details
+  extensionVersion String?
+  vscodeVersion    String?
+  platform         String?
+  metadata         Json?
+
+  // Usage tracking
+  tokensUsed    Int @default(0)
+  requestsMade  Int @default(0)
 
   createdAt DateTime @default(now())
 
+  @@unique([userId, sessionId])
   @@index([userId])
+  @@index([isActive])
 }
 
 model UsageMetrics {
@@ -69,6 +86,66 @@ model UsageMetrics {
 
   @@index([userId])
   @@index([date])
+}
+
+model UsageAnalytics {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  modelId      String
+  tokensUsed   Int @default(0)
+  requestsMade Int @default(0)
+  costAccrued  Float @default(0)
+  sessionId    String?
+  metadata     Json?
+
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([modelId])
+  @@index([createdAt])
+}
+
+model ApiKey {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  name        String
+  description String?
+  keyHash     String   @unique
+  permissions Json     @default("[]")
+  isActive    Boolean  @default(true)
+  expiresAt   DateTime?
+  lastUsedAt  DateTime?
+  usageCount  Int      @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([isActive])
+}
+
+model UserProfile {
+  id     String @id @default(cuid())
+  userId String @unique
+
+  email String
+  name  String?
+
+  // Extension settings
+  subscriptionTier    String @default("FREE")
+  subscriptionStatus  String @default("ACTIVE")
+  termsAccepted       Boolean @default(false)
+  extensionEnabled    Boolean @default(true)
+  settings            Json?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
 }
 
 // Keep the existing Page model for now
