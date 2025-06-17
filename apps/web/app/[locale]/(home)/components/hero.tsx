@@ -10,6 +10,7 @@ type HeroProps = {
   dictionary: Dictionary;
 };
 
+// Hero component for the homepage
 export const Hero = async ({ dictionary }: HeroProps) => (
   <div className="w-full">
     <div className="container mx-auto px-4 sm:px-6 lg:px-8">
