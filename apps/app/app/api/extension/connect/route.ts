@@ -67,7 +67,7 @@ export async function POST(request: NextRequest) {
       },
       update: {
         isActive: true,
-        lastActiveAt: new Date(),
+        lastActiveAt: new Date(), // Updated field name from lastSeen
       },
       create: {
         userId: dbUser.id,
