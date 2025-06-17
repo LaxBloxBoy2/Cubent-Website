@@ -74,13 +74,13 @@ export async function GET() {
       },
     };
 
-    const currentTier = dbUser.subscription?.tier || 'FREE';
+    const currentTier = dbUser.subscriptionTier || 'FREE';
     const tierInfo = subscriptionTiers[currentTier as keyof typeof subscriptionTiers];
 
     const response = {
       subscription: {
         tier: currentTier,
-        status: dbUser.subscription?.status || 'ACTIVE',
+        status: dbUser.subscriptionStatus || 'ACTIVE',
         name: tierInfo.name,
         features: tierInfo.features,
         limits: {
@@ -145,9 +145,6 @@ export async function POST(request: NextRequest) {
     // Get user from database
     const dbUser = await database.user.findUnique({
       where: { clerkId: userId },
-      include: {
-        subscription: true,
-      },
     });
 
     if (!dbUser) {
@@ -157,7 +154,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const currentTier = dbUser.subscription?.tier || 'FREE';
+    const currentTier = dbUser.subscriptionTier || 'FREE';
     
     // Get current month usage
     const now = new Date();

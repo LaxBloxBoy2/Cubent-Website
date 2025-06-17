@@ -19,9 +19,6 @@ export async function GET() {
     // Get user from database
     const dbUser = await database.user.findUnique({
       where: { clerkId: userId },
-      include: {
-        subscription: true,
-      },
     });
 
     if (!dbUser) {
@@ -83,8 +80,8 @@ export async function GET() {
       },
       user: {
         id: userId,
-        subscriptionTier: dbUser.subscription?.tier || 'FREE',
-        subscriptionStatus: dbUser.subscription?.status || 'ACTIVE',
+        subscriptionTier: dbUser.subscriptionTier || 'FREE',
+        subscriptionStatus: dbUser.subscriptionStatus || 'ACTIVE',
         extensionEnabled: dbUser.extensionEnabled || false,
       },
       usage: {
