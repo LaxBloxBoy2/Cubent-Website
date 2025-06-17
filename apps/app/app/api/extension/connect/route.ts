@@ -56,7 +56,8 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    // Create or update extension session
+    // Create or update extension session using compound unique key
+    // Fixed: Use userId_sessionId compound key instead of sessionId alone
     await database.extensionSession.upsert({
       where: {
         userId_sessionId: {
