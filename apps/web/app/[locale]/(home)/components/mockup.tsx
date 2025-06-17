@@ -5,7 +5,7 @@ import Image from 'next/image';
 export const Mockup = () => (
   <div className="w-full">
     <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="flex flex-col items-center justify-center gap-8 py-20">
+      <div className="flex flex-col items-center justify-center gap-2 py-4">
         <div className="relative w-full max-w-6xl">
           <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 p-2 shadow-2xl">
             <div className="relative overflow-hidden rounded-lg">
