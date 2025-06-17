@@ -69,7 +69,7 @@ export async function GET(request: NextRequest) {
     });
 
     // Get extension sessions if metadata is requested
-    let extensionSessions = [];
+    let extensionSessions: any[] = [];
     if (includeMetadata) {
       extensionSessions = await database.extensionSession.findMany({
         where: {
