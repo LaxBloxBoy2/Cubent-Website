@@ -64,15 +64,21 @@ export async function POST(request: NextRequest) {
 
     // Create or update extension session
     await database.extensionSession.upsert({
-      where: { sessionId },
+      where: {
+        userId_sessionId: {
+          userId: dbUser.id,
+          sessionId,
+        },
+      },
       update: {
         isActive: true,
-        lastSeen: new Date(),
+        lastActiveAt: new Date(),
       },
       create: {
         userId: dbUser.id,
         sessionId,
         isActive: true,
+        lastActiveAt: new Date(),
       },
     });
 
@@ -122,7 +128,7 @@ export async function GET() {
       include: {
         extensionSessions: {
           where: { isActive: true },
-          orderBy: { lastSeen: 'desc' },
+          orderBy: { lastActiveAt: 'desc' },
         },
       },
     });
