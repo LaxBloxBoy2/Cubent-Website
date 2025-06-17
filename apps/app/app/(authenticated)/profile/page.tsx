@@ -30,7 +30,7 @@ const ProfilePage = async () => {
     include: {
       extensionSessions: {
         where: { isActive: true },
-        orderBy: { lastSeen: 'desc' },
+        orderBy: { lastActiveAt: 'desc' },
       },
       usageMetrics: {
         orderBy: { date: 'desc' },
@@ -51,7 +51,7 @@ const ProfilePage = async () => {
       include: {
         extensionSessions: {
           where: { isActive: true },
-          orderBy: { lastSeen: 'desc' },
+          orderBy: { lastActiveAt: 'desc' },
         },
         usageMetrics: {
           orderBy: { date: 'desc' },
