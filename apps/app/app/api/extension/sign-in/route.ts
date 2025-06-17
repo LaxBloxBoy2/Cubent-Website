@@ -37,7 +37,8 @@ export async function GET(request: NextRequest) {
     
     if (userId) {
       // User is already authenticated, create a ticket for the extension
-      const ticket = await clerkClient.signInTokens.createSignInToken({
+      const client = await clerkClient();
+      const ticket = await client.signInTokens.createSignInToken({
         userId,
         expiresInSeconds: 300, // 5 minutes
       });
