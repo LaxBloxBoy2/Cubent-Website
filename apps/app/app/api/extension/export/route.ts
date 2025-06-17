@@ -100,7 +100,6 @@ export async function GET(request: NextRequest) {
         tokensUsed: metric.tokensUsed,
         requestsMade: metric.requestsMade,
         costAccrued: metric.costAccrued,
-        createdAt: metric.createdAt.toISOString(),
       })),
       summary: {
         totalTokensUsed: usageMetrics.reduce((sum, m) => sum + m.tokensUsed, 0),
