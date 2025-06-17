@@ -11,8 +11,14 @@ interface ExtensionSession {
   id: string;
   sessionId: string;
   isActive: boolean;
-  lastSeen: Date;
+  lastActiveAt: Date;
   createdAt: Date;
+  extensionVersion?: string | null;
+  vscodeVersion?: string | null;
+  platform?: string | null;
+  metadata?: any;
+  tokensUsed?: number;
+  requestsMade?: number;
 }
 
 interface ExtensionSessionsListProps {
@@ -29,7 +35,7 @@ export function ExtensionSessionsList({
   const handleDisconnectSession = async (sessionId: string) => {
     setDisconnectingSession(sessionId);
     try {
-      const response = await fetch(`/api/extension/connect?sessionId=${sessionId}`, {
+      const response = await fetch(`/api/extension/sessions?sessionId=${sessionId}`, {
         method: 'DELETE',
       });
 
@@ -98,7 +104,7 @@ export function ExtensionSessionsList({
                   <div className="text-sm text-muted-foreground">
                     <div className="flex items-center gap-4">
                       <span>Connected: {formatDate(session.createdAt)}</span>
-                      <span>Last seen: {formatRelativeTime(session.lastSeen)}</span>
+                      <span>Last seen: {formatRelativeTime(session.lastActiveAt)}</span>
                     </div>
                   </div>
                 </div>
@@ -147,7 +153,7 @@ export function ExtensionSessionsList({
                   <div className="text-sm text-muted-foreground">
                     <div className="flex items-center gap-4">
                       <span>Connected: {formatDate(session.createdAt)}</span>
-                      <span>Last seen: {formatDate(session.lastSeen)}</span>
+                      <span>Last seen: {formatDate(session.lastActiveAt)}</span>
                     </div>
                   </div>
                 </div>
