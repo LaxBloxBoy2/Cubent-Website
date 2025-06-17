@@ -28,16 +28,18 @@ export async function GET() {
     // Get user profile from database
     let userProfile = await database.userProfile.findUnique({
       where: { userId },
-      include: {
-        extensionSessions: {
-          where: { isActive: true },
-          orderBy: { lastActiveAt: 'desc' },
-        },
-        usageAnalytics: {
-          orderBy: { createdAt: 'desc' },
-          take: 1,
-        },
-      },
+    });
+
+    // Get extension sessions and usage analytics separately
+    const extensionSessions = await database.extensionSession.findMany({
+      where: { userId, isActive: true },
+      orderBy: { lastActiveAt: 'desc' },
+    });
+
+    const usageAnalytics = await database.usageAnalytics.findMany({
+      where: { userId },
+      orderBy: { createdAt: 'desc' },
+      take: 1,
     });
 
     // Create profile if it doesn't exist
@@ -50,10 +52,6 @@ export async function GET() {
           subscriptionTier: 'FREE',
           subscriptionStatus: 'ACTIVE',
           termsAccepted: false,
-        },
-        include: {
-          extensionSessions: true,
-          usageAnalytics: true,
         },
       });
     }
@@ -87,8 +85,8 @@ export async function GET() {
         requestsMade: usageStats._sum.requestsMade || 0,
         costAccrued: usageStats._sum.costAccrued || 0,
       },
-      extensionSessions: userProfile.extensionSessions.length,
-      lastActiveSession: userProfile.extensionSessions[0]?.lastActiveAt || null,
+      extensionSessions: extensionSessions.length,
+      lastActiveSession: extensionSessions[0]?.lastActiveAt || null,
     };
 
     return NextResponse.json(response);

@@ -28,7 +28,7 @@ const ExtensionPage = async () => {
     where: { clerkId: userId },
     include: {
       extensionSessions: {
-        orderBy: { lastSeen: 'desc' },
+        orderBy: { lastActiveAt: 'desc' },
       },
     },
   });
