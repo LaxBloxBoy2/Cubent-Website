@@ -13,8 +13,65 @@ datasource db {
   relationMode = "prisma"
 }
 
-// This is a stub model.
-// Delete it and add your own Prisma models.
+model User {
+  id          String   @id @default(cuid())
+  clerkId     String   @unique
+  email       String   @unique
+  name        String?
+  picture     String?
+
+  // Extension connection
+  extensionApiKey String?
+  lastExtensionSync DateTime?
+  termsAccepted Boolean @default(false)
+  termsAcceptedAt DateTime?
+
+  // Subscription (sync with extension)
+  subscriptionTier    String @default("FREE_TRIAL")
+  subscriptionStatus  String @default("TRIAL")
+
+  // Settings sync
+  extensionSettings   Json?
+  preferences         Json?
+
+  // Relations
+  extensionSessions ExtensionSession[]
+  usageMetrics     UsageMetrics[]
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model ExtensionSession {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  sessionId String   @unique
+  isActive  Boolean  @default(true)
+  lastSeen  DateTime @default(now())
+
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+model UsageMetrics {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  tokensUsed    Int @default(0)
+  requestsMade  Int @default(0)
+  costAccrued   Float @default(0)
+
+  date DateTime @default(now())
+
+  @@index([userId])
+  @@index([date])
+}
+
+// Keep the existing Page model for now
 model Page {
   id   Int    @id @default(autoincrement())
   name String
