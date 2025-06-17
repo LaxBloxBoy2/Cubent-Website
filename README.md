@@ -2,6 +2,8 @@
 
 **AI-Powered Autonomous Coding Agent for Visual Studio Code**
 
+🚀 VS Code Extension Integration Ready!
+
 <div>
   <img src="https://img.shields.io/visual-studio-marketplace/d/cubent.cubent" alt="Downloads" />
   <img src="https://img.shields.io/visual-studio-marketplace/v/cubent.cubent" alt="Version" />
