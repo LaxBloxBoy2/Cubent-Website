@@ -1,3 +1,22 @@
+/**
+ * VSCode Extension Login API Endpoint
+ *
+ * Handles the secure token generation for VSCode extension authentication.
+ * This endpoint is called after the user accepts Terms of Use on the login page.
+ *
+ * Security measures:
+ * - User authentication validation via Clerk
+ * - Terms of Use acceptance enforcement
+ * - Short-lived JWT token generation (10 minutes)
+ * - Automatic cleanup of existing tokens for device
+ * - Comprehensive audit logging
+ *
+ * Returns:
+ * - Secure JWT token for extension authentication
+ * - VS Code deep link for seamless callback
+ * - Success confirmation with timestamp
+ */
+
 import { auth, clerkClient } from '@repo/auth/server';
 import { database } from '@repo/database';
 import { parseError } from '@repo/observability/error';

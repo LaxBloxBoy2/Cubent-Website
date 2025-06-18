@@ -1,3 +1,27 @@
+/**
+ * VSCode Extension Token Retrieval API
+ *
+ * This endpoint allows the VSCode extension to retrieve authentication tokens
+ * that were generated during the web-based login flow. It implements multiple
+ * security measures to prevent abuse and ensure secure token exchange.
+ *
+ * Security features:
+ * - Rate limiting: 10 requests per minute per IP address
+ * - CSRF protection: Validates state parameter
+ * - One-time use: Tokens are deleted immediately after retrieval
+ * - Automatic expiration: Tokens expire after 10 minutes
+ * - Comprehensive logging: All access attempts are logged
+ *
+ * Usage:
+ * GET /api/token?device_id=abc123&state=xyz789
+ *
+ * Returns:
+ * - 200: { token: "jwt_token", success: true }
+ * - 404: Token not found or expired
+ * - 429: Rate limit exceeded
+ * - 400: Invalid parameters
+ */
+
 import { database } from '@repo/database';
 import { parseError } from '@repo/observability/error';
 import { log } from '@repo/observability/log';

@@ -1,3 +1,23 @@
+/**
+ * VSCode Extension Login Page
+ *
+ * This page handles the secure authentication flow for the Cubent VSCode extension.
+ * It accepts device_id and state parameters, validates user authentication,
+ * and guides users through Terms of Use acceptance before generating secure tokens.
+ *
+ * Security features:
+ * - CSRF protection via state parameter validation
+ * - Short-lived token generation (10 minutes)
+ * - One-time use tokens with automatic cleanup
+ * - Comprehensive logging and error handling
+ *
+ * Flow:
+ * 1. Validate device_id and state parameters
+ * 2. Redirect to Clerk sign-in if not authenticated
+ * 3. Show Terms of Use acceptance interface
+ * 4. Generate secure token and redirect to VS Code
+ */
+
 import { auth } from '@repo/auth/server';
 import { database } from '@repo/database';
 import { redirect } from 'next/navigation';
