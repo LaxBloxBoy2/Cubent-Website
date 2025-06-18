@@ -19,9 +19,6 @@ export async function GET() {
     // Get user from database
     const dbUser = await database.user.findUnique({
       where: { clerkId: userId },
-      include: {
-        subscription: true,
-      },
     });
 
     if (!dbUser) {
