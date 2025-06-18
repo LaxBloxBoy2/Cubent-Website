@@ -14,13 +14,22 @@ export const PostHogProvider = (
   properties: Omit<PostHogProviderProps, 'client'>
 ) => {
   useEffect(() => {
-    posthog.init(keys().NEXT_PUBLIC_POSTHOG_KEY, {
-      api_host: '/ingest',
-      ui_host: keys().NEXT_PUBLIC_POSTHOG_HOST,
-      person_profiles: 'identified_only',
-      capture_pageview: false, // Disable automatic pageview capture, as we capture manually
-      capture_pageleave: true, // Overrides the `capture_pageview` setting
-    }) as PostHog;
+    try {
+      const envKeys = keys();
+      if (envKeys.NEXT_PUBLIC_POSTHOG_KEY && envKeys.NEXT_PUBLIC_POSTHOG_HOST) {
+        posthog.init(envKeys.NEXT_PUBLIC_POSTHOG_KEY, {
+          api_host: '/ingest',
+          ui_host: envKeys.NEXT_PUBLIC_POSTHOG_HOST,
+          person_profiles: 'identified_only',
+          capture_pageview: false, // Disable automatic pageview capture, as we capture manually
+          capture_pageleave: true, // Overrides the `capture_pageview` setting
+        }) as PostHog;
+      } else {
+        console.warn('PostHog environment variables not configured. Analytics disabled.');
+      }
+    } catch (error) {
+      console.warn('PostHog initialization failed:', error);
+    }
   }, []);
 
   return <PostHogProviderRaw client={posthog} {...properties} />;
