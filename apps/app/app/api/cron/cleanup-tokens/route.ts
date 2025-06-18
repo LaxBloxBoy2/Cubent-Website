@@ -20,8 +20,8 @@ export const GET = async (request: NextRequest) => {
     // Clean up expired tokens (past expiration time)
     const expiredCount = await cleanupExpiredTokens();
     
-    // Clean up old tokens (older than 1 hour, regardless of expiration)
-    const oldCount = await cleanupOldTokens(60);
+    // Clean up old tokens (older than 2 hours, regardless of expiration)
+    const oldCount = await cleanupOldTokens(120);
 
     const totalCleaned = expiredCount + oldCount;
 
