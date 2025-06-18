@@ -12,7 +12,7 @@
  * - Comprehensive audit logging
  *
  * Returns:
- * - Secure JWT token for extension authentication
+ * - Secure session token for extension authentication
  * - VS Code deep link for seamless callback
  * - Success confirmation with timestamp
  */
