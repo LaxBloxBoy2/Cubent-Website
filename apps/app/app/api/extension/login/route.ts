@@ -76,22 +76,16 @@ export const POST = async (request: Request) => {
       );
     }
 
-    // Generate a short-lived JWT token using Clerk
+    // Generate a short-lived session token using Clerk
     const clerk = await clerkClient();
-    const token = await clerk.users.getUserOauthAccessToken(userId, 'oauth_google');
 
-    // If we can't get an OAuth token, create a session token instead
-    let authToken: string;
-    if (token && token.length > 0 && token[0]?.token) {
-      authToken = token[0].token;
-    } else {
-      // Create a session token as fallback
-      const sessionToken = await clerk.sessions.createSessionToken({
-        userId,
-        expiresInSeconds: 600, // 10 minutes
-      });
-      authToken = sessionToken;
-    }
+    // Create a session token (10 minutes expiration)
+    const sessionToken = await clerk.sessions.createSessionToken({
+      userId,
+      expiresInSeconds: 600, // 10 minutes
+    });
+
+    const authToken = sessionToken;
 
     // Set expiration time (10 minutes from now)
     const expiresAt = new Date(Date.now() + 10 * 60 * 1000);
