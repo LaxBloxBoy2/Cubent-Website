@@ -13,49 +13,53 @@ import { NextResponse } from 'next/server';
 import { Webhook } from 'svix';
 
 const handleUserCreated = (data: UserJSON) => {
-  analytics.identify({
-    distinctId: data.id,
-    properties: {
-      email: data.email_addresses.at(0)?.email_address,
-      firstName: data.first_name,
-      lastName: data.last_name,
-      createdAt: new Date(data.created_at),
-      avatar: data.image_url,
-      phoneNumber: data.phone_numbers.at(0)?.phone_number,
-    },
-  });
+  if (analytics) {
+    analytics.identify({
+      distinctId: data.id,
+      properties: {
+        email: data.email_addresses.at(0)?.email_address,
+        firstName: data.first_name,
+        lastName: data.last_name,
+        createdAt: new Date(data.created_at),
+        avatar: data.image_url,
+        phoneNumber: data.phone_numbers.at(0)?.phone_number,
+      },
+    });
 
-  analytics.capture({
-    event: 'User Created',
-    distinctId: data.id,
-  });
+    analytics.capture({
+      event: 'User Created',
+      distinctId: data.id,
+    });
+  }
 
   return new Response('User created', { status: 201 });
 };
 
 const handleUserUpdated = (data: UserJSON) => {
-  analytics.identify({
-    distinctId: data.id,
-    properties: {
-      email: data.email_addresses.at(0)?.email_address,
-      firstName: data.first_name,
-      lastName: data.last_name,
-      createdAt: new Date(data.created_at),
-      avatar: data.image_url,
-      phoneNumber: data.phone_numbers.at(0)?.phone_number,
-    },
-  });
+  if (analytics) {
+    analytics.identify({
+      distinctId: data.id,
+      properties: {
+        email: data.email_addresses.at(0)?.email_address,
+        firstName: data.first_name,
+        lastName: data.last_name,
+        createdAt: new Date(data.created_at),
+        avatar: data.image_url,
+        phoneNumber: data.phone_numbers.at(0)?.phone_number,
+      },
+    });
 
-  analytics.capture({
-    event: 'User Updated',
-    distinctId: data.id,
-  });
+    analytics.capture({
+      event: 'User Updated',
+      distinctId: data.id,
+    });
+  }
 
   return new Response('User updated', { status: 201 });
 };
 
 const handleUserDeleted = (data: DeletedObjectJSON) => {
-  if (data.id) {
+  if (data.id && analytics) {
     analytics.identify({
       distinctId: data.id,
       properties: {
@@ -73,42 +77,46 @@ const handleUserDeleted = (data: DeletedObjectJSON) => {
 };
 
 const handleOrganizationCreated = (data: OrganizationJSON) => {
-  analytics.groupIdentify({
-    groupKey: data.id,
-    groupType: 'company',
-    distinctId: data.created_by,
-    properties: {
-      name: data.name,
-      avatar: data.image_url,
-    },
-  });
-
-  if (data.created_by) {
-    analytics.capture({
-      event: 'Organization Created',
+  if (analytics) {
+    analytics.groupIdentify({
+      groupKey: data.id,
+      groupType: 'company',
       distinctId: data.created_by,
+      properties: {
+        name: data.name,
+        avatar: data.image_url,
+      },
     });
+
+    if (data.created_by) {
+      analytics.capture({
+        event: 'Organization Created',
+        distinctId: data.created_by,
+      });
+    }
   }
 
   return new Response('Organization created', { status: 201 });
 };
 
 const handleOrganizationUpdated = (data: OrganizationJSON) => {
-  analytics.groupIdentify({
-    groupKey: data.id,
-    groupType: 'company',
-    distinctId: data.created_by,
-    properties: {
-      name: data.name,
-      avatar: data.image_url,
-    },
-  });
-
-  if (data.created_by) {
-    analytics.capture({
-      event: 'Organization Updated',
+  if (analytics) {
+    analytics.groupIdentify({
+      groupKey: data.id,
+      groupType: 'company',
       distinctId: data.created_by,
+      properties: {
+        name: data.name,
+        avatar: data.image_url,
+      },
     });
+
+    if (data.created_by) {
+      analytics.capture({
+        event: 'Organization Updated',
+        distinctId: data.created_by,
+      });
+    }
   }
 
   return new Response('Organization updated', { status: 201 });
@@ -117,16 +125,18 @@ const handleOrganizationUpdated = (data: OrganizationJSON) => {
 const handleOrganizationMembershipCreated = (
   data: OrganizationMembershipJSON
 ) => {
-  analytics.groupIdentify({
-    groupKey: data.organization.id,
-    groupType: 'company',
-    distinctId: data.public_user_data.user_id,
-  });
+  if (analytics) {
+    analytics.groupIdentify({
+      groupKey: data.organization.id,
+      groupType: 'company',
+      distinctId: data.public_user_data.user_id,
+    });
 
-  analytics.capture({
-    event: 'Organization Member Created',
-    distinctId: data.public_user_data.user_id,
-  });
+    analytics.capture({
+      event: 'Organization Member Created',
+      distinctId: data.public_user_data.user_id,
+    });
+  }
 
   return new Response('Organization membership created', { status: 201 });
 };
@@ -136,10 +146,12 @@ const handleOrganizationMembershipDeleted = (
 ) => {
   // Need to unlink the user from the group
 
-  analytics.capture({
-    event: 'Organization Member Deleted',
-    distinctId: data.public_user_data.user_id,
-  });
+  if (analytics) {
+    analytics.capture({
+      event: 'Organization Member Deleted',
+      distinctId: data.public_user_data.user_id,
+    });
+  }
 
   return new Response('Organization membership deleted', { status: 201 });
 };
@@ -227,7 +239,9 @@ export const POST = async (request: Request): Promise<Response> => {
     }
   }
 
-  await analytics.shutdown();
+  if (analytics) {
+    await analytics.shutdown();
+  }
 
   return response;
 };

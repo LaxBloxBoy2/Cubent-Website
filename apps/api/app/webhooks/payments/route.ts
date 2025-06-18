@@ -34,10 +34,12 @@ const handleCheckoutSessionCompleted = async (
     return;
   }
 
-  analytics.capture({
-    event: 'User Subscribed',
-    distinctId: user.id,
-  });
+  if (analytics) {
+    analytics.capture({
+      event: 'User Subscribed',
+      distinctId: user.id,
+    });
+  }
 };
 
 const handleSubscriptionScheduleCanceled = async (
@@ -55,10 +57,12 @@ const handleSubscriptionScheduleCanceled = async (
     return;
   }
 
-  analytics.capture({
-    event: 'User Unsubscribed',
-    distinctId: user.id,
-  });
+  if (analytics) {
+    analytics.capture({
+      event: 'User Unsubscribed',
+      distinctId: user.id,
+    });
+  }
 };
 
 export const POST = async (request: Request): Promise<Response> => {
@@ -95,7 +99,9 @@ export const POST = async (request: Request): Promise<Response> => {
       }
     }
 
-    await analytics.shutdown();
+    if (analytics) {
+      await analytics.shutdown();
+    }
 
     return NextResponse.json({ result: event, ok: true });
   } catch (error) {
