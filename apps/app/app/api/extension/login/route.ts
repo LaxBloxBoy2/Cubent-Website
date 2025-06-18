@@ -79,15 +79,15 @@ export const POST = async (request: Request) => {
     // Generate a short-lived session using Clerk
     const clerk = await clerkClient();
 
-    // Create a session (10 minutes expiration)
+    // Create a session (Clerk handles expiration automatically)
     const session = await clerk.sessions.createSession({
       userId,
-      expiresInSeconds: 600, // 10 minutes
     });
 
     const authToken = session.id;
 
     // Set expiration time (10 minutes from now)
+    // Note: Clerk session expiration is handled by Clerk, but we enforce our own expiration
     const expiresAt = new Date(Date.now() + 10 * 60 * 1000);
 
     // Clean up any existing pending logins for this device
