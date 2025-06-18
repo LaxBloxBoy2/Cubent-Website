@@ -35,10 +35,10 @@ export default function DebugAuthPage() {
     const state = 'test-state-' + Math.random().toString(36).substr(2, 9);
     const authRedirect = 'vscode://cubent.cubent/auth';
     const url = `/api/extension/sign-in?state=${state}&auth_redirect=${encodeURIComponent(authRedirect)}`;
-    
+
     addLog(`Generated URL: ${url}`);
     addLog('Opening in new tab...');
-    
+
     window.open(url, '_blank');
   };
 
@@ -56,12 +56,12 @@ export default function DebugAuthPage() {
 
   const testAuthSuccess = () => {
     addLog('Testing Auth Success Page...');
-    const redirectUrl = 'vscode://cubent.auth/callback?token=test-token&state=test-state';
+    const redirectUrl = 'vscode://cubent.cubent/callback?token=test-token&state=test-state';
     const url = `/auth-success?redirect_url=${encodeURIComponent(redirectUrl)}`;
-    
+
     addLog(`Generated URL: ${url}`);
     addLog('Opening in new tab...');
-    
+
     window.open(url, '_blank');
   };
 

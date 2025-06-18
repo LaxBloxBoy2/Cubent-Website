@@ -14,7 +14,7 @@
    - After login, redirects to `/auth-success?redirect_url=/login?device_id=abc123&state=xyz789`
    - Finally redirects to `/login?device_id=abc123&state=xyz789`
 5. **Login Page**: Shows terms acceptance and generates token
-6. **Success**: Redirects to `vscode://cubent.auth/callback?token=...&state=...`
+6. **Success**: Redirects to `vscode://cubent.cubent/callback?token=...&state=...`
 
 ### **Legacy Flow ("Sign In (Legacy)")**
 

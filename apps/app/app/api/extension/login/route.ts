@@ -118,7 +118,7 @@ export const POST = async (request: Request) => {
     });
 
     // Generate VS Code callback URL
-    const redirectUrl = `vscode://cubent.auth/callback?token=${encodeURIComponent(authToken)}&state=${encodeURIComponent(state)}`;
+    const redirectUrl = `vscode://cubent.cubent/callback?token=${encodeURIComponent(authToken)}&state=${encodeURIComponent(state)}`;
 
     return NextResponse.json({
       success: true,
