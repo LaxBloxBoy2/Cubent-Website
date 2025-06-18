@@ -10,9 +10,12 @@ export const GET = async (request: NextRequest) => {
     const cronSecret = process.env.CRON_SECRET;
     
     if (cronSecret && authHeader !== `Bearer ${cronSecret}`) {
-      log.warn('Unauthorized cron request', { 
-        ip: request.ip || 'unknown',
-        userAgent: request.headers.get('user-agent') 
+      const ip = request.headers.get('x-forwarded-for') ||
+                 request.headers.get('x-real-ip') ||
+                 'unknown';
+      log.warn('Unauthorized cron request', {
+        ip,
+        userAgent: request.headers.get('user-agent')
       });
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }

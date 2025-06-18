@@ -59,7 +59,9 @@ const checkRateLimit = (ip: string): boolean => {
 export const GET = async (request: NextRequest) => {
   try {
     // Get client IP for rate limiting
-    const ip = request.ip || request.headers.get('x-forwarded-for') || 'unknown';
+    const ip = request.headers.get('x-forwarded-for') ||
+               request.headers.get('x-real-ip') ||
+               'unknown';
     
     // Check rate limit
     if (!checkRateLimit(ip)) {
