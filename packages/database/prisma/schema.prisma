@@ -148,6 +148,19 @@ model UserProfile {
   @@index([userId])
 }
 
+model PendingLogin {
+  id        String   @id @default(cuid())
+  deviceId  String
+  state     String
+  token     String
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+
+  @@index([deviceId])
+  @@index([state])
+  @@index([expiresAt])
+}
+
 // Keep the existing Page model for now
 model Page {
   id   Int    @id @default(autoincrement())
