@@ -56,7 +56,7 @@ export default function DebugAuthPage() {
 
   const testAuthSuccess = () => {
     addLog('Testing Auth Success Page...');
-    const redirectUrl = 'vscode://cubent.cubent/callback?token=test-token&state=test-state';
+    const redirectUrl = 'vscode://cubent.cubent/auth/callback?token=test-token&state=test-state';
     const url = `/auth-success?redirect_url=${encodeURIComponent(redirectUrl)}`;
 
     addLog(`Generated URL: ${url}`);
