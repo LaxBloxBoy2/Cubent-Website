@@ -7,39 +7,53 @@
   },
   "favicon": "/favicon.svg",
   "colors": {
-    "primary": "#5865F2",
-    "light": "#7289DA",
-    "dark": "#4752C4",
+    "primary": "#000000",
+    "light": "#404040",
+    "dark": "#000000",
+    "background": {
+      "light": "#ffffff",
+      "dark": "#0a0a0a"
+    },
     "anchors": {
-      "from": "#5865F2",
-      "to": "#7289DA"
+      "from": "#000000",
+      "to": "#404040"
     }
+  },
+  "theme": "minimal",
+  "layout": "topnav",
+  "modeToggle": {
+    "default": "light",
+    "isHidden": false
   },
   "topbarLinks": [
     {
-      "name": "Discord",
-      "url": "https://discord.gg/cubent"
+      "name": "Website",
+      "url": "https://cubent.com"
     },
     {
       "name": "GitHub",
       "url": "https://github.com/LaxBloxBoy2/Cubent"
+    },
+    {
+      "name": "Discord",
+      "url": "https://discord.gg/cubent"
     }
   ],
   "topbarCtaButton": {
-    "name": "Download Extension",
+    "name": "Download",
     "url": "https://marketplace.visualstudio.com/items?itemName=cubent.cubent"
   },
   "tabs": [
     {
-      "name": "Getting Started",
-      "url": "getting-started"
+      "name": "Guide",
+      "url": "guide"
     },
     {
       "name": "Features",
       "url": "features"
     },
     {
-      "name": "API Reference",
+      "name": "API",
       "url": "api-reference"
     }
   ],
@@ -62,11 +76,24 @@
   ],
   "navigation": [
     {
-      "group": "Getting Started",
-      "pages": ["introduction", "installation", "first-steps"]
+      "group": "Guide",
+      "pages": [
+        "introduction",
+        "installation",
+        "first-steps",
+        {
+          "group": "Advanced",
+          "pages": [
+            "advanced/mcp-integration",
+            "advanced/local-models",
+            "advanced/custom-instructions",
+            "advanced/automation"
+          ]
+        }
+      ]
     },
     {
-      "group": "Core Features",
+      "group": "Features",
       "pages": [
         "features/chat-mode",
         "features/agent-mode",
@@ -76,20 +103,11 @@
       ]
     },
     {
-      "group": "Advanced Usage",
-      "pages": [
-        "advanced/mcp-integration",
-        "advanced/local-models",
-        "advanced/custom-instructions",
-        "advanced/automation"
-      ]
-    },
-    {
-      "group": "API Reference",
+      "group": "API",
       "pages": ["api-reference/introduction"]
     },
     {
-      "group": "Community & Support",
+      "group": "Community",
       "pages": [
         "community/discord",
         "community/contributing",
@@ -98,8 +116,22 @@
     }
   ],
   "footerSocials": {
-    "discord": "https://discord.gg/cubent",
     "github": "https://github.com/LaxBloxBoy2/Cubent",
+    "discord": "https://discord.gg/cubent",
     "reddit": "https://www.reddit.com/r/cubent/"
+  },
+  "feedback": {
+    "thumbsRating": true,
+    "suggestEdit": true,
+    "raiseIssue": true
+  },
+  "search": {
+    "prompt": "Search documentation..."
+  },
+  "api": {
+    "baseUrl": "https://api.cubent.com",
+    "auth": {
+      "method": "bearer"
+    }
   }
 }
