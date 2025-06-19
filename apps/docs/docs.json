@@ -9,22 +9,9 @@
   "colors": {
     "primary": "#000000",
     "light": "#404040",
-    "dark": "#000000",
-    "background": {
-      "light": "#ffffff",
-      "dark": "#0a0a0a"
-    },
-    "anchors": {
-      "from": "#000000",
-      "to": "#404040"
-    }
+    "dark": "#000000"
   },
   "theme": "mint",
-  "layout": "topnav",
-  "modeToggle": {
-    "default": "light",
-    "isHidden": false
-  },
   "topbarLinks": [
     {
       "name": "Website",
@@ -60,39 +47,27 @@
       "url": "https://github.com/LaxBloxBoy2/Cubent"
     }
   ],
-  "navigation": [
-    {
-      "group": "Getting Started",
-      "pages": [
-        "introduction",
-        "installation",
-        "first-steps",
-        "models-and-pricing"
-      ]
-    },
-    {
-      "group": "Features",
-      "pages": [
-        "features/chat-mode",
-        "features/agent-mode",
-        "features/custom-modes",
-        "features/file-operations",
-        "features/terminal-integration"
-      ]
-    },
-    {
-      "group": "Advanced",
-      "pages": [
-        "advanced/mcp-integration"
-      ]
-    },
-    {
-      "group": "Community",
-      "pages": [
-        "community/discord"
-      ]
-    }
-  ],
+  "navigation": {
+    "Getting Started": [
+      "introduction",
+      "installation",
+      "first-steps",
+      "models-and-pricing"
+    ],
+    "Features": [
+      "features/chat-mode",
+      "features/agent-mode",
+      "features/custom-modes",
+      "features/file-operations",
+      "features/terminal-integration"
+    ],
+    "Advanced": [
+      "advanced/mcp-integration"
+    ],
+    "Community": [
+      "community/discord"
+    ]
+  },
   "footerSocials": {
     "github": "https://github.com/LaxBloxBoy2/Cubent",
     "discord": "https://discord.gg/cubent",
