@@ -1,0 +1,448 @@
+---
+title: MCP Integration
+description: 'Extend Cubent Coder with Model Context Protocol'
+---
+
+## Overview
+
+Model Context Protocol (MCP) integration allows Cubent Coder to connect with external tools, services, and data sources. This powerful extensibility system enables the AI to access databases, APIs, cloud services, and custom tools while maintaining security and control.
+
+## What is MCP?
+
+MCP (Model Context Protocol) is an open standard that enables AI models to securely connect to external resources:
+
+- **Standardized interface**: Consistent way to connect tools and services
+- **Security-first**: Built-in authentication and permission controls
+- **Extensible**: Support for custom tools and integrations
+- **Interoperable**: Works across different AI models and platforms
+
+## Built-in MCP Integrations
+
+### Database Connections
+
+Connect to various databases:
+
+```yaml
+# PostgreSQL
+mcp_servers:
+  postgres:
+    command: "npx"
+    args: ["@modelcontextprotocol/server-postgres"]
+    env:
+      POSTGRES_CONNECTION_STRING: "postgresql://user:pass@localhost/db"
+```
+
+```yaml
+# SQLite
+mcp_servers:
+  sqlite:
+    command: "npx"
+    args: ["@modelcontextprotocol/server-sqlite", "--db-path", "./data.db"]
+```
+
+### File System Access
+
+Enhanced file operations:
+
+```yaml
+# File system server
+mcp_servers:
+  filesystem:
+    command: "npx"
+    args: ["@modelcontextprotocol/server-filesystem", "/allowed/path"]
+```
+
+### Web Services
+
+Connect to external APIs:
+
+```yaml
+# HTTP/REST API server
+mcp_servers:
+  web_api:
+    command: "npx"
+    args: ["@modelcontextprotocol/server-fetch"]
+    env:
+      ALLOWED_HOSTS: "api.example.com,api.github.com"
+```
+
+### Development Tools
+
+Integrate with development services:
+
+```yaml
+# GitHub integration
+mcp_servers:
+  github:
+    command: "npx"
+    args: ["@modelcontextprotocol/server-github"]
+    env:
+      GITHUB_PERSONAL_ACCESS_TOKEN: "your_token_here"
+```
+
+## Setting Up MCP Servers
+
+### Installation
+
+Install MCP servers using npm:
+
+```bash
+# Install common MCP servers
+npm install -g @modelcontextprotocol/server-postgres
+npm install -g @modelcontextprotocol/server-sqlite
+npm install -g @modelcontextprotocol/server-filesystem
+npm install -g @modelcontextprotocol/server-fetch
+```
+
+### Configuration
+
+Configure MCP servers in your Cubent Coder settings:
+
+```json
+{
+  "mcpServers": {
+    "database": {
+      "command": "npx",
+      "args": ["@modelcontextprotocol/server-postgres"],
+      "env": {
+        "POSTGRES_CONNECTION_STRING": "postgresql://localhost/mydb"
+      }
+    },
+    "files": {
+      "command": "npx",
+      "args": ["@modelcontextprotocol/server-filesystem", "/workspace"]
+    }
+  }
+}
+```
+
+### Authentication
+
+Set up secure authentication:
+
+```json
+{
+  "mcpServers": {
+    "github": {
+      "command": "npx",
+      "args": ["@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_TOKEN}"
+      }
+    }
+  }
+}
+```
+
+## Using MCP Tools
+
+### Database Queries
+
+Query databases through MCP:
+
+```
+Query the users table to find all active users from the last 30 days
+```
+
+```
+Create a new table for storing product reviews with appropriate indexes
+```
+
+```
+Analyze the database schema and suggest optimizations
+```
+
+### File Operations
+
+Enhanced file system access:
+
+```
+Search for all TypeScript files that import React
+```
+
+```
+Create a backup of the src/ directory
+```
+
+```
+Find and replace all occurrences of the old API endpoint
+```
+
+### API Interactions
+
+Connect to external services:
+
+```
+Fetch the latest issues from our GitHub repository
+```
+
+```
+Get weather data for New York from the weather API
+```
+
+```
+Send a notification to our Slack channel about the deployment
+```
+
+## Custom MCP Servers
+
+### Creating a Custom Server
+
+Build your own MCP server:
+
+```typescript
+import { Server } from '@modelcontextprotocol/sdk/server/index.js';
+import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
+
+const server = new Server(
+  {
+    name: 'my-custom-server',
+    version: '1.0.0',
+  },
+  {
+    capabilities: {
+      tools: {},
+      resources: {},
+    },
+  }
+);
+
+// Add custom tools
+server.setRequestHandler('tools/list', async () => {
+  return {
+    tools: [
+      {
+        name: 'custom_tool',
+        description: 'My custom tool',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            input: { type: 'string' }
+          }
+        }
+      }
+    ]
+  };
+});
+
+// Handle tool calls
+server.setRequestHandler('tools/call', async (request) => {
+  const { name, arguments: args } = request.params;
+  
+  if (name === 'custom_tool') {
+    // Implement your custom logic here
+    return {
+      content: [
+        {
+          type: 'text',
+          text: `Processed: ${args.input}`
+        }
+      ]
+    };
+  }
+  
+  throw new Error(`Unknown tool: ${name}`);
+});
+
+// Start the server
+const transport = new StdioServerTransport();
+await server.connect(transport);
+```
+
+### Server Configuration
+
+Configure your custom server:
+
+```json
+{
+  "mcpServers": {
+    "custom": {
+      "command": "node",
+      "args": ["./my-custom-server.js"]
+    }
+  }
+}
+```
+
+## Advanced MCP Features
+
+### Resource Management
+
+Access and manage resources:
+
+```typescript
+// List available resources
+server.setRequestHandler('resources/list', async () => {
+  return {
+    resources: [
+      {
+        uri: 'file:///workspace/config.json',
+        name: 'Configuration',
+        description: 'Application configuration'
+      }
+    ]
+  };
+});
+
+// Read resource content
+server.setRequestHandler('resources/read', async (request) => {
+  const { uri } = request.params;
+  // Return resource content
+});
+```
+
+### Prompt Templates
+
+Create reusable prompt templates:
+
+```typescript
+server.setRequestHandler('prompts/list', async () => {
+  return {
+    prompts: [
+      {
+        name: 'code_review',
+        description: 'Code review template',
+        arguments: [
+          {
+            name: 'file_path',
+            description: 'Path to the file to review'
+          }
+        ]
+      }
+    ]
+  };
+});
+```
+
+### Streaming Responses
+
+Handle large data with streaming:
+
+```typescript
+server.setRequestHandler('tools/call', async (request) => {
+  // Return streaming response for large datasets
+  return {
+    content: [
+      {
+        type: 'text',
+        text: 'Processing large dataset...'
+      }
+    ],
+    isError: false
+  };
+});
+```
+
+## Security and Best Practices
+
+### Access Control
+
+Implement proper access controls:
+
+```json
+{
+  "mcpServers": {
+    "database": {
+      "command": "npx",
+      "args": ["@modelcontextprotocol/server-postgres"],
+      "env": {
+        "POSTGRES_CONNECTION_STRING": "postgresql://readonly_user:pass@localhost/db"
+      },
+      "permissions": {
+        "allowedOperations": ["SELECT"],
+        "deniedTables": ["sensitive_data", "user_passwords"]
+      }
+    }
+  }
+}
+```
+
+### Environment Variables
+
+Use environment variables for secrets:
+
+```bash
+# .env file
+GITHUB_TOKEN=your_github_token
+DATABASE_URL=postgresql://localhost/mydb
+API_KEY=your_api_key
+```
+
+### Validation and Sanitization
+
+Validate all inputs:
+
+```typescript
+server.setRequestHandler('tools/call', async (request) => {
+  const { arguments: args } = request.params;
+  
+  // Validate inputs
+  if (!args.query || typeof args.query !== 'string') {
+    throw new Error('Invalid query parameter');
+  }
+  
+  // Sanitize inputs
+  const sanitizedQuery = sanitizeSQL(args.query);
+  
+  // Execute safely
+  return executeQuery(sanitizedQuery);
+});
+```
+
+## Troubleshooting
+
+### Common Issues
+
+**Server connection failed:**
+- Check server installation
+- Verify configuration syntax
+- Review environment variables
+
+**Permission denied:**
+- Check file system permissions
+- Verify authentication credentials
+- Review access control settings
+
+**Tool not found:**
+- Ensure server is running
+- Check tool registration
+- Verify server capabilities
+
+### Debugging
+
+Enable debug logging:
+
+```json
+{
+  "mcpServers": {
+    "debug": true,
+    "logLevel": "debug"
+  }
+}
+```
+
+Monitor server logs:
+
+```bash
+# View MCP server logs
+tail -f ~/.cubent/mcp-servers.log
+```
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card
+    title="Local Models"
+    icon="server"
+    href="/advanced/local-models"
+  >
+    Run AI models locally with MCP integration
+  </Card>
+  <Card
+    title="Custom Instructions"
+    icon="gear"
+    href="/advanced/custom-instructions"
+  >
+    Configure AI behavior for your specific needs
+  </Card>
+</CardGroup>

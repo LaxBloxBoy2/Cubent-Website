@@ -1,0 +1,412 @@
+---
+title: Terminal Integration
+description: 'Execute commands and manage your development environment'
+---
+
+## Overview
+
+Cubent Coder's terminal integration allows the AI to execute commands, manage your development environment, and automate routine tasks. This powerful feature enables the AI to install packages, run tests, start development servers, and perform complex build operations.
+
+## Basic Terminal Operations
+
+### Running Commands
+
+Cubent Coder can execute terminal commands directly:
+
+```
+Run npm install to install dependencies
+```
+
+```
+Start the development server with npm run dev
+```
+
+```
+Run the test suite using npm test
+```
+
+### Command Suggestions
+
+The AI can suggest appropriate commands:
+
+```
+What command should I use to build this React project?
+```
+
+```
+How do I run TypeScript compilation?
+```
+
+```
+What's the command to deploy this to Vercel?
+```
+
+### Output Analysis
+
+Cubent Coder can interpret command output:
+
+```
+Run npm audit and explain any security vulnerabilities
+```
+
+```
+Execute the tests and analyze any failures
+```
+
+```
+Check the build output for any warnings or errors
+```
+
+## Development Workflow Integration
+
+### Package Management
+
+Manage dependencies efficiently:
+
+```
+Install React Router and update the routing configuration
+```
+
+```
+Add TypeScript support to this JavaScript project
+```
+
+```
+Update all dependencies to their latest versions
+```
+
+```
+Remove unused dependencies from package.json
+```
+
+### Build and Compilation
+
+Handle build processes:
+
+```
+Set up a production build pipeline
+```
+
+```
+Configure TypeScript compilation with strict mode
+```
+
+```
+Set up Webpack configuration for this project
+```
+
+```
+Optimize the build for better performance
+```
+
+### Testing and Quality Assurance
+
+Automate testing workflows:
+
+```
+Run all tests and generate a coverage report
+```
+
+```
+Set up ESLint and Prettier for code quality
+```
+
+```
+Run security audit and fix any vulnerabilities
+```
+
+```
+Execute end-to-end tests with Cypress
+```
+
+## Advanced Terminal Features
+
+### Multi-Command Workflows
+
+Execute complex sequences of commands:
+
+```
+Deploy this application:
+1. Run tests to ensure everything works
+2. Build the production version
+3. Deploy to the staging environment
+4. Run smoke tests on staging
+5. Deploy to production if tests pass
+```
+
+### Environment Management
+
+Manage different environments:
+
+```
+Set up development environment:
+- Install dependencies
+- Configure environment variables
+- Start database
+- Run migrations
+- Start development server
+```
+
+### CI/CD Integration
+
+Work with continuous integration:
+
+```
+Set up GitHub Actions workflow for:
+- Running tests on pull requests
+- Building and deploying on main branch
+- Running security scans
+- Generating documentation
+```
+
+## Platform-Specific Commands
+
+### Node.js Projects
+
+Common Node.js operations:
+
+```bash
+# Package management
+npm install
+npm update
+npm audit fix
+
+# Development
+npm run dev
+npm run build
+npm run test
+
+# Deployment
+npm run deploy
+npm publish
+```
+
+### Python Projects
+
+Python development commands:
+
+```bash
+# Environment setup
+python -m venv venv
+source venv/bin/activate  # Linux/Mac
+venv\Scripts\activate     # Windows
+
+# Package management
+pip install -r requirements.txt
+pip freeze > requirements.txt
+
+# Development
+python manage.py runserver
+python -m pytest
+python setup.py build
+```
+
+### Docker Operations
+
+Container management:
+
+```bash
+# Build and run
+docker build -t myapp .
+docker run -p 3000:3000 myapp
+
+# Compose operations
+docker-compose up -d
+docker-compose logs
+docker-compose down
+```
+
+## Safety and Security
+
+### Command Approval
+
+Configure which commands require approval:
+
+- **Auto-approve**: Read-only commands (ls, cat, git status)
+- **Require approval**: Installation commands (npm install, pip install)
+- **Always confirm**: Destructive operations (rm, git reset --hard)
+
+### Sandboxing
+
+Cubent Coder respects security boundaries:
+
+- **Workspace isolation**: Commands run within your project directory
+- **Permission checks**: Respects file system permissions
+- **Network restrictions**: Can be configured to limit external access
+
+### Command Validation
+
+The AI validates commands before execution:
+
+- **Syntax checking**: Ensures commands are properly formatted
+- **Safety analysis**: Identifies potentially dangerous operations
+- **Context awareness**: Considers current project state
+
+## Environment Configuration
+
+### Shell Integration
+
+Works with different shells:
+
+- **PowerShell** (Windows)
+- **Bash** (Linux/Mac)
+- **Zsh** (Mac)
+- **Fish** (Alternative shell)
+
+### Environment Variables
+
+Manage environment configuration:
+
+```
+Set up environment variables for development:
+- DATABASE_URL
+- API_KEY
+- NODE_ENV
+```
+
+```
+Create .env file with necessary configuration
+```
+
+### Path Management
+
+Handle PATH and executable locations:
+
+```
+Add node_modules/.bin to PATH for this session
+```
+
+```
+Find the location of the Python interpreter
+```
+
+## Integration with Development Tools
+
+### Version Control
+
+Git operations through terminal:
+
+```
+Initialize git repository and make first commit
+```
+
+```
+Create a new branch for this feature
+```
+
+```
+Commit changes with descriptive message
+```
+
+```
+Push changes to remote repository
+```
+
+### Database Operations
+
+Database management commands:
+
+```
+Run database migrations
+```
+
+```
+Seed the database with test data
+```
+
+```
+Create a database backup
+```
+
+```
+Reset database to clean state
+```
+
+### Monitoring and Logging
+
+Development monitoring:
+
+```
+Start the application with debug logging
+```
+
+```
+Monitor application performance
+```
+
+```
+Tail log files for errors
+```
+
+## Troubleshooting
+
+### Common Issues
+
+**Command not found:**
+- Check if the tool is installed
+- Verify PATH configuration
+- Install missing dependencies
+
+**Permission denied:**
+- Check file permissions
+- Use sudo if necessary (with caution)
+- Verify user access rights
+
+**Command hangs:**
+- Check for interactive prompts
+- Use timeout settings
+- Monitor resource usage
+
+### Performance Optimization
+
+**Slow command execution:**
+- Use parallel execution where possible
+- Cache results when appropriate
+- Optimize command parameters
+
+**Resource usage:**
+- Monitor CPU and memory usage
+- Limit concurrent operations
+- Use efficient command alternatives
+
+## Best Practices
+
+### Command Organization
+
+1. **Group related commands**: Organize workflows logically
+2. **Use descriptive names**: Make command purposes clear
+3. **Document complex operations**: Add comments for clarity
+4. **Test in development**: Verify commands before production use
+
+### Error Handling
+
+1. **Check exit codes**: Verify command success
+2. **Handle failures gracefully**: Provide fallback options
+3. **Log important operations**: Keep audit trail
+4. **Validate inputs**: Ensure command parameters are correct
+
+### Security Considerations
+
+1. **Review commands**: Always check what will be executed
+2. **Use least privilege**: Don't run unnecessary sudo commands
+3. **Protect secrets**: Don't expose API keys or passwords
+4. **Audit operations**: Keep track of system changes
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card
+    title="Advanced Automation"
+    icon="magic"
+    href="/advanced/automation"
+  >
+    Set up complex workflows and automation
+  </Card>
+  <Card
+    title="Custom Instructions"
+    icon="gear"
+    href="/advanced/custom-instructions"
+  >
+    Configure AI behavior for your specific needs
+  </Card>
+</CardGroup>

@@ -1,0 +1,190 @@
+---
+title: Chat Mode
+description: 'Natural language coding with Cubent Coder'
+---
+
+## Overview
+
+Chat Mode is the primary interface for interacting with Cubent Coder. It allows you to communicate with AI using natural language to generate code, debug issues, explain concepts, and perform various development tasks.
+
+## Getting Started
+
+To start using Chat Mode:
+
+1. Open the Cubent Coder panel in VS Code
+2. Type your question or request in the chat input
+3. Press Enter or click Send
+4. Review the AI's response and any generated code
+
+## Basic Commands
+
+### Code Generation
+
+Ask Cubent Coder to generate code for you:
+
+```
+Create a React component for a user profile card
+```
+
+```
+Write a Python function to calculate fibonacci numbers
+```
+
+```
+Generate a SQL query to find users who registered last month
+```
+
+### Code Explanation
+
+Select code in your editor and ask for explanations:
+
+```
+Explain this function
+```
+
+```
+What does this code do?
+```
+
+```
+How can I improve this implementation?
+```
+
+### Debugging Help
+
+Get assistance with debugging:
+
+```
+Why is this function not working?
+```
+
+```
+Find the bug in this code
+```
+
+```
+Help me fix this error: [paste error message]
+```
+
+## Advanced Features
+
+### Context Awareness
+
+Cubent Coder understands your project context:
+
+- **File awareness**: References files in your workspace
+- **Code understanding**: Analyzes your existing codebase
+- **Project structure**: Understands your project's architecture
+
+### Multi-turn Conversations
+
+Continue conversations naturally:
+
+- Ask follow-up questions
+- Request modifications to generated code
+- Build upon previous responses
+
+### Code Actions
+
+Cubent Coder can perform actions directly in your editor:
+
+- Create new files
+- Modify existing code
+- Run terminal commands
+- Install dependencies
+
+## Best Practices
+
+### Writing Effective Prompts
+
+1. **Be specific**: Provide clear requirements and context
+2. **Include examples**: Show what you want when possible
+3. **Specify constraints**: Mention any limitations or requirements
+4. **Ask for explanations**: Request comments and documentation
+
+### Example of a Good Prompt
+
+```
+Create a TypeScript interface for a user object that includes:
+- id (number)
+- name (string)
+- email (string)
+- isActive (boolean)
+- createdAt (Date)
+
+Also create a function to validate this user object.
+```
+
+### Managing Context
+
+- Keep conversations focused on specific topics
+- Start new chats for unrelated tasks
+- Provide relevant code snippets when asking for help
+
+## Tips & Tricks
+
+### Quick Actions
+
+- Use `@` to reference files in your workspace
+- Use `#` to reference specific functions or classes
+- Copy code blocks directly to your clipboard
+
+### Keyboard Shortcuts
+
+- `Ctrl+Enter` (or `Cmd+Enter`): Send message
+- `Ctrl+/` (or `Cmd+/`): Focus chat input
+- `Escape`: Clear current input
+
+### Code Review
+
+Ask Cubent Coder to review your code:
+
+```
+Review this function for potential issues and improvements
+```
+
+```
+Check this code for security vulnerabilities
+```
+
+```
+Suggest optimizations for this algorithm
+```
+
+## Troubleshooting
+
+### Common Issues
+
+**AI not responding:**
+- Check your API key configuration
+- Verify internet connection
+- Check API rate limits
+
+**Responses seem off-topic:**
+- Provide more context in your prompts
+- Start a new conversation
+- Be more specific about your requirements
+
+**Code suggestions don't work:**
+- Ensure the AI understands your project structure
+- Provide relevant file context
+- Specify the programming language and framework
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card
+    title="Try Agent Mode"
+    icon="robot"
+    href="/features/agent-mode"
+  >
+    Let Cubent Coder work autonomously on complex tasks
+  </Card>
+  <Card
+    title="Create Custom Modes"
+    icon="gear"
+    href="/features/custom-modes"
+  >
+    Build specialized AI personas for your workflow
+  </Card>
+</CardGroup>
