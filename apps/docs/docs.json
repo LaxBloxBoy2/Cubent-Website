@@ -47,39 +47,41 @@
       "url": "https://github.com/LaxBloxBoy2/Cubent"
     }
   ],
-  "navigation": [
-    {
-      "group": "Getting Started",
-      "pages": [
-        "introduction",
-        "installation",
-        "first-steps",
-        "models-and-pricing"
-      ]
-    },
-    {
-      "group": "Features",
-      "pages": [
-        "features/chat-mode",
-        "features/agent-mode",
-        "features/custom-modes",
-        "features/file-operations",
-        "features/terminal-integration"
-      ]
-    },
-    {
-      "group": "Advanced",
-      "pages": [
-        "advanced/mcp-integration"
-      ]
-    },
-    {
-      "group": "Community",
-      "pages": [
-        "community/discord"
-      ]
-    }
-  ],
+  "navigation": {
+    "groups": [
+      {
+        "group": "Getting Started",
+        "pages": [
+          "introduction",
+          "installation",
+          "first-steps",
+          "models-and-pricing"
+        ]
+      },
+      {
+        "group": "Features",
+        "pages": [
+          "features/chat-mode",
+          "features/agent-mode",
+          "features/custom-modes",
+          "features/file-operations",
+          "features/terminal-integration"
+        ]
+      },
+      {
+        "group": "Advanced",
+        "pages": [
+          "advanced/mcp-integration"
+        ]
+      },
+      {
+        "group": "Community",
+        "pages": [
+          "community/discord"
+        ]
+      }
+    ]
+  },
   "footerSocials": {
     "github": "https://github.com/LaxBloxBoy2/Cubent",
     "discord": "https://discord.gg/cubent",
