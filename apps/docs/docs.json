@@ -9,11 +9,7 @@
   "colors": {
     "primary": "#ffffff",
     "light": "#000000",
-    "dark": "#ffffff",
-    "background": {
-      "light": "#ffffff",
-      "dark": "#0a0a0a"
-    }
+    "dark": "#ffffff"
   },
   "theme": "mint",
   "topbarLinks": [
