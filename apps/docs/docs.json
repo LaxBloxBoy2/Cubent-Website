@@ -54,13 +54,9 @@
         "pages": [
           "introduction",
           "installation",
-          "first-steps"
-        ]
-      },
-      {
-        "group": "Subscription Plans",
-        "pages": [
-          "models-and-pricing"
+          "first-steps",
+          "models-and-pricing",
+          "subscription-plans"
         ]
       },
       {
