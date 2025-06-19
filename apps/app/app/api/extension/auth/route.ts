@@ -114,13 +114,18 @@ export async function POST(request: NextRequest) {
 
 export async function GET(request: NextRequest) {
   try {
+    console.log('[Extension Auth] Request received');
+
     // Check for Bearer token in Authorization header
     const authHeader = request.headers.get('authorization');
+    console.log('[Extension Auth] Auth header:', authHeader ? 'Bearer token present' : 'No auth header');
+
     let userId: string | null = null;
 
     if (authHeader?.startsWith('Bearer ')) {
       // Extension is using custom token (Clerk session ID)
       const token = authHeader.substring(7);
+      console.log('[Extension Auth] Token extracted, length:', token.length);
 
       // Find the pending login with this token to get the user
       const pendingLogin = await database.pendingLogin.findFirst({
@@ -130,6 +135,8 @@ export async function GET(request: NextRequest) {
         },
       });
 
+      console.log('[Extension Auth] Pending login found:', !!pendingLogin);
+
       if (pendingLogin) {
         // Token is valid, but we need to get the user ID from the session
         // The token is actually a Clerk session ID, so we can use it to get user info
@@ -138,14 +145,16 @@ export async function GET(request: NextRequest) {
           const client = await clerkClient();
           const session = await client.sessions.getSession(token);
           userId = session.userId;
+          console.log('[Extension Auth] Session validated, userId:', userId);
         } catch (error) {
-          console.error('Failed to validate session token:', error);
+          console.error('[Extension Auth] Failed to validate session token:', error);
           return NextResponse.json(
             { error: 'Invalid token' },
             { status: 401 }
           );
         }
       } else {
+        console.log('[Extension Auth] No valid pending login found for token');
         return NextResponse.json(
           { error: 'Invalid or expired token' },
           { status: 401 }
@@ -153,6 +162,7 @@ export async function GET(request: NextRequest) {
       }
     } else {
       // Fallback to regular Clerk auth for web requests
+      console.log('[Extension Auth] Using regular Clerk auth');
       const authResult = await auth();
       userId = authResult.userId;
     }
@@ -197,7 +207,7 @@ export async function GET(request: NextRequest) {
     });
 
   } catch (error) {
-    console.error('Extension auth check error:', error);
+    console.error('[Extension Auth] Error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
