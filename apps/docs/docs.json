@@ -11,7 +11,7 @@
     "light": "#404040",
     "dark": "#000000"
   },
-  "theme": "mint",
+  "theme": "quill",
   "topbarLinks": [
     {
       "name": "Website",
@@ -54,7 +54,12 @@
         "pages": [
           "introduction",
           "installation",
-          "first-steps",
+          "first-steps"
+        ]
+      },
+      {
+        "group": "Subscription Plans",
+        "pages": [
           "models-and-pricing"
         ]
       },
