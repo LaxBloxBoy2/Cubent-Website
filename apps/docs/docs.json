@@ -11,7 +11,7 @@
     "light": "#404040",
     "dark": "#000000"
   },
-  "theme": "prism",
+  "theme": "mint",
   "topbarLinks": [
     {
       "name": "Website",
