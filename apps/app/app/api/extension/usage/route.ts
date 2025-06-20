@@ -1,6 +1,5 @@
 import { auth } from '@repo/auth/server';
 import { database } from '@repo/database';
-import { calculateCubentUnits, getUsagePercentage } from '@repo/database/cubent-units';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 
@@ -8,8 +7,6 @@ const usageUpdateSchema = z.object({
   tokensUsed: z.number().min(0),
   requestsMade: z.number().min(0),
   costAccrued: z.number().min(0),
-  modelId: z.string(),
-  hasImages: z.boolean().optional().default(false),
   date: z.string().datetime().optional(),
 });
 
@@ -25,10 +22,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { tokensUsed, requestsMade, costAccrued, modelId, hasImages, date } = usageUpdateSchema.parse(body);
-
-    // Calculate Cubent Units for this request
-    const cubentUnits = calculateCubentUnits(modelId, tokensUsed, hasImages);
+    const { tokensUsed, requestsMade, costAccrued, date } = usageUpdateSchema.parse(body);
 
     const dbUser = await database.user.findUnique({
       where: { clerkId: userId },
@@ -61,7 +55,6 @@ export async function POST(request: NextRequest) {
           tokensUsed: existingUsage.tokensUsed + tokensUsed,
           requestsMade: existingUsage.requestsMade + requestsMade,
           costAccrued: existingUsage.costAccrued + costAccrued,
-          cubentUnits: (existingUsage.cubentUnits || 0) + cubentUnits,
         },
       });
     } else {
@@ -71,31 +64,10 @@ export async function POST(request: NextRequest) {
           tokensUsed,
           requestsMade,
           costAccrued,
-          cubentUnits,
           date: usageDate,
         },
       });
     }
-
-    // Update user's current month Cubent Units
-    await database.user.update({
-      where: { id: dbUser.id },
-      data: {
-        currentMonthCubentUnits: dbUser.currentMonthCubentUnits + cubentUnits,
-      },
-    });
-
-    // Create detailed usage analytics
-    await database.usageAnalytics.create({
-      data: {
-        userId: dbUser.id,
-        modelId,
-        tokensUsed,
-        requestsMade,
-        costAccrued,
-        cubentUnits,
-      },
-    });
 
     return NextResponse.json({
       success: true,
@@ -153,22 +125,13 @@ export async function GET(request: NextRequest) {
         tokensUsed: acc.tokensUsed + metric.tokensUsed,
         requestsMade: acc.requestsMade + metric.requestsMade,
         costAccrued: acc.costAccrued + metric.costAccrued,
-        cubentUnits: acc.cubentUnits + (metric.cubentUnits || 0),
       }),
-      { tokensUsed: 0, requestsMade: 0, costAccrued: 0, cubentUnits: 0 }
+      { tokensUsed: 0, requestsMade: 0, costAccrued: 0 }
     );
-
-    // Calculate usage percentage
-    const usagePercentage = getUsagePercentage(dbUser.currentMonthCubentUnits, dbUser.cubentUnitsLimit);
 
     return NextResponse.json({
       totalUsage,
       dailyUsage: usageMetrics,
-      currentMonth: {
-        cubentUnits: dbUser.currentMonthCubentUnits,
-        cubentUnitsLimit: dbUser.cubentUnitsLimit,
-        usagePercentage,
-      },
       period: `${days} days`,
     });
 

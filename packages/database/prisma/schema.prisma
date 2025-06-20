@@ -33,11 +33,6 @@ model User {
   subscriptionTier    String @default("FREE")
   subscriptionStatus  String @default("ACTIVE")
 
-  // Usage tracking
-  currentMonthCubentUnits Float @default(0)
-  cubentUnitsLimit        Float @default(50)
-  lastUsageReset          DateTime?
-
   // Settings sync
   extensionSettings   Json?
   preferences         Json?
@@ -86,7 +81,6 @@ model UsageMetrics {
   tokensUsed    Int @default(0)
   requestsMade  Int @default(0)
   costAccrued   Float @default(0)
-  cubentUnits   Float @default(0)
 
   date DateTime @default(now())
 
@@ -103,7 +97,6 @@ model UsageAnalytics {
   tokensUsed   Int @default(0)
   requestsMade Int @default(0)
   costAccrued  Float @default(0)
-  cubentUnits  Float @default(0)
   sessionId    String?
   metadata     Json?
 

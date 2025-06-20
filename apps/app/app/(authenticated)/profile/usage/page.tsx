@@ -43,9 +43,8 @@ const UsagePage = async () => {
       tokensUsed: acc.tokensUsed + metric.tokensUsed,
       requestsMade: acc.requestsMade + metric.requestsMade,
       costAccrued: acc.costAccrued + metric.costAccrued,
-      cubentUnits: acc.cubentUnits + (metric.cubentUnits || 0),
     }),
-    { tokensUsed: 0, requestsMade: 0, costAccrued: 0, cubentUnits: 0 }
+    { tokensUsed: 0, requestsMade: 0, costAccrued: 0 }
   );
 
   const last30Days = dbUser.usageMetrics.slice(0, 30);
@@ -54,16 +53,14 @@ const UsagePage = async () => {
       tokensUsed: acc.tokensUsed + metric.tokensUsed,
       requestsMade: acc.requestsMade + metric.requestsMade,
       costAccrued: acc.costAccrued + metric.costAccrued,
-      cubentUnits: acc.cubentUnits + (metric.cubentUnits || 0),
     }),
-    { tokensUsed: 0, requestsMade: 0, costAccrued: 0, cubentUnits: 0 }
+    { tokensUsed: 0, requestsMade: 0, costAccrued: 0 }
   );
 
   const averageDaily = {
     tokensUsed: last30Days.length > 0 ? Math.round(last30DaysUsage.tokensUsed / last30Days.length) : 0,
     requestsMade: last30Days.length > 0 ? Math.round(last30DaysUsage.requestsMade / last30Days.length) : 0,
     costAccrued: last30Days.length > 0 ? last30DaysUsage.costAccrued / last30Days.length : 0,
-    cubentUnits: last30Days.length > 0 ? last30DaysUsage.cubentUnits / last30Days.length : 0,
   };
 
   const formatNumber = (num: number) => {
@@ -95,61 +92,8 @@ const UsagePage = async () => {
         </div>
       </div>
 
-      {/* Current Month Usage */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Zap className="h-5 w-5 text-blue-500" />
-            Current Month Usage
-          </CardTitle>
-          <CardDescription>
-            Your Cubent Units usage for this month (Limit: {dbUser.cubentUnitsLimit} units)
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-medium">Cubent Units</span>
-              <span className={`text-sm font-semibold ${
-                (dbUser.currentMonthCubentUnits / dbUser.cubentUnitsLimit) * 100 >= 90
-                  ? 'text-red-600'
-                  : (dbUser.currentMonthCubentUnits / dbUser.cubentUnitsLimit) * 100 >= 75
-                    ? 'text-yellow-600'
-                    : 'text-green-600'
-              }`}>
-                {dbUser.currentMonthCubentUnits.toFixed(1)} / {dbUser.cubentUnitsLimit}
-              </span>
-            </div>
-            <div className="w-full bg-gray-200 rounded-full h-3">
-              <div
-                className={`h-3 rounded-full transition-all duration-300 ${
-                  (dbUser.currentMonthCubentUnits / dbUser.cubentUnitsLimit) * 100 >= 90
-                    ? 'bg-red-500'
-                    : (dbUser.currentMonthCubentUnits / dbUser.cubentUnitsLimit) * 100 >= 75
-                      ? 'bg-yellow-500'
-                      : 'bg-green-500'
-                }`}
-                style={{ width: `${Math.min((dbUser.currentMonthCubentUnits / dbUser.cubentUnitsLimit) * 100, 100)}%` }}
-              />
-            </div>
-            <div className="flex items-center justify-between text-xs text-gray-500">
-              <span>{((dbUser.currentMonthCubentUnits / dbUser.cubentUnitsLimit) * 100).toFixed(1)}% used</span>
-              <span>{(dbUser.cubentUnitsLimit - dbUser.currentMonthCubentUnits).toFixed(1)} remaining</span>
-            </div>
-          </div>
-
-          {(dbUser.currentMonthCubentUnits / dbUser.cubentUnitsLimit) * 100 >= 90 && (
-            <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
-              <p className="text-red-800 text-sm">
-                ⚠️ You're approaching your Cubent Units limit. Consider upgrading your plan to continue using the service.
-              </p>
-            </div>
-          )}
-        </CardContent>
-      </Card>
-
       {/* Summary Cards */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Tokens</CardTitle>
@@ -159,19 +103,6 @@ const UsagePage = async () => {
             <div className="text-2xl font-bold">{formatNumber(totalUsage.tokensUsed)}</div>
             <p className="text-xs text-muted-foreground">
               {formatNumber(averageDaily.tokensUsed)}/day average
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Cubent Units</CardTitle>
-            <Zap className="h-4 w-4 text-blue-500" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-blue-600">{totalUsage.cubentUnits.toFixed(1)}</div>
-            <p className="text-xs text-muted-foreground">
-              {averageDaily.cubentUnits.toFixed(1)}/day average
             </p>
           </CardContent>
         </Card>
