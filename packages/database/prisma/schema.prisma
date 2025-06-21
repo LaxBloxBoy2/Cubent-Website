@@ -14,47 +14,52 @@ datasource db {
 }
 
 model User {
-  id          String   @id @default(cuid())
-  clerkId     String   @unique
-  email       String   @unique
-  name        String?
-  picture     String?
+  id      String  @id @default(cuid())
+  clerkId String  @unique
+  email   String  @unique
+  name    String?
+  picture String?
 
   // Extension connection
-  extensionApiKey String?
-  sessionToken String? // For webapp session authentication
+
+  extensionApiKey   String?
+  sessionToken      String? // For webapp session authentication
   lastExtensionSync DateTime?
-  lastSettingsSync DateTime?
-  extensionEnabled Boolean @default(true)
-  lastActiveAt DateTime?
-  termsAccepted Boolean @default(false)
-  termsAcceptedAt DateTime?
+  lastSettingsSync  DateTime?
+  extensionEnabled  Boolean   @default(true)
+  lastActiveAt      DateTime?
+  termsAccepted     Boolean   @default(false)
+  termsAcceptedAt   DateTime?
 
   // Subscription (sync with extension)
-  subscriptionTier    String @default("FREE")
-  subscriptionStatus  String @default("ACTIVE")
+  subscriptionTier   String @default("FREE")
+  subscriptionStatus String @default("ACTIVE")
 
+  // Cubent Unit tracking
+  cubentUnitsUsed   Float     @default(0)
+  cubentUnitsLimit  Float     @default(50)
+  unitsResetDate    DateTime?
   // Settings sync
-  extensionSettings   Json?
-  preferences         Json?
+  extensionSettings Json?
+  preferences       Json?
 
   // Relations
   extensionSessions ExtensionSession[]
-  usageMetrics     UsageMetrics[]
-  apiKeys          ApiKey[]
-  usageAnalytics   UsageAnalytics[]
+  usageMetrics      UsageMetrics[]
+  apiKeys           ApiKey[]
+  usageAnalytics    UsageAnalytics[]
 
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model ExtensionSession {
-  id        String   @id @default(cuid())
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  sessionId String
-  isActive  Boolean  @default(true)
+  sessionId    String
+  isActive     Boolean  @default(true)
   lastActiveAt DateTime @default(now())
 
   // Extension details
@@ -64,8 +69,8 @@ model ExtensionSession {
   metadata         Json?
 
   // Usage tracking
-  tokensUsed    Int @default(0)
-  requestsMade  Int @default(0)
+  tokensUsed   Int @default(0)
+  requestsMade Int @default(0)
 
   createdAt DateTime @default(now())
 
@@ -79,9 +84,10 @@ model UsageMetrics {
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  tokensUsed    Int @default(0)
-  requestsMade  Int @default(0)
-  costAccrued   Float @default(0)
+  tokensUsed      Int   @default(0)
+  cubentUnitsUsed Float @default(0)
+  requestsMade    Int   @default(0)
+  costAccrued     Float @default(0)
 
   date DateTime @default(now())
 
@@ -94,12 +100,13 @@ model UsageAnalytics {
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  modelId      String
-  tokensUsed   Int @default(0)
-  requestsMade Int @default(0)
-  costAccrued  Float @default(0)
-  sessionId    String?
-  metadata     Json?
+  modelId         String
+  tokensUsed      Int     @default(0)
+  cubentUnitsUsed Float   @default(0)
+  requestsMade    Int     @default(0)
+  costAccrued     Float   @default(0)
+  sessionId       String?
+  metadata        Json?
 
   createdAt DateTime @default(now())
 
@@ -115,12 +122,12 @@ model ApiKey {
 
   name        String
   description String?
-  keyHash     String   @unique
-  permissions Json     @default("[]")
-  isActive    Boolean  @default(true)
+  keyHash     String    @unique
+  permissions Json      @default("[]")
+  isActive    Boolean   @default(true)
   expiresAt   DateTime?
   lastUsedAt  DateTime?
-  usageCount  Int      @default(0)
+  usageCount  Int       @default(0)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -137,11 +144,11 @@ model UserProfile {
   name  String?
 
   // Extension settings
-  subscriptionTier    String @default("FREE")
-  subscriptionStatus  String @default("ACTIVE")
-  termsAccepted       Boolean @default(false)
-  extensionEnabled    Boolean @default(true)
-  settings            Json?
+  subscriptionTier   String  @default("FREE")
+  subscriptionStatus String  @default("ACTIVE")
+  termsAccepted      Boolean @default(false)
+  extensionEnabled   Boolean @default(true)
+  settings           Json?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
