@@ -45,7 +45,7 @@ export async function POST(request: NextRequest) {
 
     // Reset users who actually need reset based on business logic
     for (const user of usersToReset) {
-      if (shouldResetUsage(user.unitsResetDate)) {
+      if (shouldResetUsage(user.unitsResetDate || undefined)) {
         try {
           await database.user.update({
             where: { id: user.id },

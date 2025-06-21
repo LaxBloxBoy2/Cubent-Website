@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
       });
 
       for (const user of usersToReset) {
-        if (shouldResetUsage(user.unitsResetDate)) {
+        if (shouldResetUsage(user.unitsResetDate || undefined)) {
           await database.user.update({
             where: { id: user.id },
             data: {
@@ -187,8 +187,8 @@ export async function GET(request: NextRequest) {
 
     const usersWithResetInfo = users.map(user => ({
       ...user,
-      needsReset: shouldResetUsage(user.unitsResetDate),
-      nextResetDate: calculateNextResetDate(user.unitsResetDate),
+      needsReset: shouldResetUsage(user.unitsResetDate || undefined),
+      nextResetDate: calculateNextResetDate(user.unitsResetDate || undefined),
       daysSinceLastReset: user.unitsResetDate 
         ? Math.floor((now.getTime() - user.unitsResetDate.getTime()) / (1000 * 60 * 60 * 24))
         : null,
