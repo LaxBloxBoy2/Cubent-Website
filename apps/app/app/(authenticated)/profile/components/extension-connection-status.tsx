@@ -110,6 +110,39 @@ export function ExtensionConnectionStatus({
     }
   };
 
+  const handleTestButton = async () => {
+    try {
+      setIsConnecting(true);
+
+      // Test the extension status endpoint
+      const response = await fetch('/api/extension/status', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          sessionId: `test_${Date.now()}`,
+          extensionVersion: 'test-button',
+          vscodeVersion: 'webapp',
+          platform: 'browser'
+        })
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        toast.success('Test session created successfully!');
+        await fetchExtensionStatus();
+        setTimeout(() => window.location.reload(), 1000);
+      } else {
+        toast.error(`Test failed: ${data.error || 'Unknown error'}`);
+      }
+    } catch (error) {
+      toast.error('Test button failed');
+      console.error('Test error:', error);
+    } finally {
+      setIsConnecting(false);
+    }
+  };
+
   const currentStatus = extensionStatus || {
     connected: isConnected,
     lastActive: lastSync?.toISOString() || null,
@@ -227,14 +260,25 @@ export function ExtensionConnectionStatus({
             </Button>
           </div>
         ) : (
-          <Button
-            onClick={handleConnectExtension}
-            disabled={isConnecting || !termsAccepted}
-            size="sm"
-            className="w-full"
-          >
-            {isConnecting ? 'Connecting...' : 'Connect Extension'}
-          </Button>
+          <div className="space-y-2">
+            <Button
+              onClick={handleConnectExtension}
+              disabled={isConnecting || !termsAccepted}
+              size="sm"
+              className="w-full"
+            >
+              {isConnecting ? 'Connecting...' : 'Connect Extension'}
+            </Button>
+            <Button
+              onClick={handleTestButton}
+              disabled={isConnecting}
+              variant="outline"
+              size="sm"
+              className="w-full"
+            >
+              🧪 Test Connection
+            </Button>
+          </div>
         )}
       </div>
 
