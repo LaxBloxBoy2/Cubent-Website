@@ -332,12 +332,12 @@ export async function getUserUsageHistory(
 export async function getUserModelUsage(
   userId: string,
   days: number = 30
-): Promise<any[]> {
+) {
   const startDate = new Date();
   startDate.setDate(startDate.getDate() - days);
 
   return await database.usageAnalytics.groupBy({
-    by: ['modelId'],
+    by: ['modelId'] as const,
     where: {
       userId,
       createdAt: {
@@ -351,7 +351,7 @@ export async function getUserModelUsage(
     },
     orderBy: {
       _sum: {
-        cubentUnitsUsed: 'desc',
+        cubentUnitsUsed: 'desc' as const,
       },
     },
   });
