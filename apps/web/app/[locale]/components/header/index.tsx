@@ -50,6 +50,11 @@ export const Header = ({ dictionary }: HeaderProps) => {
       ],
     },
     {
+      title: dictionary.web.header.docs,
+      href: 'https://cubentdev.mintlify.app',
+      description: '',
+    },
+    {
       title: dictionary.web.header.blog,
       href: '/blog',
       description: '',
@@ -60,14 +65,6 @@ export const Header = ({ dictionary }: HeaderProps) => {
       description: '',
     },
   ];
-
-  if (env.NEXT_PUBLIC_DOCS_URL) {
-    navigationItems.push({
-      title: dictionary.web.header.docs,
-      href: env.NEXT_PUBLIC_DOCS_URL,
-      description: '',
-    });
-  }
 
   const [isOpen, setOpen] = useState(false);
   return (
@@ -92,7 +89,13 @@ export const Header = ({ dictionary }: HeaderProps) => {
                     <>
                       <NavigationMenuLink asChild>
                         <Button variant="ghost" asChild>
-                          <Link href={item.href}>{item.title}</Link>
+                          <Link
+                            href={item.href}
+                            target={item.href.startsWith('http') ? '_blank' : undefined}
+                            rel={item.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                          >
+                            {item.title}
+                          </Link>
                         </Button>
                       </NavigationMenuLink>
                     </>

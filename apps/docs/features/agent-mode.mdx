@@ -1,0 +1,220 @@
+---
+title: Agent Mode
+description: 'Autonomous AI coding with minimal supervision'
+---
+
+## Overview
+
+Agent Mode transforms Cubent Coder into an autonomous coding assistant that can work independently on complex tasks with minimal supervision. Instead of back-and-forth conversations, you give the agent a high-level goal, and it breaks down the task, creates a plan, and executes it step by step.
+
+## How Agent Mode Works
+
+### 1. Task Planning
+When you give the agent a task, it:
+- Analyzes the requirements
+- Breaks down the task into smaller steps
+- Creates an execution plan
+- Identifies potential challenges
+
+### 2. Autonomous Execution
+The agent then:
+- Executes each step of the plan
+- Makes decisions based on context
+- Handles unexpected issues
+- Adapts the plan as needed
+
+### 3. Progress Monitoring
+Throughout execution, you can:
+- Monitor progress in real-time
+- Intervene when necessary
+- Approve or reject specific actions
+- Provide additional guidance
+
+## Getting Started
+
+### Activating Agent Mode
+
+1. Open the Cubent Coder panel
+2. Click the "Agent Mode" button
+3. Describe your high-level task or goal
+4. Review the generated plan
+5. Approve execution or request modifications
+
+### Example Tasks
+
+**Feature Development:**
+```
+Create a user authentication system with login, signup, and password reset functionality using React and Node.js
+```
+
+**Bug Fixing:**
+```
+Find and fix all TypeScript errors in the project, ensuring type safety throughout the codebase
+```
+
+**Code Refactoring:**
+```
+Refactor the legacy jQuery code to modern React components while maintaining all existing functionality
+```
+
+**Testing:**
+```
+Add comprehensive unit tests for all API endpoints with at least 90% code coverage
+```
+
+## Agent Capabilities
+
+### Code Operations
+- **File Creation**: Generate new files and directories
+- **Code Modification**: Update existing code across multiple files
+- **Dependency Management**: Install and configure packages
+- **Configuration**: Set up build tools, linters, and formatters
+
+### Development Tasks
+- **Feature Implementation**: Build complete features from scratch
+- **Bug Resolution**: Identify and fix issues systematically
+- **Code Review**: Analyze code quality and suggest improvements
+- **Documentation**: Generate comprehensive documentation
+
+### Project Management
+- **Architecture Planning**: Design system architecture
+- **Migration Tasks**: Upgrade frameworks and dependencies
+- **Performance Optimization**: Identify and resolve bottlenecks
+- **Security Audits**: Find and fix security vulnerabilities
+
+## Configuration Options
+
+### Approval Settings
+
+Configure what actions require your approval:
+
+- **Auto-approve safe actions**: File reads, code analysis
+- **Require approval for**: File modifications, package installations
+- **Always ask for**: Destructive operations, external API calls
+
+### Execution Limits
+
+Set boundaries for agent behavior:
+
+- **Maximum execution time**: Prevent runaway tasks
+- **File modification limits**: Restrict scope of changes
+- **API call limits**: Control external service usage
+- **Resource usage**: Monitor CPU and memory consumption
+
+### Custom Instructions
+
+Provide project-specific guidelines:
+
+```
+Always use TypeScript for new files
+Follow the existing code style and patterns
+Add JSDoc comments for all public functions
+Write tests for any new functionality
+```
+
+## Best Practices
+
+### Writing Effective Agent Tasks
+
+1. **Be Clear and Specific**
+   ```
+   ❌ "Make the app better"
+   ✅ "Improve the app's performance by optimizing database queries and implementing caching"
+   ```
+
+2. **Provide Context**
+   ```
+   ✅ "Add user authentication to the existing Express.js API, using JWT tokens and bcrypt for password hashing"
+   ```
+
+3. **Set Boundaries**
+   ```
+   ✅ "Refactor the user service module without changing the public API interface"
+   ```
+
+### Monitoring Agent Progress
+
+- **Review the plan** before approving execution
+- **Check intermediate results** during long-running tasks
+- **Intervene early** if the agent goes off-track
+- **Provide feedback** to improve future performance
+
+### Safety Considerations
+
+- **Start with small tasks** to build confidence
+- **Use version control** to track all changes
+- **Review all modifications** before committing
+- **Test thoroughly** after agent completion
+
+## Advanced Features
+
+### Multi-Step Workflows
+
+Chain multiple agent tasks together:
+
+1. **Analysis Phase**: "Analyze the codebase and identify performance bottlenecks"
+2. **Planning Phase**: "Create a detailed optimization plan based on the analysis"
+3. **Implementation Phase**: "Implement the optimization plan step by step"
+
+### Collaborative Mode
+
+Work alongside the agent:
+
+- **Pair programming**: Agent writes code while you review
+- **Task delegation**: Assign specific subtasks to the agent
+- **Knowledge sharing**: Agent learns from your feedback
+
+### Integration with Tools
+
+Agent Mode integrates with:
+
+- **Version Control**: Automatic commit messages and branch management
+- **Testing Frameworks**: Run tests after code changes
+- **CI/CD Pipelines**: Trigger builds and deployments
+- **Code Quality Tools**: Ensure standards compliance
+
+## Troubleshooting
+
+### Common Issues
+
+**Agent gets stuck:**
+- Provide more specific instructions
+- Break down the task into smaller parts
+- Check for conflicting requirements
+
+**Unexpected results:**
+- Review the initial task description
+- Check approval settings
+- Provide additional context or constraints
+
+**Performance issues:**
+- Reduce task complexity
+- Set execution time limits
+- Monitor resource usage
+
+### Getting Help
+
+If you encounter issues with Agent Mode:
+
+1. Join our [Discord community](https://discord.gg/cubent)
+2. Report bugs on [GitHub](https://github.com/LaxBloxBoy2/Cubent/issues)
+3. Check our community resources for help
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card
+    title="Custom Modes"
+    icon="gear"
+    href="/features/custom-modes"
+  >
+    Create specialized AI personas for specific workflows
+  </Card>
+  <Card
+    title="MCP Integration"
+    icon="magic"
+    href="/advanced/mcp-integration"
+  >
+    Extend capabilities with Model Context Protocol
+  </Card>
+</CardGroup>

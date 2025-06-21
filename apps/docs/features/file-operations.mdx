@@ -1,0 +1,346 @@
+---
+title: File Operations
+description: 'Read, write, and manage files with Cubent Coder'
+---
+
+## Overview
+
+Cubent Coder can directly interact with files in your workspace, making it a powerful tool for code generation, refactoring, and project management. The AI can read existing files to understand context, create new files, and modify existing ones with precision.
+
+## Reading Files
+
+### Automatic Context Awareness
+
+Cubent Coder automatically understands your project structure:
+
+- **Project scanning**: Analyzes your workspace on startup
+- **File relationships**: Understands imports, dependencies, and references
+- **Code patterns**: Learns from your existing codebase style
+- **Configuration files**: Reads package.json, tsconfig.json, etc.
+
+### Explicit File References
+
+You can explicitly reference files in your conversations:
+
+```
+@src/components/UserProfile.tsx
+```
+
+```
+Look at the file @utils/api.ts and explain how it works
+```
+
+```
+Based on @package.json, what testing framework are we using?
+```
+
+### File Content Analysis
+
+Ask Cubent Coder to analyze specific files:
+
+```
+What does this file do? @src/services/auth.ts
+```
+
+```
+Find potential issues in @components/Dashboard.jsx
+```
+
+```
+Explain the purpose of each function in @utils/helpers.js
+```
+
+## Creating Files
+
+### New File Generation
+
+Cubent Coder can create complete files from scratch:
+
+```
+Create a new React component for a product card that displays:
+- Product image
+- Title and description
+- Price and discount
+- Add to cart button
+
+Save it as src/components/ProductCard.tsx
+```
+
+### Template-Based Creation
+
+Generate files based on existing patterns:
+
+```
+Create a new API route following the same pattern as @api/users.ts
+but for managing products. Save as api/products.ts
+```
+
+### Multiple File Creation
+
+Create several related files at once:
+
+```
+Create a complete user management module with:
+- User model (models/User.ts)
+- User service (services/UserService.ts)
+- User controller (controllers/UserController.ts)
+- User routes (routes/users.ts)
+```
+
+## Modifying Files
+
+### Targeted Updates
+
+Make specific changes to existing files:
+
+```
+In @src/components/Header.tsx, add a dark mode toggle button
+```
+
+```
+Update @package.json to include the latest version of React
+```
+
+```
+Add error handling to the login function in @services/auth.ts
+```
+
+### Refactoring Operations
+
+Perform complex refactoring across multiple files:
+
+```
+Refactor all class components in the src/components directory 
+to functional components with hooks
+```
+
+```
+Convert all JavaScript files in src/ to TypeScript
+```
+
+```
+Extract common utility functions from @components/UserList.tsx 
+into a separate utils file
+```
+
+### Code Style Updates
+
+Apply consistent formatting and style:
+
+```
+Update all files in src/ to use consistent import ordering
+```
+
+```
+Add JSDoc comments to all public functions in @services/
+```
+
+```
+Convert all var declarations to const/let throughout the project
+```
+
+## File Management
+
+### Directory Operations
+
+Organize your project structure:
+
+```
+Create a new feature directory structure for user authentication:
+- src/features/auth/
+  - components/
+  - services/
+  - types/
+  - index.ts
+```
+
+### File Organization
+
+Reorganize existing files:
+
+```
+Move all utility functions from src/utils/ into feature-specific 
+directories and update all imports
+```
+
+```
+Reorganize components into feature-based folders instead of 
+type-based folders
+```
+
+### Cleanup Operations
+
+Remove unused code and files:
+
+```
+Find and remove all unused imports across the project
+```
+
+```
+Identify unused components and suggest which ones to delete
+```
+
+```
+Clean up dead code in @src/legacy/ directory
+```
+
+## Advanced File Operations
+
+### Batch Processing
+
+Process multiple files with similar operations:
+
+```
+Add TypeScript interfaces for all API response types 
+based on the existing JavaScript files in src/api/
+```
+
+```
+Generate unit tests for all components in src/components/
+```
+
+```
+Add error boundaries to all page components
+```
+
+### Cross-File Analysis
+
+Analyze relationships between files:
+
+```
+Show me all files that import from @utils/api.ts
+```
+
+```
+Find circular dependencies in the src/ directory
+```
+
+```
+List all components that use the useAuth hook
+```
+
+### Migration Tasks
+
+Handle large-scale code migrations:
+
+```
+Migrate from Create React App to Vite:
+1. Update build configuration
+2. Update import paths
+3. Update environment variables
+4. Update package.json scripts
+```
+
+## File Safety and Best Practices
+
+### Backup and Version Control
+
+Always use version control when working with file operations:
+
+1. **Commit before major changes**: Create a checkpoint
+2. **Review changes**: Use git diff to see what changed
+3. **Test after modifications**: Ensure everything still works
+4. **Incremental changes**: Make small, focused updates
+
+### Approval Settings
+
+Configure what file operations require approval:
+
+- **Auto-approve**: Reading files, analyzing code
+- **Require approval**: Creating new files, major refactoring
+- **Always confirm**: Deleting files, destructive operations
+
+### File Patterns and Exclusions
+
+Configure which files Cubent Coder can access:
+
+```json
+{
+  "include": ["src/**/*", "tests/**/*"],
+  "exclude": [
+    "node_modules/**/*",
+    "dist/**/*",
+    ".env*",
+    "*.log"
+  ]
+}
+```
+
+## Integration with Development Tools
+
+### IDE Integration
+
+Cubent Coder works seamlessly with VS Code:
+
+- **Syntax highlighting**: Maintains proper formatting
+- **IntelliSense**: Preserves type information
+- **Extensions**: Compatible with linters and formatters
+- **Git integration**: Tracks all file changes
+
+### Build Tools
+
+Integrates with your build pipeline:
+
+- **TypeScript**: Respects tsconfig.json settings
+- **ESLint**: Follows your linting rules
+- **Prettier**: Maintains code formatting
+- **Webpack/Vite**: Understands build configuration
+
+### Testing Frameworks
+
+Works with testing tools:
+
+- **Jest**: Generates tests following your patterns
+- **Cypress**: Creates E2E tests for new features
+- **Storybook**: Generates component stories
+- **Testing Library**: Follows testing best practices
+
+## Troubleshooting
+
+### Common Issues
+
+**File not found errors:**
+- Check file paths are relative to workspace root
+- Ensure files exist and are not excluded
+- Verify file permissions
+
+**Permission denied:**
+- Check file system permissions
+- Ensure VS Code has necessary access
+- Review workspace trust settings
+
+**Unexpected file changes:**
+- Review approval settings
+- Check auto-save configuration
+- Use version control to track changes
+
+### Performance Considerations
+
+**Large file handling:**
+- Cubent Coder can handle large files efficiently
+- Consider breaking very large files into smaller modules
+- Use file exclusion patterns for build artifacts
+
+**Workspace scanning:**
+- Initial scan may take time for large projects
+- Exclude unnecessary directories to improve performance
+- Use .gitignore patterns to guide file selection
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card
+    title="Terminal Integration"
+    icon="terminal"
+    href="/features/terminal-integration"
+  >
+    Execute commands and manage your development environment
+  </Card>
+  <Card
+    title="MCP Integration"
+    icon="magic"
+    href="/advanced/mcp-integration"
+  >
+    Extend capabilities with Model Context Protocol
+  </Card>
+</CardGroup>

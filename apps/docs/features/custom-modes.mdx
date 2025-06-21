@@ -1,0 +1,267 @@
+---
+title: Custom Modes
+description: 'Create specialized AI personas for your workflow'
+---
+
+## Overview
+
+Custom Modes allow you to create specialized AI personas tailored to specific roles, workflows, or project requirements. Instead of using a generic AI assistant, you can configure Cubent Coder to behave like a security expert, code reviewer, documentation specialist, or any other role you need.
+
+## What are Custom Modes?
+
+Custom Modes are pre-configured AI personalities with:
+
+- **Specialized knowledge**: Focused expertise in specific domains
+- **Custom instructions**: Tailored behavior and response patterns
+- **Role-specific tools**: Access to relevant capabilities
+- **Consistent behavior**: Predictable responses for similar tasks
+
+## Built-in Modes
+
+Cubent Coder comes with several pre-configured modes:
+
+### Code Mode
+- **Purpose**: General-purpose coding assistance
+- **Strengths**: Code generation, debugging, refactoring
+- **Best for**: Day-to-day development tasks
+
+### Architect Mode
+- **Purpose**: System design and architecture planning
+- **Strengths**: High-level design, technology selection, scalability
+- **Best for**: Planning new projects or major refactors
+
+### Security Mode
+- **Purpose**: Security-focused code analysis
+- **Strengths**: Vulnerability detection, secure coding practices
+- **Best for**: Security audits and secure development
+
+### Documentation Mode
+- **Purpose**: Creating and maintaining documentation
+- **Strengths**: Clear explanations, comprehensive guides
+- **Best for**: API docs, user guides, technical writing
+
+### QA Mode
+- **Purpose**: Quality assurance and testing
+- **Strengths**: Test planning, bug detection, quality metrics
+- **Best for**: Testing strategies and quality improvement
+
+## Creating Custom Modes
+
+### Step 1: Define the Role
+
+Start by clearly defining what your custom mode should do:
+
+```yaml
+Name: "API Specialist"
+Purpose: "Expert in REST API design and implementation"
+Focus Areas:
+  - RESTful principles
+  - OpenAPI/Swagger documentation
+  - API security best practices
+  - Performance optimization
+```
+
+### Step 2: Write Custom Instructions
+
+Create detailed instructions for the AI:
+
+```markdown
+You are an API Specialist with deep expertise in REST API design.
+
+Core Principles:
+- Always follow RESTful conventions
+- Prioritize clear, consistent naming
+- Include proper HTTP status codes
+- Implement comprehensive error handling
+- Focus on security and performance
+
+When reviewing APIs:
+1. Check endpoint naming conventions
+2. Verify proper HTTP methods usage
+3. Ensure consistent response formats
+4. Review authentication/authorization
+5. Suggest performance improvements
+
+When creating APIs:
+- Use noun-based resource URLs
+- Implement proper CRUD operations
+- Include pagination for collections
+- Add rate limiting considerations
+- Provide clear documentation
+```
+
+### Step 3: Configure Tools and Capabilities
+
+Specify what tools the mode should have access to:
+
+- **File operations**: Read/write API specifications
+- **Code generation**: Create API endpoints and documentation
+- **Testing tools**: Generate API tests and validation
+- **Documentation**: Create OpenAPI specs and guides
+
+### Step 4: Test and Refine
+
+Test your custom mode with various scenarios:
+
+1. **Simple tasks**: Basic API endpoint creation
+2. **Complex scenarios**: Full API design and implementation
+3. **Edge cases**: Error handling and security considerations
+4. **Real projects**: Apply to actual development work
+
+## Advanced Configuration
+
+### Conditional Behavior
+
+Configure different behaviors based on context:
+
+```yaml
+Conditions:
+  - If working with Node.js: Suggest Express.js patterns
+  - If working with Python: Recommend FastAPI or Flask
+  - If working with Java: Use Spring Boot conventions
+  - If reviewing legacy code: Focus on modernization
+```
+
+### Integration with External Tools
+
+Connect your custom mode to external services:
+
+- **API testing tools**: Postman, Insomnia integration
+- **Documentation platforms**: Swagger UI, GitBook
+- **Monitoring services**: API analytics and performance tracking
+- **Security scanners**: Automated vulnerability detection
+
+### Team Collaboration
+
+Share custom modes with your team:
+
+1. **Export configuration**: Save mode settings to a file
+2. **Version control**: Track mode changes over time
+3. **Team standards**: Ensure consistent AI behavior
+4. **Knowledge sharing**: Document mode usage and best practices
+
+## Example Custom Modes
+
+### Frontend Specialist
+
+```yaml
+Name: "React Expert"
+Instructions: |
+  You are a React specialist focused on modern best practices.
+  
+  Always consider:
+  - Component composition over inheritance
+  - Hooks over class components
+  - TypeScript for type safety
+  - Performance optimization
+  - Accessibility standards
+  
+  Code Style:
+  - Use functional components
+  - Implement proper error boundaries
+  - Follow React naming conventions
+  - Include PropTypes or TypeScript interfaces
+```
+
+### Database Expert
+
+```yaml
+Name: "Database Architect"
+Instructions: |
+  You are a database specialist with expertise in design and optimization.
+  
+  Focus Areas:
+  - Normalized database design
+  - Query optimization
+  - Index strategies
+  - Performance monitoring
+  - Data security
+  
+  When designing schemas:
+  - Follow normalization principles
+  - Consider query patterns
+  - Plan for scalability
+  - Include proper constraints
+```
+
+### DevOps Engineer
+
+```yaml
+Name: "DevOps Specialist"
+Instructions: |
+  You are a DevOps expert focused on automation and reliability.
+  
+  Priorities:
+  - Infrastructure as Code
+  - CI/CD pipeline optimization
+  - Monitoring and alerting
+  - Security best practices
+  - Cost optimization
+  
+  Tools Expertise:
+  - Docker and Kubernetes
+  - Terraform and CloudFormation
+  - Jenkins, GitHub Actions
+  - Prometheus, Grafana
+```
+
+## Best Practices
+
+### Mode Design
+
+1. **Single Responsibility**: Each mode should have a clear, focused purpose
+2. **Consistent Behavior**: Ensure predictable responses across sessions
+3. **Clear Instructions**: Write detailed, unambiguous guidelines
+4. **Regular Updates**: Refine modes based on usage and feedback
+
+### Usage Guidelines
+
+1. **Choose the Right Mode**: Select the most appropriate mode for each task
+2. **Provide Context**: Give the mode relevant project information
+3. **Iterate and Improve**: Refine modes based on results
+4. **Document Usage**: Keep track of what works best for different scenarios
+
+### Team Adoption
+
+1. **Start Simple**: Begin with basic modes and gradually add complexity
+2. **Train the Team**: Ensure everyone understands how to use custom modes
+3. **Establish Standards**: Create guidelines for mode creation and usage
+4. **Share Knowledge**: Document successful patterns and configurations
+
+## Troubleshooting
+
+### Common Issues
+
+**Mode not behaving as expected:**
+- Review and refine the instructions
+- Check for conflicting guidelines
+- Test with simpler scenarios first
+
+**Inconsistent responses:**
+- Make instructions more specific
+- Add examples of desired behavior
+- Consider breaking complex modes into simpler ones
+
+**Mode switching problems:**
+- Ensure clear mode boundaries
+- Avoid overlapping responsibilities
+- Document when to use each mode
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card
+    title="MCP Integration"
+    icon="magic"
+    href="/advanced/mcp-integration"
+  >
+    Extend capabilities with Model Context Protocol
+  </Card>
+  <Card
+    title="Discord Community"
+    icon="users"
+    href="/community/discord"
+  >
+    Share custom modes with the community
+  </Card>
+</CardGroup>

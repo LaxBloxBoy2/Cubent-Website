@@ -21,7 +21,12 @@ model User {
   picture String?
 
   // Extension connection
+<<<<<<< HEAD
   extensionApiKey   String?
+=======
+  extensionApiKey String?
+  sessionToken String? // For webapp session authentication
+>>>>>>> 7d040f89d901f61e51c0bdf1041edf011ee17854
   lastExtensionSync DateTime?
   lastSettingsSync  DateTime?
   extensionEnabled  Boolean   @default(true)

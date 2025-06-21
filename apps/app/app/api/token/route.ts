@@ -110,9 +110,13 @@ export const GET = async (request: NextRequest) => {
       );
     }
 
-    // Delete the pending login (one-time use)
-    await database.pendingLogin.delete({
+    // Mark as used but don't delete yet (extension needs it for auth)
+    await database.pendingLogin.update({
       where: { id: pendingLogin.id },
+      data: {
+        // Set expiration to 5 minutes from now to allow extension auth
+        expiresAt: new Date(Date.now() + 5 * 60 * 1000)
+      },
     });
 
     log.info('Token retrieved successfully', {

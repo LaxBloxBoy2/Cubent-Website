@@ -1,0 +1,99 @@
+{
+  "$schema": "https://mintlify.com/schema.json",
+  "name": "Cubent Coder Documentation",
+  "logo": {
+    "dark": "/logo/dark.svg",
+    "light": "/logo/light.svg"
+  },
+  "favicon": "/favicon.svg",
+  "colors": {
+    "primary": "#2563eb",
+    "light": "#3b82f6",
+    "dark": "#1d4ed8"
+  },
+  "theme": "mint",
+  "topbarLinks": [
+    {
+      "name": "Website",
+      "url": "https://cubent.com"
+    },
+    {
+      "name": "GitHub",
+      "url": "https://github.com/LaxBloxBoy2/Cubent"
+    },
+    {
+      "name": "Discord",
+      "url": "https://discord.gg/cubent"
+    }
+  ],
+  "topbarCtaButton": {
+    "name": "Download",
+    "url": "https://marketplace.visualstudio.com/items?itemName=cubent.cubent"
+  },
+  "anchors": [
+    {
+      "name": "VS Code Extension",
+      "icon": "download",
+      "url": "https://marketplace.visualstudio.com/items?itemName=cubent.cubent"
+    },
+    {
+      "name": "Discord Community",
+      "icon": "discord",
+      "url": "https://discord.gg/cubent"
+    },
+    {
+      "name": "GitHub Repository",
+      "icon": "github",
+      "url": "https://github.com/LaxBloxBoy2/Cubent"
+    }
+  ],
+  "navigation": {
+    "groups": [
+      {
+        "group": "Getting Started",
+        "pages": [
+          "introduction",
+          "installation",
+          "first-steps",
+          "models-and-pricing",
+          "subscription-plans"
+        ]
+      },
+      {
+        "group": "Features",
+        "pages": [
+          "features/chat-mode",
+          "features/agent-mode",
+          "features/custom-modes",
+          "features/file-operations",
+          "features/terminal-integration"
+        ]
+      },
+      {
+        "group": "Advanced",
+        "pages": [
+          "advanced/mcp-integration"
+        ]
+      },
+      {
+        "group": "Community",
+        "pages": [
+          "community/discord"
+        ]
+      }
+    ]
+  },
+  "footerSocials": {
+    "github": "https://github.com/LaxBloxBoy2/Cubent",
+    "discord": "https://discord.gg/cubent",
+    "reddit": "https://www.reddit.com/r/cubent/"
+  },
+  "feedback": {
+    "thumbsRating": true,
+    "suggestEdit": true,
+    "raiseIssue": true
+  },
+  "search": {
+    "prompt": "Search documentation..."
+  }
+}

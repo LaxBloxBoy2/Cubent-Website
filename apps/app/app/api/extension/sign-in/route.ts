@@ -52,9 +52,16 @@ export async function GET(request: NextRequest) {
     }
 
     // User is not authenticated, redirect to sign-in with return URL
+    // Store the original request URL in session/cookie for after-login redirect
     const signInUrl = new URL('/sign-in', request.url);
-    signInUrl.searchParams.set('redirect_url', request.url);
-    
+
+    // Use Clerk's redirect_url parameter (this gets handled by Clerk after sign-in)
+    const afterSignInUrl = new URL('/api/extension/sign-in', request.url);
+    afterSignInUrl.searchParams.set('state', validatedState);
+    afterSignInUrl.searchParams.set('auth_redirect', validatedAuthRedirect);
+
+    signInUrl.searchParams.set('redirect_url', afterSignInUrl.toString());
+
     return NextResponse.redirect(signInUrl.toString());
   } catch (error) {
     console.error('Extension sign-in error:', error);
