@@ -94,7 +94,7 @@ export async function GET(request: NextRequest) {
       ? usageMetrics.reduce((sum, metric) => sum + (metric.cubentUnitsUsed || 0), 0)
       : dbUser.cubentUnitsUsed || 0;
 
-    const totalMessages = usageMetrics.reduce((sum, metric) => sum + (metric.requestsMade || 0), 0);
+    const periodMessages = usageMetrics.reduce((sum, metric) => sum + (metric.requestsMade || 0), 0);
 
     // Calculate model breakdown
     const modelBreakdown: Record<string, { cubentUnits: number; messages: number }> = {};
@@ -138,7 +138,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({
       success: true,
       totalCubentUnits,
-      totalMessages,
+      totalMessages: days > 0 ? periodMessages : totalMessages,
       userLimit: dbUser.cubentUnitsLimit || 50,
       subscriptionTier: dbUser.subscriptionTier || 'free_trial',
       lastUpdated: usageAnalytics.length > 0 ? usageAnalytics[0].createdAt.getTime() : Date.now(),
