@@ -3,12 +3,9 @@
 import { useMemo } from 'react';
 
 interface UsageMetric {
-  id: string;
-  tokensUsed: number;
-  cubentUnitsUsed?: number;
-  requestsMade: number;
-  costAccrued: number;
   date: Date;
+  cubentUnitsUsed: number;
+  requestsMade: number;
 }
 
 interface UsageChartProps {
@@ -17,80 +14,99 @@ interface UsageChartProps {
 
 export function UsageChart({ data }: UsageChartProps) {
   const chartData = useMemo(() => {
-    return data.map(metric => ({
-      date: new Date(metric.date).toLocaleDateString('en-US', {
-        month: 'short',
-        day: 'numeric'
-      }),
-      cubentUnits: metric.cubentUnitsUsed || 0,
-      requests: metric.requestsMade,
-    }));
+    // Fill in missing days with zero values for the last 30 days
+    const today = new Date();
+    const thirtyDaysAgo = new Date(today);
+    thirtyDaysAgo.setDate(today.getDate() - 29);
+
+    const filledData = [];
+    for (let i = 0; i < 30; i++) {
+      const currentDate = new Date(thirtyDaysAgo);
+      currentDate.setDate(thirtyDaysAgo.getDate() + i);
+
+      const existingData = data.find(metric => {
+        const metricDate = new Date(metric.date);
+        return metricDate.toDateString() === currentDate.toDateString();
+      });
+
+      filledData.push({
+        date: currentDate.toLocaleDateString('en-US', {
+          month: 'short',
+          day: 'numeric'
+        }),
+        cubentUnits: existingData?.cubentUnitsUsed || 0,
+        requests: existingData?.requestsMade || 0,
+      });
+    }
+
+    return filledData;
   }, [data]);
 
-  const maxCubentUnits = Math.max(...chartData.map(d => d.cubentUnits));
-  const maxRequests = Math.max(...chartData.map(d => d.requests));
-
-  if (chartData.length === 0) {
-    return (
-      <div className="h-64 flex items-center justify-center text-muted-foreground">
-        <p>No usage data available</p>
-      </div>
-    );
-  }
+  const maxCubentUnits = Math.max(...chartData.map(d => d.cubentUnits), 1);
+  const maxRequests = Math.max(...chartData.map(d => d.requests), 1);
 
   return (
-    <div className="h-64 w-full">
-      <div className="flex items-end justify-between h-full space-x-1">
+    <div className="h-80 w-full">
+      <div className="flex items-end justify-between h-full space-x-1 px-4">
         {chartData.map((item, index) => (
-          <div key={index} className="flex flex-col items-center flex-1 h-full">
+          <div key={index} className="flex flex-col items-center flex-1 h-full max-w-8">
             <div className="flex-1 flex flex-col justify-end w-full space-y-1">
               {/* Cubent Units bar */}
               <div className="relative group">
                 <div
-                  className="bg-blue-500 rounded-t-sm transition-all hover:bg-blue-600"
+                  className="bg-gradient-to-t from-blue-500 to-blue-400 rounded-t-sm transition-all hover:from-blue-600 hover:to-blue-500 shadow-sm"
                   style={{
-                    height: `${maxCubentUnits > 0 ? (item.cubentUnits / maxCubentUnits) * 100 : 0}%`,
-                    minHeight: item.cubentUnits > 0 ? '2px' : '0px',
+                    height: `${maxCubentUnits > 0 ? Math.max((item.cubentUnits / maxCubentUnits) * 180, item.cubentUnits > 0 ? 3 : 0) : 0}px`,
+                    width: '100%',
                   }}
                 />
-                <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-black text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-                  {item.cubentUnits.toFixed(2)} units
+                <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-900 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10 shadow-lg">
+                  <div className="font-medium">{item.cubentUnits.toFixed(2)} units</div>
+                  <div className="text-gray-300">{item.requests} requests</div>
+                  <div className="text-gray-300">{item.date}</div>
                 </div>
               </div>
 
-              {/* Messages bar */}
+              {/* Requests indicator */}
               <div className="relative group">
                 <div
-                  className="bg-green-500 rounded-t-sm transition-all hover:bg-green-600"
+                  className="bg-gradient-to-t from-green-500 to-green-400 rounded-t-sm transition-all hover:from-green-600 hover:to-green-500 shadow-sm"
                   style={{
-                    height: `${maxRequests > 0 ? (item.requests / maxRequests) * 80 : 0}%`,
-                    minHeight: item.requests > 0 ? '2px' : '0px',
+                    height: `${maxRequests > 0 ? Math.max((item.requests / maxRequests) * 60, item.requests > 0 ? 2 : 0) : 0}px`,
+                    width: '100%',
                   }}
                 />
-                <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-black text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-                  {item.requests} messages
-                </div>
               </div>
             </div>
 
-            {/* Date label */}
-            <div className="text-xs text-muted-foreground mt-2 transform -rotate-45 origin-left">
-              {item.date}
-            </div>
+            {/* Date label - show every 5th day to avoid crowding */}
+            {index % 5 === 0 && (
+              <div className="text-xs text-muted-foreground mt-3 transform -rotate-45 origin-left whitespace-nowrap">
+                {item.date}
+              </div>
+            )}
           </div>
         ))}
       </div>
-      
+
       {/* Legend */}
-      <div className="flex justify-center space-x-6 mt-4">
+      <div className="flex justify-center space-x-8 mt-6">
         <div className="flex items-center space-x-2">
-          <div className="w-3 h-3 bg-blue-500 rounded"></div>
-          <span className="text-sm text-muted-foreground">Cubent Units</span>
+          <div className="w-4 h-4 bg-gradient-to-t from-blue-500 to-blue-400 rounded shadow-sm"></div>
+          <span className="text-sm font-medium text-muted-foreground">Cubent Units</span>
         </div>
         <div className="flex items-center space-x-2">
-          <div className="w-3 h-3 bg-green-500 rounded"></div>
-          <span className="text-sm text-muted-foreground">Messages</span>
+          <div className="w-4 h-4 bg-gradient-to-t from-green-500 to-green-400 rounded shadow-sm"></div>
+          <span className="text-sm font-medium text-muted-foreground">Messages</span>
         </div>
+      </div>
+
+      {/* Summary */}
+      <div className="mt-4 text-center">
+        <p className="text-sm text-muted-foreground">
+          Total: {chartData.reduce((sum, item) => sum + item.cubentUnits, 0).toFixed(2)} units, {' '}
+          {chartData.reduce((sum, item) => sum + item.requests, 0)} messages
+        </p>
       </div>
     </div>
   );
