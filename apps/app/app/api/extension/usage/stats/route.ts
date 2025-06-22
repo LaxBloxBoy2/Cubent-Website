@@ -4,10 +4,53 @@ import { database } from '@repo/database';
 
 export async function GET(request: NextRequest) {
   try {
-    const { userId } = await auth();
-    const clerkUser = await currentUser();
+    // Check for Bearer token in Authorization header (for extension)
+    const authHeader = request.headers.get('authorization');
+    let userId: string | null = null;
+    let clerkUser: any = null;
 
-    if (!userId || !clerkUser) {
+    if (authHeader?.startsWith('Bearer ')) {
+      // Extension is using custom token (Clerk session ID)
+      const token = authHeader.substring(7);
+
+      // Find the pending login with this token to get the user
+      const pendingLogin = await database.pendingLogin.findFirst({
+        where: {
+          token,
+          expiresAt: { gt: new Date() }, // Not expired
+        },
+      });
+
+      if (pendingLogin) {
+        // Token is valid, but we need to get the user ID from the session
+        // The token is actually a Clerk session ID, so we can use it to get user info
+        try {
+          const { clerkClient } = await import('@repo/auth/server');
+          const client = await clerkClient();
+          const session = await client.sessions.getSession(token);
+          userId = session.userId;
+          // For extension requests, we don't need the full clerkUser object
+          clerkUser = { userId };
+        } catch (error) {
+          return NextResponse.json(
+            { error: 'Invalid token' },
+            { status: 401 }
+          );
+        }
+      } else {
+        return NextResponse.json(
+          { error: 'Invalid or expired token' },
+          { status: 401 }
+        );
+      }
+    } else {
+      // Fallback to regular Clerk auth for web requests
+      const authResult = await auth();
+      userId = authResult.userId;
+      clerkUser = await currentUser();
+    }
+
+    if (!userId) {
       return NextResponse.json(
         { error: 'Unauthorized' },
         { status: 401 }
@@ -26,7 +69,15 @@ export async function GET(request: NextRequest) {
     });
 
     if (!dbUser) {
-      // Create new user automatically for social login users
+      // For extension requests, we might not have full user info, so just return error
+      if (authHeader?.startsWith('Bearer ')) {
+        return NextResponse.json(
+          { error: 'User not found in database. Please sign in to the web app first.' },
+          { status: 404 }
+        );
+      }
+
+      // Create new user automatically for web requests only
       const newUser = await database.user.create({
         data: {
           clerkId: userId,
