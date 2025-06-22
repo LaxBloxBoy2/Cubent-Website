@@ -99,80 +99,22 @@ export function UsageAnalytics({ initialData }: UsageAnalyticsProps) {
   const TierIcon = tierInfo.icon;
 
   return (
-    <div className="flex h-screen bg-background">
-      {/* Sidebar-style navigation */}
-      <div className="w-64 border-r bg-sidebar text-sidebar-foreground p-4">
-        <div className="space-y-4">
-          <Button variant="ghost" size="sm" asChild className="w-full justify-start">
-            <Link href="/profile">
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Back to Profile
-            </Link>
-          </Button>
-
-          <div className="space-y-2">
-            <h2 className="text-lg font-semibold">Cubent Units</h2>
-            <p className="text-sm text-sidebar-foreground/70">VS Code extension usage</p>
-          </div>
-
-          {/* Quick Stats in Sidebar */}
-          <div className="space-y-3 pt-4">
-            <div className="p-3 rounded-lg bg-sidebar-accent">
-              <div className="flex items-center justify-between">
-                <Zap className="h-4 w-4 text-blue-500" />
-                <span className="text-sm font-medium">Units Used</span>
-              </div>
-              <div className="mt-2">
-                <div className="text-xl font-bold">{data.totalCubentUnits.toFixed(2)}</div>
-                <div className="text-xs text-sidebar-foreground/70">of {data.userLimit} limit</div>
-              </div>
-            </div>
-
-            <div className="p-3 rounded-lg bg-sidebar-accent">
-              <div className="flex items-center justify-between">
-                <MessageSquare className="h-4 w-4 text-green-500" />
-                <span className="text-sm font-medium">Messages</span>
-              </div>
-              <div className="mt-2">
-                <div className="text-xl font-bold">{data.totalMessages.toLocaleString()}</div>
-                <div className="text-xs text-sidebar-foreground/70">total requests</div>
-              </div>
-            </div>
-
-            <div className="p-3 rounded-lg bg-sidebar-accent">
-              <div className="flex items-center justify-between">
-                <TrendingUp className="h-4 w-4 text-purple-500" />
-                <span className="text-sm font-medium">Efficiency</span>
-              </div>
-              <div className="mt-2">
-                <div className="text-xl font-bold">
-                  {data.totalMessages > 0 ? (data.totalCubentUnits / data.totalMessages).toFixed(2) : '0.00'}
-                </div>
-                <div className="text-xs text-sidebar-foreground/70">units per message</div>
-              </div>
-            </div>
-          </div>
-
-          {/* Subscription Badge */}
-          <div className="pt-4 border-t border-sidebar-border">
-            <Badge variant="secondary" className="w-full justify-center">
-              <TierIcon className={`h-4 w-4 mr-2 ${tierInfo.color}`} />
-              {tierInfo.name}
-            </Badge>
-          </div>
-        </div>
-      </div>
-
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col">
-        {/* Header */}
-        <div className="border-b bg-background p-6">
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
+      <div className="container mx-auto px-6 py-8 max-w-6xl">
+        {/* Elegant Header */}
+        <div className="mb-8">
           <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-bold">Usage Analytics</h1>
-              <p className="text-muted-foreground">Monitor your Cubent Units consumption over time</p>
+            <div className="space-y-1">
+              <Button variant="ghost" size="sm" asChild className="mb-2 -ml-2">
+                <Link href="/profile">
+                  <ArrowLeft className="h-4 w-4 mr-2" />
+                  Back to Profile
+                </Link>
+              </Button>
+              <h1 className="text-3xl font-bold tracking-tight">Cubent Units Usage</h1>
+              <p className="text-muted-foreground">Monitor your VS Code extension consumption</p>
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-4">
               <div className="text-right">
                 <p className="text-xs text-muted-foreground">Last updated</p>
                 <p className="text-sm font-medium">{lastUpdated.toLocaleTimeString()}</p>
@@ -182,6 +124,7 @@ export function UsageAnalytics({ initialData }: UsageAnalyticsProps) {
                 size="sm"
                 onClick={refreshData}
                 disabled={isRefreshing}
+                className="shadow-sm"
               >
                 <RefreshCw className={`h-4 w-4 mr-2 ${isRefreshing ? 'animate-spin' : ''}`} />
                 Refresh
@@ -190,94 +133,124 @@ export function UsageAnalytics({ initialData }: UsageAnalyticsProps) {
           </div>
         </div>
 
-        {/* Main Content Area */}
-        <div className="flex-1 p-6 space-y-6">
-          {/* Usage Progress Card */}
-          <Card className="border-l-4 border-l-blue-500">
+        {/* Elegant Stats Overview */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          {/* Cubent Units Card */}
+          <Card className="relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 to-blue-600"></div>
             <CardContent className="p-6">
-              <div className="flex items-center justify-between mb-4">
-                <div>
-                  <h3 className="text-lg font-semibold">Current Usage</h3>
-                  <p className="text-sm text-muted-foreground">Your Cubent Units consumption</p>
-                </div>
-                <div className="text-right">
-                  <div className="text-2xl font-bold">{data.totalCubentUnits.toFixed(2)}</div>
-                  <div className="text-sm text-muted-foreground">of {data.userLimit} units</div>
-                </div>
-              </div>
-
-              <Progress
-                value={Math.min(usagePercentage, 100)}
-                className="h-3 mb-3"
-              />
-
-              <div className="flex justify-between items-center">
-                <span className="text-sm font-medium">
-                  {usagePercentage.toFixed(1)}% used
-                </span>
-                <span className={`text-sm font-medium ${isOverLimit ? 'text-red-600' : isNearLimit ? 'text-yellow-600' : 'text-green-600'}`}>
-                  {data.userLimit - data.totalCubentUnits > 0
-                    ? `${(data.userLimit - data.totalCubentUnits).toFixed(2)} remaining`
-                    : 'Limit exceeded'
-                  }
-                </span>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Enhanced Usage Chart */}
-          <Card>
-            <CardHeader>
               <div className="flex items-center justify-between">
                 <div>
-                  <CardTitle className="flex items-center gap-2">
-                    <TrendingUp className="h-5 w-5 text-blue-500" />
-                    Usage Over Time
-                  </CardTitle>
-                  <CardDescription>Daily Cubent Units and message activity for the last 30 days</CardDescription>
+                  <p className="text-sm font-medium text-muted-foreground">Cubent Units</p>
+                  <p className="text-3xl font-bold">{data.totalCubentUnits.toFixed(2)}</p>
+                  <p className="text-sm text-muted-foreground">of {data.userLimit} limit</p>
                 </div>
-                <div className="flex items-center gap-4 text-sm">
-                  <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full bg-blue-500"></div>
-                    <span>Cubent Units</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full bg-green-500"></div>
-                    <span>Messages</span>
-                  </div>
+                <div className="p-3 bg-blue-100 dark:bg-blue-900/20 rounded-full">
+                  <Zap className="h-6 w-6 text-blue-600 dark:text-blue-400" />
                 </div>
               </div>
-            </CardHeader>
-            <CardContent>
-              <UsageChart data={data.chartData} />
+              <div className="mt-4">
+                <Progress
+                  value={Math.min(usagePercentage, 100)}
+                  className="h-2"
+                />
+                <div className="flex justify-between mt-2 text-xs">
+                  <span className={isOverLimit ? 'text-red-600' : isNearLimit ? 'text-yellow-600' : 'text-green-600'}>
+                    {usagePercentage.toFixed(1)}% used
+                  </span>
+                  <span className="text-muted-foreground">
+                    {data.userLimit - data.totalCubentUnits > 0
+                      ? `${(data.userLimit - data.totalCubentUnits).toFixed(2)} remaining`
+                      : 'Over limit'
+                    }
+                  </span>
+                </div>
+              </div>
             </CardContent>
           </Card>
 
-          {/* Upgrade Prompt */}
-          {(isNearLimit || isOverLimit) && data.subscriptionTier === 'free_trial' && (
-            <Card className="border-l-4 border-l-yellow-500 bg-yellow-50 dark:bg-yellow-950/20">
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <Crown className="h-6 w-6 text-yellow-600 dark:text-yellow-400" />
-                    <div>
-                      <h3 className="font-semibold text-yellow-800 dark:text-yellow-200">
-                        {isOverLimit ? 'Usage Limit Exceeded' : 'Approaching Usage Limit'}
-                      </h3>
-                      <p className="text-sm text-yellow-700 dark:text-yellow-300">
-                        Upgrade to Pro for unlimited Cubent Units and advanced features.
-                      </p>
-                    </div>
-                  </div>
-                  <Button className="bg-yellow-600 hover:bg-yellow-700 text-white">
-                    <Sparkles className="h-4 w-4 mr-2" />
-                    Upgrade Now
-                  </Button>
+          {/* Messages Card */}
+          <Card className="relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-green-500 to-green-600"></div>
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground">Total Messages</p>
+                  <p className="text-3xl font-bold">{data.totalMessages.toLocaleString()}</p>
+                  <p className="text-sm text-muted-foreground">requests made</p>
                 </div>
-              </CardContent>
-            </Card>
-          )}
+                <div className="p-3 bg-green-100 dark:bg-green-900/20 rounded-full">
+                  <MessageSquare className="h-6 w-6 text-green-600 dark:text-green-400" />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Efficiency Card */}
+          <Card className="relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-500 to-purple-600"></div>
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground">Efficiency</p>
+                  <p className="text-3xl font-bold">
+                    {data.totalMessages > 0 ? (data.totalCubentUnits / data.totalMessages).toFixed(2) : '0.00'}
+                  </p>
+                  <p className="text-sm text-muted-foreground">units per message</p>
+                </div>
+                <div className="p-3 bg-purple-100 dark:bg-purple-900/20 rounded-full">
+                  <TrendingUp className="h-6 w-6 text-purple-600 dark:text-purple-400" />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
+
+        {/* Elegant Usage Chart */}
+        <Card className="shadow-lg">
+          <CardHeader className="pb-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <CardTitle className="text-xl">Usage Over Time</CardTitle>
+                <CardDescription>Daily consumption patterns for the last 30 days</CardDescription>
+              </div>
+              <Badge variant="secondary" className="flex items-center gap-2">
+                <TierIcon className={`h-4 w-4 ${tierInfo.color}`} />
+                {tierInfo.name}
+              </Badge>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <UsageChart data={data.chartData} />
+          </CardContent>
+        </Card>
+
+        {/* Elegant Upgrade Prompt */}
+        {(isNearLimit || isOverLimit) && data.subscriptionTier === 'free_trial' && (
+          <Card className="mt-8 bg-gradient-to-r from-yellow-50 to-orange-50 dark:from-yellow-950/20 dark:to-orange-950/20 border-yellow-200 dark:border-yellow-800">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div className="p-3 bg-yellow-100 dark:bg-yellow-900/30 rounded-full">
+                    <Crown className="h-6 w-6 text-yellow-600 dark:text-yellow-400" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-yellow-800 dark:text-yellow-200">
+                      {isOverLimit ? 'Usage Limit Exceeded' : 'Approaching Usage Limit'}
+                    </h3>
+                    <p className="text-sm text-yellow-700 dark:text-yellow-300">
+                      Upgrade to Pro for unlimited Cubent Units and advanced features.
+                    </p>
+                  </div>
+                </div>
+                <Button className="bg-gradient-to-r from-yellow-600 to-orange-600 hover:from-yellow-700 hover:to-orange-700 text-white shadow-lg">
+                  <Sparkles className="h-4 w-4 mr-2" />
+                  Upgrade Now
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        )}
       </div>
     </div>
   );
