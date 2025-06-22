@@ -8,6 +8,7 @@ import { ChevronLeft, ChevronRight, Search } from 'lucide-react';
 interface UsageMetric {
   id: string;
   tokensUsed: number;
+  cubentUnitsUsed?: number;
   requestsMade: number;
   costAccrued: number;
   date: Date;
@@ -22,12 +23,8 @@ export function UsageTable({ data }: UsageTableProps) {
   const [searchTerm, setSearchTerm] = useState('');
   const itemsPerPage = 10;
 
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 4,
-    }).format(amount);
+  const formatUnits = (units: number) => {
+    return units.toFixed(2);
   };
 
   const formatNumber = (num: number) => {
@@ -90,10 +87,9 @@ export function UsageTable({ data }: UsageTableProps) {
             <thead className="bg-muted/50">
               <tr>
                 <th className="text-left p-4 font-medium">Date</th>
-                <th className="text-right p-4 font-medium">Tokens Used</th>
-                <th className="text-right p-4 font-medium">Requests</th>
-                <th className="text-right p-4 font-medium">Cost</th>
-                <th className="text-right p-4 font-medium">Avg Tokens/Request</th>
+                <th className="text-right p-4 font-medium">Cubent Units</th>
+                <th className="text-right p-4 font-medium">Messages</th>
+                <th className="text-right p-4 font-medium">Avg Units/Message</th>
               </tr>
             </thead>
             <tbody>
@@ -101,17 +97,14 @@ export function UsageTable({ data }: UsageTableProps) {
                 <tr key={item.id} className={index % 2 === 0 ? 'bg-background' : 'bg-muted/25'}>
                   <td className="p-4">{formatDate(item.date)}</td>
                   <td className="p-4 text-right font-mono">
-                    {formatNumber(item.tokensUsed)}
+                    {formatUnits(item.cubentUnitsUsed || 0)}
                   </td>
                   <td className="p-4 text-right font-mono">
                     {formatNumber(item.requestsMade)}
                   </td>
                   <td className="p-4 text-right font-mono">
-                    {formatCurrency(item.costAccrued)}
-                  </td>
-                  <td className="p-4 text-right font-mono">
-                    {item.requestsMade > 0 
-                      ? Math.round(item.tokensUsed / item.requestsMade)
+                    {item.requestsMade > 0 && (item.cubentUnitsUsed || 0) > 0
+                      ? formatUnits((item.cubentUnitsUsed || 0) / item.requestsMade)
                       : '-'
                     }
                   </td>
