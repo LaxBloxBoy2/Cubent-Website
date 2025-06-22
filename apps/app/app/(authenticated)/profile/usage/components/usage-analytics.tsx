@@ -99,11 +99,11 @@ export function UsageAnalytics({ initialData }: UsageAnalyticsProps) {
   const TierIcon = tierInfo.icon;
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-gray-50 dark:bg-[#0a0a0a]">
       <div className="max-w-7xl mx-auto p-6">
-        {/* Clean Header - Xenith Style */}
+        {/* Clean Header - Fixed Dark Mode */}
         <div className="mb-8">
-          <Button variant="ghost" size="sm" asChild className="mb-4 text-muted-foreground hover:text-foreground">
+          <Button variant="ghost" size="sm" asChild className="mb-4 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100">
             <Link href="/profile">
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Profile
@@ -112,7 +112,7 @@ export function UsageAnalytics({ initialData }: UsageAnalyticsProps) {
 
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-semibold text-gray-900 dark:text-white mb-1">
+              <h1 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-1">
                 Cubent Units Usage
               </h1>
               <p className="text-gray-600 dark:text-gray-400 text-sm">
@@ -122,8 +122,8 @@ export function UsageAnalytics({ initialData }: UsageAnalyticsProps) {
 
             <div className="flex items-center gap-3">
               <div className="text-right">
-                <p className="text-xs text-gray-500">Last updated</p>
-                <p className="text-sm font-medium text-gray-900 dark:text-white">
+                <p className="text-xs text-gray-500 dark:text-gray-400">Last updated</p>
+                <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
                   {lastUpdated.toLocaleTimeString()}
                 </p>
               </div>
@@ -132,7 +132,7 @@ export function UsageAnalytics({ initialData }: UsageAnalyticsProps) {
                 size="sm"
                 onClick={refreshData}
                 disabled={isRefreshing}
-                className="border-gray-200 dark:border-gray-700"
+                className="border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700"
               >
                 <RefreshCw className={`h-4 w-4 mr-2 ${isRefreshing ? 'animate-spin' : ''}`} />
                 Refresh
@@ -141,13 +141,13 @@ export function UsageAnalytics({ initialData }: UsageAnalyticsProps) {
           </div>
         </div>
 
-        {/* Xenith-Style Stats Cards */}
+        {/* Fixed Dark Mode Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           {/* Cubent Units Card */}
-          <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
+          <div className="bg-white dark:bg-[#1a1a1a] rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-gray-800">
             <div className="flex items-start justify-between mb-4">
               <div>
-                <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
                   {data.totalCubentUnits.toFixed(2)}
                 </p>
                 <p className="text-sm text-gray-500 dark:text-gray-400">Total Cubent Units</p>
@@ -155,7 +155,7 @@ export function UsageAnalytics({ initialData }: UsageAnalyticsProps) {
                   <span className={`text-sm font-medium ${isOverLimit ? 'text-red-500' : isNearLimit ? 'text-yellow-500' : 'text-green-500'}`}>
                     {usagePercentage.toFixed(0)}%
                   </span>
-                  <span className="text-xs text-gray-400 ml-1">This month</span>
+                  <span className="text-xs text-gray-400 dark:text-gray-500 ml-1">This month</span>
                 </div>
               </div>
               <div className="w-12 h-8">
@@ -178,10 +178,10 @@ export function UsageAnalytics({ initialData }: UsageAnalyticsProps) {
           </div>
 
           {/* Messages Card */}
-          <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
+          <div className="bg-white dark:bg-[#1a1a1a] rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-gray-800">
             <div className="flex items-start justify-between mb-4">
               <div>
-                <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
                   {data.totalMessages.toLocaleString()}
                 </p>
                 <p className="text-sm text-gray-500 dark:text-gray-400">Total Messages</p>
@@ -189,7 +189,7 @@ export function UsageAnalytics({ initialData }: UsageAnalyticsProps) {
                   <span className="text-sm font-medium text-blue-500">
                     +{Math.round((data.totalMessages / 30) * 7)}
                   </span>
-                  <span className="text-xs text-gray-400 ml-1">This week</span>
+                  <span className="text-xs text-gray-400 dark:text-gray-500 ml-1">This week</span>
                 </div>
               </div>
               <div className="w-12 h-8">
@@ -207,10 +207,10 @@ export function UsageAnalytics({ initialData }: UsageAnalyticsProps) {
           </div>
 
           {/* Efficiency Card */}
-          <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
+          <div className="bg-white dark:bg-[#1a1a1a] rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-gray-800">
             <div className="flex items-start justify-between mb-4">
               <div>
-                <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
                   {data.totalMessages > 0 ? (data.totalCubentUnits / data.totalMessages).toFixed(2) : '0.00'}
                 </p>
                 <p className="text-sm text-gray-500 dark:text-gray-400">Efficiency</p>
@@ -218,7 +218,7 @@ export function UsageAnalytics({ initialData }: UsageAnalyticsProps) {
                   <span className="text-sm font-medium text-purple-500">
                     Units/msg
                   </span>
-                  <span className="text-xs text-gray-400 ml-1">Average</span>
+                  <span className="text-xs text-gray-400 dark:text-gray-500 ml-1">Average</span>
                 </div>
               </div>
               <div className="w-12 h-8">
@@ -236,15 +236,15 @@ export function UsageAnalytics({ initialData }: UsageAnalyticsProps) {
           </div>
 
           {/* Subscription Card */}
-          <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
+          <div className="bg-white dark:bg-[#1a1a1a] rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-gray-800">
             <div className="flex items-start justify-between mb-4">
               <div>
-                <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
                   {data.userLimit}
                 </p>
                 <p className="text-sm text-gray-500 dark:text-gray-400">Usage Limit</p>
                 <div className="flex items-center mt-2">
-                  <Badge variant="secondary" className="text-xs">
+                  <Badge variant="secondary" className="text-xs bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300">
                     <TierIcon className={`h-3 w-3 mr-1 ${tierInfo.color}`} />
                     {tierInfo.name}
                   </Badge>
@@ -257,37 +257,37 @@ export function UsageAnalytics({ initialData }: UsageAnalyticsProps) {
           </div>
         </div>
 
-        {/* Xenith-Style Chart */}
-        <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
+        {/* Fixed Dark Mode Chart */}
+        <div className="bg-white dark:bg-[#1a1a1a] rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-gray-800">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Usage</h3>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Usage</h3>
               <p className="text-sm text-gray-500 dark:text-gray-400">Daily consumption for the last 30 days</p>
             </div>
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                <span className="text-xs text-gray-500">Cubent Units</span>
+                <span className="text-xs text-gray-500 dark:text-gray-400">Cubent Units</span>
               </div>
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                <span className="text-xs text-gray-500">Messages</span>
+                <span className="text-xs text-gray-500 dark:text-gray-400">Messages</span>
               </div>
             </div>
           </div>
           <UsageChart data={data.chartData} />
         </div>
 
-        {/* Xenith-Style Upgrade Prompt */}
+        {/* Fixed Dark Mode Upgrade Prompt */}
         {(isNearLimit || isOverLimit) && data.subscriptionTier === 'free_trial' && (
-          <div className="mt-8 bg-gradient-to-r from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-orange-900/20 rounded-2xl p-6 border border-yellow-200 dark:border-yellow-800">
+          <div className="mt-8 bg-gradient-to-r from-yellow-50 to-orange-50 dark:from-yellow-900/10 dark:to-orange-900/10 rounded-2xl p-6 border border-yellow-200 dark:border-yellow-800/50">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 bg-yellow-100 dark:bg-yellow-900/30 rounded-xl flex items-center justify-center">
                   <Crown className="h-6 w-6 text-yellow-600 dark:text-yellow-400" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
                     {isOverLimit ? 'Usage Limit Exceeded' : 'Approaching Usage Limit'}
                   </h3>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
@@ -295,7 +295,7 @@ export function UsageAnalytics({ initialData }: UsageAnalyticsProps) {
                   </p>
                 </div>
               </div>
-              <Button className="bg-gray-900 hover:bg-gray-800 dark:bg-white dark:hover:bg-gray-100 text-white dark:text-gray-900 rounded-xl px-6">
+              <Button className="bg-gray-900 hover:bg-gray-800 dark:bg-gray-100 dark:hover:bg-gray-200 text-white dark:text-gray-900 rounded-xl px-6">
                 <Sparkles className="h-4 w-4 mr-2" />
                 Upgrade Now
               </Button>
