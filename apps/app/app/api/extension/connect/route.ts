@@ -1,4 +1,4 @@
-import { auth } from '@repo/auth/server';
+import { auth, currentUser } from '@repo/auth/server';
 import { database } from '@repo/database';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
@@ -13,8 +13,9 @@ const connectRequestSchema = z.object({
 export async function POST(request: NextRequest) {
   try {
     const { userId } = await auth();
-    
-    if (!userId) {
+    const clerkUser = await currentUser();
+
+    if (!userId || !clerkUser) {
       return NextResponse.json(
         { error: 'Unauthorized' },
         { status: 401 }
@@ -24,15 +25,21 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { sessionId, extensionVersion, platform } = connectRequestSchema.parse(body);
 
-    const dbUser = await database.user.findUnique({
+    // Find or create user in database
+    let dbUser = await database.user.findUnique({
       where: { clerkId: userId },
     });
 
     if (!dbUser) {
-      return NextResponse.json(
-        { error: 'User not found' },
-        { status: 404 }
-      );
+      // Create new user automatically for social login users
+      dbUser = await database.user.create({
+        data: {
+          clerkId: userId,
+          email: clerkUser.emailAddresses[0]?.emailAddress || '',
+          name: `${clerkUser.firstName || ''} ${clerkUser.lastName || ''}`.trim() || null,
+          picture: clerkUser.imageUrl,
+        },
+      });
     }
 
     if (!dbUser.termsAccepted) {

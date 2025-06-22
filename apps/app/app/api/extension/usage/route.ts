@@ -13,7 +13,7 @@ const usageUpdateSchema = z.object({
 export async function POST(request: NextRequest) {
   try {
     const { userId } = await auth();
-    
+
     if (!userId) {
       return NextResponse.json(
         { error: 'Unauthorized' },
@@ -22,6 +22,95 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
+
+    // Handle both old format and new Cubent Units format
+    if (body.modelId && body.cubentUnits !== undefined) {
+      // New Cubent Units tracking format
+      const { modelId, provider, configName, cubentUnits, messageCount, timestamp } = body;
+
+      const dbUser = await database.user.findUnique({
+        where: { clerkId: userId },
+      });
+
+      if (!dbUser) {
+        return NextResponse.json(
+          { error: 'User not found' },
+          { status: 404 }
+        );
+      }
+
+      // Update user's total Cubent Units used
+      await database.user.update({
+        where: { id: dbUser.id },
+        data: {
+          cubentUnitsUsed: {
+            increment: cubentUnits
+          },
+          lastActiveAt: new Date(),
+        },
+      });
+
+      // Create usage analytics record
+      await database.usageAnalytics.create({
+        data: {
+          userId: dbUser.id,
+          modelId,
+          cubentUnitsUsed: cubentUnits,
+          requestsMade: messageCount || 1,
+          metadata: {
+            provider,
+            configName,
+            timestamp
+          }
+        },
+      });
+
+      // Update daily usage metrics
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      const existingMetrics = await database.usageMetrics.findFirst({
+        where: {
+          userId: dbUser.id,
+          date: {
+            gte: today,
+            lt: new Date(today.getTime() + 24 * 60 * 60 * 1000)
+          }
+        }
+      });
+
+      if (existingMetrics) {
+        await database.usageMetrics.update({
+          where: { id: existingMetrics.id },
+          data: {
+            cubentUnitsUsed: {
+              increment: cubentUnits
+            },
+            requestsMade: {
+              increment: messageCount || 1
+            }
+          },
+        });
+      } else {
+        await database.usageMetrics.create({
+          data: {
+            userId: dbUser.id,
+            cubentUnitsUsed: cubentUnits,
+            requestsMade: messageCount || 1,
+            date: today,
+          },
+        });
+      }
+
+      return NextResponse.json({
+        success: true,
+        message: 'Cubent Units usage tracked successfully',
+        cubentUnitsUsed: cubentUnits,
+        totalCubentUnits: dbUser.cubentUnitsUsed + cubentUnits
+      });
+    }
+
+    // Original token-based tracking format
     const { tokensUsed, requestsMade, costAccrued, date } = usageUpdateSchema.parse(body);
 
     const dbUser = await database.user.findUnique({

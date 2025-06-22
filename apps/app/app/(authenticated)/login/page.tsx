@@ -18,7 +18,7 @@
  * 4. Generate secure token and redirect to VS Code
  */
 
-import { auth } from '@repo/auth/server';
+import { auth, currentUser } from '@repo/auth/server';
 import { database } from '@repo/database';
 import { redirect } from 'next/navigation';
 import { LoginFlow } from './components/login-flow';
@@ -32,8 +32,9 @@ type LoginPageProps = {
 
 const LoginPage = async ({ searchParams }: LoginPageProps) => {
   const { userId } = await auth();
+  const clerkUser = await currentUser();
   const params = await searchParams;
-  
+
   // Validate required parameters
   if (!params.device_id || !params.state) {
     return (
@@ -49,32 +50,31 @@ const LoginPage = async ({ searchParams }: LoginPageProps) => {
   }
 
   // If user is not authenticated, redirect to sign-in
-  if (!userId) {
+  if (!userId || !clerkUser) {
     const signInUrl = new URL('/sign-in', process.env.NEXT_PUBLIC_APP_URL);
     signInUrl.searchParams.set('redirect_url', `/login?device_id=${params.device_id}&state=${params.state}`);
     redirect(signInUrl.toString());
   }
 
-  // Check if user exists in database
-  const user = await database.user.findUnique({
+  // Find or create user in database
+  let user = await database.user.findUnique({
     where: { clerkId: userId },
   });
 
   if (!user) {
-    return (
-      <div className="flex min-h-screen items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-red-600">User Not Found</h1>
-          <p className="mt-2 text-gray-600">
-            Please contact support if this issue persists.
-          </p>
-        </div>
-      </div>
-    );
+    // Create new user automatically for social login users
+    user = await database.user.create({
+      data: {
+        clerkId: userId,
+        email: clerkUser.emailAddresses[0]?.emailAddress || '',
+        name: `${clerkUser.firstName || ''} ${clerkUser.lastName || ''}`.trim() || null,
+        picture: clerkUser.imageUrl,
+      },
+    });
   }
 
   return (
-    <LoginFlow 
+    <LoginFlow
       deviceId={params.device_id}
       state={params.state}
       user={user}

@@ -17,7 +17,7 @@
  * - Success confirmation with timestamp
  */
 
-import { auth, clerkClient } from '@repo/auth/server';
+import { auth, clerkClient, currentUser } from '@repo/auth/server';
 import { database } from '@repo/database';
 import { parseError } from '@repo/observability/error';
 import { log } from '@repo/observability/log';
@@ -33,8 +33,9 @@ const loginSchema = z.object({
 export const POST = async (request: Request) => {
   try {
     const { userId } = await auth();
+    const clerkUser = await currentUser();
 
-    if (!userId) {
+    if (!userId || !clerkUser) {
       return NextResponse.json(
         { error: 'Unauthorized', message: 'User not authenticated' },
         { status: 401 }
@@ -44,16 +45,21 @@ export const POST = async (request: Request) => {
     const body = await request.json();
     const { deviceId, state, acceptTerms } = loginSchema.parse(body);
 
-    // Get user from database
-    const user = await database.user.findUnique({
+    // Find or create user in database
+    let user = await database.user.findUnique({
       where: { clerkId: userId },
     });
 
     if (!user) {
-      return NextResponse.json(
-        { error: 'User not found', message: 'User not found in database' },
-        { status: 404 }
-      );
+      // Create new user automatically for social login users
+      user = await database.user.create({
+        data: {
+          clerkId: userId,
+          email: clerkUser.emailAddresses[0]?.emailAddress || '',
+          name: `${clerkUser.firstName || ''} ${clerkUser.lastName || ''}`.trim() || null,
+          picture: clerkUser.imageUrl,
+        },
+      });
     }
 
     // Update terms acceptance if needed
