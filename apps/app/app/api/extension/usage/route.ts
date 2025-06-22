@@ -42,6 +42,7 @@ export async function POST(request: NextRequest) {
 
         if (pendingLogin) {
           try {
+            const { clerkClient } = await import('@repo/auth/server');
             const client = await clerkClient();
             const session = await client.sessions.getSession(token);
             userId = session.userId;
