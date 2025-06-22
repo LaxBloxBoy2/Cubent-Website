@@ -70,16 +70,32 @@ export async function GET(request: NextRequest) {
       }
     });
 
+    // Add some sample data if user has no usage yet (for demo purposes)
+    const sampleData = {
+      totalCubentUnits: 12.5,
+      totalMessages: 45,
+      userLimit: 50,
+      subscriptionTier: 'free_trial',
+      monthlyUsage: {
+        cubentUnits: 8.2,
+        messages: 28
+      }
+    };
+
+    // Use real data if available, otherwise use sample data
+    const hasRealData = (dbUser.cubentUnitsUsed && dbUser.cubentUnitsUsed > 0) || totalMessages > 0;
+
     return NextResponse.json({
       success: true,
-      totalCubentUnits: dbUser.cubentUnitsUsed || 0,
-      totalMessages: totalMessages,
+      totalCubentUnits: hasRealData ? (dbUser.cubentUnitsUsed || 0) : sampleData.totalCubentUnits,
+      totalMessages: hasRealData ? totalMessages : sampleData.totalMessages,
       userLimit: dbUser.cubentUnitsLimit || 50,
       subscriptionTier: dbUser.subscriptionTier || 'free_trial',
       monthlyUsage: {
-        cubentUnits: monthlyUsage._sum.cubentUnitsUsed || 0,
-        messages: monthlyUsage._sum.requestsMade || 0
-      }
+        cubentUnits: hasRealData ? (monthlyUsage._sum.cubentUnitsUsed || 0) : sampleData.monthlyUsage.cubentUnits,
+        messages: hasRealData ? (monthlyUsage._sum.requestsMade || 0) : sampleData.monthlyUsage.messages
+      },
+      isDemo: !hasRealData // Flag to indicate this is demo data
     });
 
   } catch (error) {
