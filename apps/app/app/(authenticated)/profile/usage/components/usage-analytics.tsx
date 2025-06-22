@@ -33,7 +33,6 @@ interface UsageData {
     email: string;
     picture?: string;
   };
-  isDemo?: boolean;
 }
 
 interface UsageAnalyticsProps {
@@ -60,10 +59,10 @@ export function UsageAnalytics({ initialData }: UsageAnalyticsProps) {
         if (result.success) {
           setData(prev => ({
             ...prev,
-            totalCubentUnits: result.totalCubentUnits || 0,
-            totalMessages: result.totalMessages || 0,
-            userLimit: result.userLimit || 50,
-            subscriptionTier: result.subscriptionTier || 'free_trial',
+            totalCubentUnits: result.totalCubentUnits,
+            totalMessages: result.totalMessages,
+            userLimit: result.userLimit,
+            subscriptionTier: result.subscriptionTier,
           }));
           setLastUpdated(new Date());
         }
@@ -111,20 +110,8 @@ export function UsageAnalytics({ initialData }: UsageAnalyticsProps) {
             </Link>
           </Button>
           <div>
-            <div className="flex items-center gap-3">
-              <h1 className="text-3xl font-bold">Cubent Units Usage</h1>
-              {data.isDemo && (
-                <Badge variant="outline" className="text-xs">
-                  Demo Data
-                </Badge>
-              )}
-            </div>
-            <p className="text-muted-foreground">
-              {data.isDemo
-                ? "Sample data shown - start using the extension to see real usage statistics."
-                : "View your VS Code extension usage statistics and analytics."
-              }
-            </p>
+            <h1 className="text-3xl font-bold">Cubent Units Usage</h1>
+            <p className="text-muted-foreground">View your VS Code extension usage statistics and analytics.</p>
           </div>
         </div>
 

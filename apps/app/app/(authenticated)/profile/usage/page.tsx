@@ -73,36 +73,17 @@ const UsagePage = async () => {
     }
   });
 
-  // Generate sample chart data if no real data exists
-  const generateSampleChartData = () => {
-    const data = [];
-    const today = new Date();
-    for (let i = 29; i >= 0; i--) {
-      const date = new Date(today);
-      date.setDate(today.getDate() - i);
-      data.push({
-        date,
-        cubentUnitsUsed: Math.random() * 2 + 0.1, // Random between 0.1 and 2.1
-        requestsMade: Math.floor(Math.random() * 5) + 1, // Random between 1 and 5
-      });
-    }
-    return data;
-  };
-
-  const hasRealData = (dbUser.cubentUnitsUsed && dbUser.cubentUnitsUsed > 0) || totalMessages > 0;
-
   const usageData = {
-    totalCubentUnits: hasRealData ? (dbUser.cubentUnitsUsed || 0) : 12.5,
-    totalMessages: hasRealData ? totalMessages : 45,
+    totalCubentUnits: dbUser.cubentUnitsUsed || 0,
+    totalMessages: totalMessages,
     userLimit: dbUser.cubentUnitsLimit || 50,
     subscriptionTier: dbUser.subscriptionTier || 'free_trial',
-    chartData: hasRealData ? dbUser.usageMetrics : generateSampleChartData(),
+    chartData: dbUser.usageMetrics,
     user: {
       name: user.firstName || 'User',
       email: user.emailAddresses[0]?.emailAddress || '',
       picture: user.imageUrl,
-    },
-    isDemo: !hasRealData
+    }
   };
 
   return <UsageAnalytics initialData={usageData} />;
