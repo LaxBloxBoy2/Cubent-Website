@@ -1,0 +1,3 @@
+Force deployment - Fix extension usage tracking authentication
+Date: 06/22/2025 04:30:00
+Changes: Modified /api/extension/usage to support direct Clerk JWT validation

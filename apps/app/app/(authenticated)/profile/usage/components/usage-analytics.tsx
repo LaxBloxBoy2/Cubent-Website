@@ -39,84 +39,14 @@ interface UsageAnalyticsProps {
   initialData: UsageData;
 }
 
-// Extension usage data structure (matches extension's localStorage format)
-interface ExtensionUsageStats {
-  totalCubentUnits: number;
-  totalMessages: number;
-  entries: Array<{
-    timestamp: number;
-    modelId: string;
-    cubentUnits: number;
-    messageCount: number;
-    provider: string;
-    configName: string;
-  }>;
-  lastUpdated: number;
-}
-
 export function UsageAnalytics({ initialData }: UsageAnalyticsProps) {
   const [data, setData] = useState(initialData);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [lastUpdated, setLastUpdated] = useState(new Date());
-  const [extensionDataFound, setExtensionDataFound] = useState(false);
-
-  // Function to read usage data from localStorage (where extension stores it)
-  const readExtensionUsageData = (): ExtensionUsageStats | null => {
-    try {
-      // Try to find user-specific usage data first
-      const storageKeys = [];
-      for (let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i);
-        if (key && key.startsWith('cubent-usage-stats')) {
-          storageKeys.push(key);
-        }
-      }
-
-      console.log('🔍 Found localStorage keys:', storageKeys);
-
-      // Try each key to find valid usage data
-      for (const key of storageKeys) {
-        const stored = localStorage.getItem(key);
-        if (stored) {
-          try {
-            const parsed = JSON.parse(stored) as ExtensionUsageStats;
-            if (parsed.totalCubentUnits !== undefined && parsed.totalMessages !== undefined) {
-              console.log('✅ Found valid extension usage data:', parsed);
-              return parsed;
-            }
-          } catch (e) {
-            console.warn('Failed to parse data from key:', key, e);
-          }
-        }
-      }
-
-      return null;
-    } catch (error) {
-      console.error('Error reading extension usage data:', error);
-      return null;
-    }
-  };
 
   const refreshData = async () => {
     setIsRefreshing(true);
     try {
-      // First, try to read from localStorage (extension data)
-      const extensionData = readExtensionUsageData();
-
-      if (extensionData) {
-        console.log('📊 Using extension localStorage data:', extensionData);
-        setData(prev => ({
-          ...prev,
-          totalCubentUnits: extensionData.totalCubentUnits,
-          totalMessages: extensionData.totalMessages,
-        }));
-        setExtensionDataFound(true);
-        setLastUpdated(new Date(extensionData.lastUpdated));
-        return;
-      }
-
-      // Fallback to API call if no extension data found
-      console.log('📊 No extension data found, trying API...');
       const response = await fetch('/api/extension/usage/stats', {
         method: 'GET',
         headers: {
@@ -134,7 +64,6 @@ export function UsageAnalytics({ initialData }: UsageAnalyticsProps) {
             userLimit: result.userLimit,
             subscriptionTier: result.subscriptionTier,
           }));
-          setExtensionDataFound(false);
           setLastUpdated(new Date());
         }
       }
@@ -145,28 +74,10 @@ export function UsageAnalytics({ initialData }: UsageAnalyticsProps) {
     }
   };
 
-  // Load extension data on component mount
+  // Auto-refresh every 30 seconds
   useEffect(() => {
-    refreshData();
-  }, []);
-
-  // Auto-refresh every 10 seconds to catch localStorage changes
-  useEffect(() => {
-    const interval = setInterval(refreshData, 10000);
+    const interval = setInterval(refreshData, 30000);
     return () => clearInterval(interval);
-  }, []);
-
-  // Listen for localStorage changes
-  useEffect(() => {
-    const handleStorageChange = (e: StorageEvent) => {
-      if (e.key && e.key.startsWith('cubent-usage-stats')) {
-        console.log('🔄 localStorage changed, refreshing data');
-        refreshData();
-      }
-    };
-
-    window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
 
   const usagePercentage = (data.totalCubentUnits / data.userLimit) * 100;

@@ -17,35 +17,49 @@ export async function POST(request: NextRequest) {
     let userId: string | null = null;
 
     if (authHeader?.startsWith('Bearer ')) {
-      // Extension is using Bearer token authentication
+      // Extension is using Clerk session token (JWT)
       const token = authHeader.substring(7);
 
-      // Find the pending login with this token to get the user
-      const pendingLogin = await database.pendingLogin.findFirst({
-        where: {
-          token,
-          expiresAt: { gt: new Date() }, // Not expired
-        },
-      });
+      try {
+        // First try to validate as Clerk JWT directly
+        const { clerkClient } = await import('@repo/auth/server');
+        const client = await clerkClient();
 
-      if (pendingLogin) {
-        // Token is valid, get the user ID from the session
-        try {
-          const { clerkClient } = await import('@repo/auth/server');
-          const client = await clerkClient();
-          const session = await client.sessions.getSession(token);
-          userId = session.userId;
-        } catch (error) {
+        // Try to get session info from the token
+        const session = await client.sessions.getSession(token);
+        userId = session.userId;
+        console.log('Extension usage tracking - Direct Clerk JWT validation successful:', { userId });
+      } catch (clerkError) {
+        console.log('Extension usage tracking - Direct Clerk JWT validation failed, trying PendingLogin table:', clerkError);
+
+        // Fallback: Check if token exists in PendingLogin table (for new auth flow)
+        const pendingLogin = await database.pendingLogin.findFirst({
+          where: {
+            token,
+            expiresAt: { gt: new Date() }, // Not expired
+          },
+        });
+
+        if (pendingLogin) {
+          try {
+            const client = await clerkClient();
+            const session = await client.sessions.getSession(token);
+            userId = session.userId;
+            console.log('Extension usage tracking - PendingLogin validation successful:', { userId });
+          } catch (error) {
+            console.error('Extension usage tracking - Invalid session token from PendingLogin:', error);
+            return NextResponse.json(
+              { error: 'Invalid token' },
+              { status: 401 }
+            );
+          }
+        } else {
+          console.error('Extension usage tracking - Token not found in PendingLogin table and direct validation failed');
           return NextResponse.json(
-            { error: 'Invalid token' },
+            { error: 'Invalid or expired token' },
             { status: 401 }
           );
         }
-      } else {
-        return NextResponse.json(
-          { error: 'Invalid or expired token' },
-          { status: 401 }
-        );
       }
     } else {
       // Fallback to regular Clerk auth for web requests

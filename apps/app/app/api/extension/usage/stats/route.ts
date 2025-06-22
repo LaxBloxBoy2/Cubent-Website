@@ -4,52 +4,10 @@ import { database } from '@repo/database';
 
 export async function GET(request: NextRequest) {
   try {
-    // Check for Bearer token in Authorization header (for extension)
-    const authHeader = request.headers.get('authorization');
-    let userId: string | null = null;
-    let clerkUser: any = null;
+    const { userId } = await auth();
+    const clerkUser = await currentUser();
 
-    if (authHeader?.startsWith('Bearer ')) {
-      // Extension is using Bearer token authentication
-      const token = authHeader.substring(7);
-
-      // Find the pending login with this token to get the user
-      const pendingLogin = await database.pendingLogin.findFirst({
-        where: {
-          token,
-          expiresAt: { gt: new Date() }, // Not expired
-        },
-      });
-
-      if (pendingLogin) {
-        // Token is valid, get the user ID from the session
-        try {
-          const { clerkClient } = await import('@repo/auth/server');
-          const client = await clerkClient();
-          const session = await client.sessions.getSession(token);
-          userId = session.userId;
-          // For extension requests, we don't need the full clerkUser object
-          clerkUser = { userId };
-        } catch (error) {
-          return NextResponse.json(
-            { error: 'Invalid token' },
-            { status: 401 }
-          );
-        }
-      } else {
-        return NextResponse.json(
-          { error: 'Invalid or expired token' },
-          { status: 401 }
-        );
-      }
-    } else {
-      // Fallback to regular Clerk auth for web requests
-      const authResult = await auth();
-      userId = authResult.userId;
-      clerkUser = await currentUser();
-    }
-
-    if (!userId) {
+    if (!userId || !clerkUser) {
       return NextResponse.json(
         { error: 'Unauthorized' },
         { status: 401 }
@@ -68,15 +26,7 @@ export async function GET(request: NextRequest) {
     });
 
     if (!dbUser) {
-      // For extension requests, we might not have full user info, so just return error
-      if (authHeader?.startsWith('Bearer ')) {
-        return NextResponse.json(
-          { error: 'User not found in database. Please sign in to the web app first.' },
-          { status: 404 }
-        );
-      }
-
-      // Create new user automatically for web requests only
+      // Create new user automatically for social login users
       const newUser = await database.user.create({
         data: {
           clerkId: userId,
@@ -101,7 +51,72 @@ export async function GET(request: NextRequest) {
       }
     });
 
-    // Get current month usage
+    // Get query parameters for filtering
+    const { searchParams } = new URL(request.url);
+    const days = parseInt(searchParams.get('days') || '0'); // 0 = all time
+
+    // Calculate date range
+    let dateFilter = {};
+    if (days > 0) {
+      const startDate = new Date();
+      startDate.setDate(startDate.getDate() - days);
+      dateFilter = {
+        date: {
+          gte: startDate
+        }
+      };
+    }
+
+    // Get usage metrics for the specified period
+    const usageMetrics = await database.usageMetrics.findMany({
+      where: {
+        userId: dbUser.id,
+        ...dateFilter
+      },
+      orderBy: { date: 'desc' }
+    });
+
+    // Get usage analytics for detailed breakdown
+    const usageAnalytics = await database.usageAnalytics.findMany({
+      where: {
+        userId: dbUser.id,
+        ...(days > 0 ? {
+          createdAt: {
+            gte: new Date(Date.now() - days * 24 * 60 * 60 * 1000)
+          }
+        } : {})
+      },
+      orderBy: { createdAt: 'desc' }
+    });
+
+    // Calculate totals
+    const totalCubentUnits = days > 0
+      ? usageMetrics.reduce((sum, metric) => sum + (metric.cubentUnitsUsed || 0), 0)
+      : dbUser.cubentUnitsUsed || 0;
+
+    const totalMessages = usageMetrics.reduce((sum, metric) => sum + (metric.requestsMade || 0), 0);
+
+    // Calculate model breakdown
+    const modelBreakdown: Record<string, { cubentUnits: number; messages: number }> = {};
+    usageAnalytics.forEach(analytics => {
+      if (!modelBreakdown[analytics.modelId]) {
+        modelBreakdown[analytics.modelId] = { cubentUnits: 0, messages: 0 };
+      }
+      modelBreakdown[analytics.modelId].cubentUnits += analytics.cubentUnitsUsed || 0;
+      modelBreakdown[analytics.modelId].messages += analytics.requestsMade || 0;
+    });
+
+    // Create entries array for compatibility with frontend
+    const entries = usageAnalytics.map(analytics => ({
+      timestamp: analytics.createdAt.getTime(),
+      modelId: analytics.modelId,
+      cubentUnits: analytics.cubentUnitsUsed || 0,
+      messageCount: analytics.requestsMade || 0,
+      provider: (analytics.metadata as any)?.provider || 'unknown',
+      configName: (analytics.metadata as any)?.configName || 'default'
+    }));
+
+    // Get current month usage for additional context
     const now = new Date();
     const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
     const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
@@ -122,10 +137,13 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      totalCubentUnits: dbUser.cubentUnitsUsed || 0,
-      totalMessages: totalMessages,
+      totalCubentUnits,
+      totalMessages,
       userLimit: dbUser.cubentUnitsLimit || 50,
       subscriptionTier: dbUser.subscriptionTier || 'free_trial',
+      lastUpdated: usageAnalytics.length > 0 ? usageAnalytics[0].createdAt.getTime() : Date.now(),
+      entries,
+      modelBreakdown,
       monthlyUsage: {
         cubentUnits: monthlyUsage._sum.cubentUnitsUsed || 0,
         messages: monthlyUsage._sum.requestsMade || 0
