@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
     let userId: string | null = null;
 
     if (authHeader?.startsWith('Bearer ')) {
-      // Extension is using custom token (Clerk session ID)
+      // Extension is using Bearer token authentication
       const token = authHeader.substring(7);
 
       // Find the pending login with this token to get the user
@@ -29,8 +29,7 @@ export async function POST(request: NextRequest) {
       });
 
       if (pendingLogin) {
-        // Token is valid, but we need to get the user ID from the session
-        // The token is actually a Clerk session ID, so we can use it to get user info
+        // Token is valid, get the user ID from the session
         try {
           const { clerkClient } = await import('@repo/auth/server');
           const client = await clerkClient();
@@ -214,48 +213,8 @@ export async function POST(request: NextRequest) {
 
 export async function GET(request: NextRequest) {
   try {
-    // Check for Bearer token in Authorization header (for extension)
-    const authHeader = request.headers.get('authorization');
-    let userId: string | null = null;
-
-    if (authHeader?.startsWith('Bearer ')) {
-      // Extension is using custom token (Clerk session ID)
-      const token = authHeader.substring(7);
-
-      // Find the pending login with this token to get the user
-      const pendingLogin = await database.pendingLogin.findFirst({
-        where: {
-          token,
-          expiresAt: { gt: new Date() }, // Not expired
-        },
-      });
-
-      if (pendingLogin) {
-        // Token is valid, but we need to get the user ID from the session
-        // The token is actually a Clerk session ID, so we can use it to get user info
-        try {
-          const { clerkClient } = await import('@repo/auth/server');
-          const client = await clerkClient();
-          const session = await client.sessions.getSession(token);
-          userId = session.userId;
-        } catch (error) {
-          return NextResponse.json(
-            { error: 'Invalid token' },
-            { status: 401 }
-          );
-        }
-      } else {
-        return NextResponse.json(
-          { error: 'Invalid or expired token' },
-          { status: 401 }
-        );
-      }
-    } else {
-      // Fallback to regular Clerk auth for web requests
-      const authResult = await auth();
-      userId = authResult.userId;
-    }
-
+    const { userId } = await auth();
+    
     if (!userId) {
       return NextResponse.json(
         { error: 'Unauthorized' },

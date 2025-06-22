@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) {
     let clerkUser: any = null;
 
     if (authHeader?.startsWith('Bearer ')) {
-      // Extension is using custom token (Clerk session ID)
+      // Extension is using Bearer token authentication
       const token = authHeader.substring(7);
 
       // Find the pending login with this token to get the user
@@ -22,8 +22,7 @@ export async function GET(request: NextRequest) {
       });
 
       if (pendingLogin) {
-        // Token is valid, but we need to get the user ID from the session
-        // The token is actually a Clerk session ID, so we can use it to get user info
+        // Token is valid, get the user ID from the session
         try {
           const { clerkClient } = await import('@repo/auth/server');
           const client = await clerkClient();
