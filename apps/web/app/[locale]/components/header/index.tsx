@@ -50,8 +50,12 @@ export const Header = ({ dictionary }: HeaderProps) => {
       try {
         console.log('📡 Trying direct fetch...');
         const response = await fetch('https://app-cubent.vercel.app/api/auth/status', {
+          method: 'GET',
           credentials: 'include',
           mode: 'cors',
+          headers: {
+            'Content-Type': 'application/json',
+          },
         });
 
         if (response.ok) {

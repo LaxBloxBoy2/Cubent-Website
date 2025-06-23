@@ -3,6 +3,8 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest) {
   const origin = request.headers.get('origin');
+  console.log('🌐 Auth status request from origin:', origin);
+
   const allowedOrigins = [
     'https://cubent.vercel.app',
     'http://localhost:3000',
@@ -11,14 +13,20 @@ export async function GET(request: NextRequest) {
   const corsHeaders = {
     'Access-Control-Allow-Origin': allowedOrigins.includes(origin || '') ? (origin || 'https://cubent.vercel.app') : 'https://cubent.vercel.app',
     'Access-Control-Allow-Methods': 'GET, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
     'Access-Control-Allow-Credentials': 'true',
+    'Vary': 'Origin',
   };
 
+  console.log('🔧 CORS headers:', corsHeaders);
+
   try {
+    console.log('🔐 Checking auth...');
     const { userId } = await auth();
+    console.log('👤 User ID from auth():', userId);
 
     if (!userId) {
+      console.log('❌ No user ID found');
       return NextResponse.json({
         authenticated: false
       }, {
@@ -26,7 +34,9 @@ export async function GET(request: NextRequest) {
       });
     }
 
+    console.log('✅ User ID found, getting user details...');
     const user = await currentUser();
+    console.log('👤 Current user:', user?.id, user?.firstName, user?.lastName);
 
     return NextResponse.json({
       authenticated: true,
