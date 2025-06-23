@@ -11,6 +11,9 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from '@repo/design-system/components/ui/navigation-menu';
+import { Menu, MoveRight, X, User, Settings, LogOut } from 'lucide-react';
+import Link from 'next/link';
+import { useState, useEffect } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@repo/design-system/components/ui/avatar';
 import {
   DropdownMenu,
@@ -19,9 +22,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@repo/design-system/components/ui/dropdown-menu';
-import { Menu, MoveRight, X, User, Settings, LogOut } from 'lucide-react';
-import Link from 'next/link';
-import { useState, useEffect } from 'react';
 
 import type { Dictionary } from '@repo/internationalization';
 import Image from 'next/image';
@@ -41,73 +41,49 @@ export const Header = ({ dictionary }: HeaderProps) => {
   } | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Check authentication status from URL params or localStorage
+  // Cross-domain authentication detection using iframe
   useEffect(() => {
-    const checkAuthStatus = () => {
+    const checkAuth = () => {
       try {
-        // Check if user data was passed via URL params (from app redirect)
-        const urlParams = new URLSearchParams(window.location.search);
-        const authData = urlParams.get('auth');
+        // Create hidden iframe to check auth status
+        const iframe = document.createElement('iframe');
+        iframe.style.display = 'none';
+        iframe.src = 'https://app-cubent.vercel.app/api/auth/check-for-website';
 
-        if (authData) {
-          try {
-            const userData = JSON.parse(decodeURIComponent(authData));
-            setIsAuthenticated(true);
-            setUserProfile(userData);
-            // Store in localStorage for future visits
-            localStorage.setItem('cubent_user', JSON.stringify(userData));
-            // Clean up URL
-            window.history.replaceState({}, document.title, window.location.pathname);
-            setIsLoading(false);
-            return;
-          } catch (e) {
-            console.log('Failed to parse auth data from URL');
-          }
-        }
+        const handleMessage = (event: MessageEvent) => {
+          if (event.origin !== 'https://app-cubent.vercel.app') return;
 
-        // Check localStorage for cached user data
-        const cachedUser = localStorage.getItem('cubent_user');
-        if (cachedUser) {
-          try {
-            const userData = JSON.parse(cachedUser);
-            // Verify the cached data is still valid by making a simple request
-            fetch(`${env.NEXT_PUBLIC_DOCS_URL || 'https://app-cubent.vercel.app'}/api/auth/status`, {
-              credentials: 'include',
-              mode: 'cors',
-            })
-            .then(response => response.json())
-            .then(data => {
-              if (data.authenticated) {
-                setIsAuthenticated(true);
-                setUserProfile(data.user);
-                // Update cached data
-                localStorage.setItem('cubent_user', JSON.stringify(data.user));
-              } else {
-                // Clear invalid cached data
-                localStorage.removeItem('cubent_user');
-              }
-            })
-            .catch(() => {
-              // If we can't verify, use cached data anyway
+          if (event.data.type === 'AUTH_STATUS') {
+            if (event.data.authenticated) {
               setIsAuthenticated(true);
-              setUserProfile(userData);
-            })
-            .finally(() => setIsLoading(false));
-            return;
-          } catch (e) {
-            localStorage.removeItem('cubent_user');
-          }
-        }
+              setUserProfile(event.data.user);
+            }
+            setIsLoading(false);
 
-        // No cached data, assume not authenticated
-        setIsLoading(false);
+            // Clean up
+            document.body.removeChild(iframe);
+            window.removeEventListener('message', handleMessage);
+          }
+        };
+
+        window.addEventListener('message', handleMessage);
+        document.body.appendChild(iframe);
+
+        // Timeout after 3 seconds
+        setTimeout(() => {
+          setIsLoading(false);
+          if (document.body.contains(iframe)) {
+            document.body.removeChild(iframe);
+          }
+          window.removeEventListener('message', handleMessage);
+        }, 3000);
       } catch (error) {
         console.log('Auth check failed:', error);
         setIsLoading(false);
       }
     };
 
-    checkAuthStatus();
+    checkAuth();
   }, []);
 
   const navigationItems = [
@@ -237,17 +213,13 @@ export const Header = ({ dictionary }: HeaderProps) => {
               <span className="shrink-0 text-sm">Download</span>
             </Link>
           </Button>
-
-          {/* Show different content based on auth state */}
+          {/* Authentication-aware buttons */}
           {isLoading ? (
-            <div className="flex gap-2">
-              <div className="hidden md:block w-20 h-10 bg-muted animate-pulse rounded"></div>
-              <div className="w-16 h-10 bg-muted animate-pulse rounded"></div>
-            </div>
+            <div className="w-16 h-10 bg-muted animate-pulse rounded"></div>
           ) : isAuthenticated && userProfile ? (
             <div className="flex items-center gap-2">
               <Button variant="outline" asChild className="hidden md:inline-flex">
-                <Link href={`${env.NEXT_PUBLIC_DOCS_URL || 'https://app-cubent.vercel.app'}/profile`}>
+                <Link href="https://app-cubent.vercel.app/profile">
                   <User className="h-4 w-4 mr-2" />
                   Dashboard
                 </Link>
@@ -274,20 +246,20 @@ export const Header = ({ dictionary }: HeaderProps) => {
                   </div>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem asChild>
-                    <Link href={`${env.NEXT_PUBLIC_DOCS_URL || 'https://app-cubent.vercel.app'}/profile`}>
+                    <Link href="https://app-cubent.vercel.app/profile">
                       <User className="mr-2 h-4 w-4" />
                       Profile
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link href={`${env.NEXT_PUBLIC_DOCS_URL || 'https://app-cubent.vercel.app'}/profile/settings`}>
+                    <Link href="https://app-cubent.vercel.app/profile/settings">
                       <Settings className="mr-2 h-4 w-4" />
                       Settings
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem asChild>
-                    <Link href={`${env.NEXT_PUBLIC_DOCS_URL || 'https://app-cubent.vercel.app'}/sign-out`}>
+                    <Link href="https://app-cubent.vercel.app/sign-out">
                       <LogOut className="mr-2 h-4 w-4" />
                       Sign out
                     </Link>
@@ -296,18 +268,11 @@ export const Header = ({ dictionary }: HeaderProps) => {
               </DropdownMenu>
             </div>
           ) : (
-            <div className="flex gap-2">
-              <Button variant="outline" asChild className="hidden md:inline-flex">
-                <Link href={`${env.NEXT_PUBLIC_DOCS_URL || 'https://app-cubent.vercel.app'}/sign-up`}>
-                  Sign Up
-                </Link>
-              </Button>
-              <Button asChild>
-                <Link href={`${env.NEXT_PUBLIC_DOCS_URL || 'https://app-cubent.vercel.app'}/sign-in`}>
-                  Sign In
-                </Link>
-              </Button>
-            </div>
+            <Button asChild>
+              <Link href="https://app-cubent.vercel.app/sign-in">
+                Sign In
+              </Link>
+            </Button>
           )}
         </div>
         <div className="flex w-12 shrink items-end justify-end lg:hidden">
@@ -371,25 +336,18 @@ export const Header = ({ dictionary }: HeaderProps) => {
                       </div>
                     </div>
                     <Button asChild className="w-full">
-                      <Link href={`${env.NEXT_PUBLIC_DOCS_URL || 'https://app-cubent.vercel.app'}/profile`}>
+                      <Link href="https://app-cubent.vercel.app/profile">
                         <User className="h-4 w-4 mr-2" />
                         Go to Dashboard
                       </Link>
                     </Button>
                   </div>
                 ) : (
-                  <div className="flex gap-2">
-                    <Button variant="outline" asChild className="flex-1">
-                      <Link href={`${env.NEXT_PUBLIC_DOCS_URL || 'https://app-cubent.vercel.app'}/sign-up`}>
-                        Sign Up
-                      </Link>
-                    </Button>
-                    <Button asChild className="flex-1">
-                      <Link href={`${env.NEXT_PUBLIC_DOCS_URL || 'https://app-cubent.vercel.app'}/sign-in`}>
-                        Sign In
-                      </Link>
-                    </Button>
-                  </div>
+                  <Button asChild className="w-full">
+                    <Link href="https://app-cubent.vercel.app/sign-in">
+                      Sign In
+                    </Link>
+                  </Button>
                 )}
               </div>
             </div>
