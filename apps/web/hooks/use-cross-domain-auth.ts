@@ -23,12 +23,13 @@ export interface CrossDomainAuthState {
 
 /**
  * Hook to check authentication status across domains
- * 
+ *
  * This hook calls the app domain (app-cubent.vercel.app) to check if a user
  * is authenticated and returns their profile information if they are.
- * 
+ *
  * The hook includes caching to avoid unnecessary API calls and handles
  * loading states and errors appropriately.
+ * Force deployment trigger.
  */
 export function useCrossDomainAuth(): CrossDomainAuthState {
   const [state, setState] = useState<CrossDomainAuthState>({
