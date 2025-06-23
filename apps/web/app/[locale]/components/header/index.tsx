@@ -1,18 +1,8 @@
 'use client';
 
 import { env } from '@/env';
-import { useCrossDomainAuth } from '@/hooks/use-cross-domain-auth';
 import { ModeToggle } from '@repo/design-system/components/mode-toggle';
-import { Avatar, AvatarFallback, AvatarImage } from '@repo/design-system/components/ui/avatar';
 import { Button } from '@repo/design-system/components/ui/button';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@repo/design-system/components/ui/dropdown-menu';
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -21,7 +11,7 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from '@repo/design-system/components/ui/navigation-menu';
-import { ExternalLink, LogOut, Menu, MoveRight, Settings, User, X } from 'lucide-react';
+import { Menu, MoveRight, X } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
 
@@ -35,9 +25,6 @@ type HeaderProps = {
 };
 
 export const Header = ({ dictionary }: HeaderProps) => {
-  const { isAuthenticated, user, isLoading } = useCrossDomainAuth();
-  const [isOpen, setOpen] = useState(false);
-
   const navigationItems = [
     {
       title: dictionary.web.header.home,
@@ -79,6 +66,7 @@ export const Header = ({ dictionary }: HeaderProps) => {
     },
   ];
 
+  const [isOpen, setOpen] = useState(false);
   return (
     <header className="sticky top-0 left-0 z-40 w-full border-b bg-background">
       <div className="relative w-full max-w-none flex min-h-20 flex-row items-center justify-between" style={{paddingInline: 'clamp(1rem, 2.5%, 2rem)'}}>
@@ -164,65 +152,11 @@ export const Header = ({ dictionary }: HeaderProps) => {
               <span className="shrink-0 text-sm">Download</span>
             </Link>
           </Button>
-
-          {/* Authentication Section */}
-          {isLoading ? (
-            <Button disabled className="h-10">
-              Loading...
-            </Button>
-          ) : isAuthenticated && user ? (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="relative h-10 w-10 rounded-full">
-                  <Avatar className="h-8 w-8">
-                    <AvatarImage src={user.picture || ''} alt={user.name || ''} />
-                    <AvatarFallback>
-                      {user.name?.split(' ').map(n => n[0]).join('') || user.email?.[0]?.toUpperCase() || 'U'}
-                    </AvatarFallback>
-                  </Avatar>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-56" align="end" forceMount>
-                <DropdownMenuLabel className="font-normal">
-                  <div className="flex flex-col space-y-1">
-                    <p className="text-sm font-medium leading-none">{user.name || 'User'}</p>
-                    <p className="text-xs leading-none text-muted-foreground">
-                      {user.email}
-                    </p>
-                  </div>
-                </DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem asChild>
-                  <Link href={`${env.NEXT_PUBLIC_APP_URL || 'https://app-cubent.vercel.app'}/profile`} className="flex items-center">
-                    <User className="mr-2 h-4 w-4" />
-                    <span>Profile</span>
-                    <ExternalLink className="ml-auto h-3 w-3" />
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href={`${env.NEXT_PUBLIC_APP_URL || 'https://app-cubent.vercel.app'}/profile/settings`} className="flex items-center">
-                    <Settings className="mr-2 h-4 w-4" />
-                    <span>Settings</span>
-                    <ExternalLink className="ml-auto h-3 w-3" />
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem asChild>
-                  <Link href={`${env.NEXT_PUBLIC_APP_URL || 'https://app-cubent.vercel.app'}`} className="flex items-center">
-                    <LogOut className="mr-2 h-4 w-4" />
-                    <span>Go to App</span>
-                    <ExternalLink className="ml-auto h-3 w-3" />
-                  </Link>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          ) : (
-            <Button asChild>
-              <Link href={`${env.NEXT_PUBLIC_APP_URL || 'https://app-cubent.vercel.app'}`}>
-                Sign In
-              </Link>
-            </Button>
-          )}
+          <Button asChild>
+            <Link href={`${env.NEXT_PUBLIC_DOCS_URL || 'https://docs.cubent.com'}`}>
+              Sign In
+            </Link>
+          </Button>
         </div>
         <div className="flex w-12 shrink items-end justify-end lg:hidden">
           <Button variant="ghost" onClick={() => setOpen(!isOpen)}>
