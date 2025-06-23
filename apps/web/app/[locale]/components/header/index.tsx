@@ -11,9 +11,17 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from '@repo/design-system/components/ui/navigation-menu';
-import { Menu, MoveRight, X } from 'lucide-react';
+import { Avatar, AvatarFallback, AvatarImage } from '@repo/design-system/components/ui/avatar';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@repo/design-system/components/ui/dropdown-menu';
+import { Menu, MoveRight, X, User, Settings, LogOut } from 'lucide-react';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import type { Dictionary } from '@repo/internationalization';
 import Image from 'next/image';
@@ -25,6 +33,42 @@ type HeaderProps = {
 };
 
 export const Header = ({ dictionary }: HeaderProps) => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [userProfile, setUserProfile] = useState<{
+    name: string;
+    email: string;
+    imageUrl?: string;
+  } | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Check authentication status from the app
+  useEffect(() => {
+    const checkAuthStatus = async () => {
+      try {
+        const appUrl = env.NEXT_PUBLIC_DOCS_URL || 'https://app-cubent.vercel.app';
+        const response = await fetch(`${appUrl}/api/auth/status`, {
+          credentials: 'include',
+          mode: 'cors',
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          if (data.authenticated) {
+            setIsAuthenticated(true);
+            setUserProfile(data.user);
+          }
+        }
+      } catch (error) {
+        // If we can't reach the app or there's an error, assume not authenticated
+        console.log('Auth check failed:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    checkAuthStatus();
+  }, []);
+
   const navigationItems = [
     {
       title: dictionary.web.header.home,
@@ -153,16 +197,77 @@ export const Header = ({ dictionary }: HeaderProps) => {
             </Link>
           </Button>
 
-          <Button variant="outline" asChild className="hidden md:inline-flex">
-            <Link href={`${env.NEXT_PUBLIC_DOCS_URL || 'https://app.cubent.com'}/sign-up`}>
-              Sign Up
-            </Link>
-          </Button>
-          <Button asChild>
-            <Link href={`${env.NEXT_PUBLIC_DOCS_URL || 'https://app.cubent.com'}/sign-in`}>
-              Sign In
-            </Link>
-          </Button>
+          {/* Show different content based on auth state */}
+          {isLoading ? (
+            <div className="flex gap-2">
+              <div className="hidden md:block w-20 h-10 bg-muted animate-pulse rounded"></div>
+              <div className="w-16 h-10 bg-muted animate-pulse rounded"></div>
+            </div>
+          ) : isAuthenticated && userProfile ? (
+            <div className="flex items-center gap-2">
+              <Button variant="outline" asChild className="hidden md:inline-flex">
+                <Link href={`${env.NEXT_PUBLIC_DOCS_URL || 'https://app-cubent.vercel.app'}/profile`}>
+                  <User className="h-4 w-4 mr-2" />
+                  Dashboard
+                </Link>
+              </Button>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                    <Avatar className="h-8 w-8">
+                      <AvatarImage src={userProfile.imageUrl} alt={userProfile.name} />
+                      <AvatarFallback>
+                        {userProfile.name?.charAt(0)?.toUpperCase() || 'U'}
+                      </AvatarFallback>
+                    </Avatar>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56" align="end" forceMount>
+                  <div className="flex items-center justify-start gap-2 p-2">
+                    <div className="flex flex-col space-y-1 leading-none">
+                      <p className="font-medium">{userProfile.name}</p>
+                      <p className="w-[200px] truncate text-sm text-muted-foreground">
+                        {userProfile.email}
+                      </p>
+                    </div>
+                  </div>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <Link href={`${env.NEXT_PUBLIC_DOCS_URL || 'https://app-cubent.vercel.app'}/profile`}>
+                      <User className="mr-2 h-4 w-4" />
+                      Profile
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href={`${env.NEXT_PUBLIC_DOCS_URL || 'https://app-cubent.vercel.app'}/profile/settings`}>
+                      <Settings className="mr-2 h-4 w-4" />
+                      Settings
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <Link href={`${env.NEXT_PUBLIC_DOCS_URL || 'https://app-cubent.vercel.app'}/sign-out`}>
+                      <LogOut className="mr-2 h-4 w-4" />
+                      Sign out
+                    </Link>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          ) : (
+            <div className="flex gap-2">
+              <Button variant="outline" asChild className="hidden md:inline-flex">
+                <Link href={`${env.NEXT_PUBLIC_DOCS_URL || 'https://app-cubent.vercel.app'}/sign-up`}>
+                  Sign Up
+                </Link>
+              </Button>
+              <Button asChild>
+                <Link href={`${env.NEXT_PUBLIC_DOCS_URL || 'https://app-cubent.vercel.app'}/sign-in`}>
+                  Sign In
+                </Link>
+              </Button>
+            </div>
+          )}
         </div>
         <div className="flex w-12 shrink items-end justify-end lg:hidden">
           <Button variant="ghost" onClick={() => setOpen(!isOpen)}>
@@ -210,18 +315,41 @@ export const Header = ({ dictionary }: HeaderProps) => {
 
               {/* Mobile Auth Section */}
               <div className="border-t pt-4">
-                <div className="flex gap-2">
-                  <Button variant="outline" asChild className="flex-1">
-                    <Link href={`${env.NEXT_PUBLIC_DOCS_URL || 'https://app.cubent.com'}/sign-up`}>
-                      Sign Up
-                    </Link>
-                  </Button>
-                  <Button asChild className="flex-1">
-                    <Link href={`${env.NEXT_PUBLIC_DOCS_URL || 'https://app.cubent.com'}/sign-in`}>
-                      Sign In
-                    </Link>
-                  </Button>
-                </div>
+                {isAuthenticated && userProfile ? (
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-3 p-2">
+                      <Avatar className="h-8 w-8">
+                        <AvatarImage src={userProfile.imageUrl} alt={userProfile.name} />
+                        <AvatarFallback>
+                          {userProfile.name?.charAt(0)?.toUpperCase() || 'U'}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div>
+                        <p className="font-medium text-sm">{userProfile.name}</p>
+                        <p className="text-xs text-muted-foreground">{userProfile.email}</p>
+                      </div>
+                    </div>
+                    <Button asChild className="w-full">
+                      <Link href={`${env.NEXT_PUBLIC_DOCS_URL || 'https://app-cubent.vercel.app'}/profile`}>
+                        <User className="h-4 w-4 mr-2" />
+                        Go to Dashboard
+                      </Link>
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="flex gap-2">
+                    <Button variant="outline" asChild className="flex-1">
+                      <Link href={`${env.NEXT_PUBLIC_DOCS_URL || 'https://app-cubent.vercel.app'}/sign-up`}>
+                        Sign Up
+                      </Link>
+                    </Button>
+                    <Button asChild className="flex-1">
+                      <Link href={`${env.NEXT_PUBLIC_DOCS_URL || 'https://app-cubent.vercel.app'}/sign-in`}>
+                        Sign In
+                      </Link>
+                    </Button>
+                  </div>
+                )}
               </div>
             </div>
           )}
