@@ -38,20 +38,51 @@ export const Header = ({ dictionary }: HeaderProps) => {
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Check authentication status on mount using JSONP for cross-domain access
+  // Check authentication status on mount using multiple methods
   useEffect(() => {
-    const checkAuthStatus = () => {
+    const checkAuthStatus = async () => {
       console.log('🔍 Checking authentication status...');
 
-      // Create a unique callback name
+      // Method 1: Try direct fetch first
+      try {
+        console.log('📡 Trying direct fetch...');
+        const response = await fetch('https://app-cubent.vercel.app/api/auth/status', {
+          method: 'GET',
+          mode: 'cors',
+          credentials: 'include',
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          console.log('✅ Direct fetch successful:', data);
+
+          if (data.authenticated && data.user) {
+            console.log('✅ User is authenticated:', data.user);
+            setUserInfo({
+              id: data.user.id,
+              name: data.user.name || 'User',
+              email: data.user.email,
+              picture: data.user.picture,
+              subscriptionTier: data.user.subscriptionTier,
+            });
+            setIsLoading(false);
+            return;
+          }
+        }
+      } catch (error) {
+        console.log('❌ Direct fetch failed:', error);
+      }
+
+      // Method 2: Fallback to JSONP
+      console.log('📡 Falling back to JSONP...');
       const callbackName = `authCallback_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
       // Define the callback function
       (window as any)[callbackName] = (data: any) => {
-        console.log('📡 Auth callback received:', data);
+        console.log('📡 JSONP callback received:', data);
         try {
           if (data.authenticated && data.user) {
-            console.log('✅ User is authenticated:', data.user);
+            console.log('✅ User is authenticated via JSONP:', data.user);
             setUserInfo({
               id: data.user.id,
               name: data.user.name || 'User',
@@ -63,7 +94,7 @@ export const Header = ({ dictionary }: HeaderProps) => {
             console.log('❌ User is not authenticated');
           }
         } catch (error) {
-          console.error('❌ Auth callback error:', error);
+          console.error('❌ JSONP callback error:', error);
         } finally {
           setIsLoading(false);
           // Clean up
@@ -82,7 +113,7 @@ export const Header = ({ dictionary }: HeaderProps) => {
       console.log('📡 Making JSONP request to:', script.src);
 
       script.onerror = () => {
-        console.error('❌ Auth check failed - script error');
+        console.error('❌ JSONP failed - script error');
         setIsLoading(false);
         delete (window as any)[callbackName];
         script.remove();
@@ -102,7 +133,7 @@ export const Header = ({ dictionary }: HeaderProps) => {
             timeoutScript.remove();
           }
         }
-      }, 10000); // Increased timeout to 10 seconds
+      }, 10000);
     };
 
     checkAuthStatus();
