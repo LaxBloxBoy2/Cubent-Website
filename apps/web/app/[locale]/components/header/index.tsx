@@ -1,8 +1,18 @@
 'use client';
 
 import { env } from '@/env';
+import { useCrossDomainAuth } from '@/hooks/use-cross-domain-auth';
 import { ModeToggle } from '@repo/design-system/components/mode-toggle';
+import { Avatar, AvatarFallback, AvatarImage } from '@repo/design-system/components/ui/avatar';
 import { Button } from '@repo/design-system/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@repo/design-system/components/ui/dropdown-menu';
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -11,11 +21,9 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from '@repo/design-system/components/ui/navigation-menu';
-import { Avatar, AvatarFallback, AvatarImage } from '@repo/design-system/components/ui/avatar';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@repo/design-system/components/ui/dropdown-menu';
-import { Menu, MoveRight, X, User, Settings, LogOut } from 'lucide-react';
+import { ExternalLink, LogOut, Menu, MoveRight, Settings, User, X } from 'lucide-react';
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 import type { Dictionary } from '@repo/internationalization';
 import Image from 'next/image';
@@ -26,49 +34,10 @@ type HeaderProps = {
   dictionary: Dictionary;
 };
 
-interface UserInfo {
-  id: string;
-  name: string;
-  email: string;
-  picture?: string;
-  subscriptionTier?: string;
-}
-
 export const Header = ({ dictionary }: HeaderProps) => {
-  const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const { isAuthenticated, user, isLoading } = useCrossDomainAuth();
+  const [isOpen, setOpen] = useState(false);
 
-  // Check authentication status on mount
-  useEffect(() => {
-    const checkAuthStatus = async () => {
-      try {
-        const response = await fetch('https://app-cubent.vercel.app/api/auth/status', {
-          method: 'GET',
-          mode: 'cors',
-          credentials: 'include',
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          if (data.authenticated && data.user) {
-            setUserInfo({
-              id: data.user.id,
-              name: data.user.name || 'User',
-              email: data.user.email,
-              picture: data.user.picture,
-              subscriptionTier: data.user.subscriptionTier,
-            });
-          }
-        }
-      } catch (error) {
-        // Silently fail
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    checkAuthStatus();
-  }, []);
   const navigationItems = [
     {
       title: dictionary.web.header.home,
@@ -110,7 +79,6 @@ export const Header = ({ dictionary }: HeaderProps) => {
     },
   ];
 
-  const [isOpen, setOpen] = useState(false);
   return (
     <header className="sticky top-0 left-0 z-40 w-full border-b bg-background">
       <div className="relative w-full max-w-none flex min-h-20 flex-row items-center justify-between" style={{paddingInline: 'clamp(1rem, 2.5%, 2rem)'}}>
@@ -197,60 +165,60 @@ export const Header = ({ dictionary }: HeaderProps) => {
             </Link>
           </Button>
 
-          {/* Conditional rendering based on authentication status */}
-          {!isLoading && userInfo ? (
-            // User is authenticated - show user dropdown
+          {/* Authentication Section */}
+          {isLoading ? (
+            <Button disabled className="h-10">
+              Loading...
+            </Button>
+          ) : isAuthenticated && user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="relative h-10 w-10 rounded-full">
                   <Avatar className="h-8 w-8">
-                    <AvatarImage src={userInfo.picture} alt={userInfo.name} />
+                    <AvatarImage src={user.picture || ''} alt={user.name || ''} />
                     <AvatarFallback>
-                      {userInfo.name.split(' ').map(n => n[0]).join('').toUpperCase()}
+                      {user.name?.split(' ').map(n => n[0]).join('') || user.email?.[0]?.toUpperCase() || 'U'}
                     </AvatarFallback>
                   </Avatar>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56" align="end" forceMount>
-                <div className="flex items-center justify-start gap-2 p-2">
-                  <div className="flex flex-col space-y-1 leading-none">
-                    <p className="font-medium">{userInfo.name}</p>
-                    <p className="w-[200px] truncate text-sm text-muted-foreground">
-                      {userInfo.email}
+                <DropdownMenuLabel className="font-normal">
+                  <div className="flex flex-col space-y-1">
+                    <p className="text-sm font-medium leading-none">{user.name || 'User'}</p>
+                    <p className="text-xs leading-none text-muted-foreground">
+                      {user.email}
                     </p>
-                    {userInfo.subscriptionTier && (
-                      <p className="text-xs text-muted-foreground capitalize">
-                        {userInfo.subscriptionTier.toLowerCase()} plan
-                      </p>
-                    )}
                   </div>
-                </div>
+                </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
-                  <Link href="https://app-cubent.vercel.app/profile" className="flex items-center">
+                  <Link href={`${env.NEXT_PUBLIC_APP_URL || 'https://app-cubent.vercel.app'}/profile`} className="flex items-center">
                     <User className="mr-2 h-4 w-4" />
-                    Profile
+                    <span>Profile</span>
+                    <ExternalLink className="ml-auto h-3 w-3" />
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link href="https://app-cubent.vercel.app/settings" className="flex items-center">
+                  <Link href={`${env.NEXT_PUBLIC_APP_URL || 'https://app-cubent.vercel.app'}/profile/settings`} className="flex items-center">
                     <Settings className="mr-2 h-4 w-4" />
-                    Settings
+                    <span>Settings</span>
+                    <ExternalLink className="ml-auto h-3 w-3" />
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
-                  <Link href="https://app-cubent.vercel.app/sign-out" className="flex items-center">
+                  <Link href={`${env.NEXT_PUBLIC_APP_URL || 'https://app-cubent.vercel.app'}`} className="flex items-center">
                     <LogOut className="mr-2 h-4 w-4" />
-                    Sign out
+                    <span>Go to App</span>
+                    <ExternalLink className="ml-auto h-3 w-3" />
                   </Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
-            // User is not authenticated - show sign in button
             <Button asChild>
-              <Link href="https://app-cubent.vercel.app/sign-in">
+              <Link href={`${env.NEXT_PUBLIC_APP_URL || 'https://app-cubent.vercel.app'}`}>
                 Sign In
               </Link>
             </Button>
