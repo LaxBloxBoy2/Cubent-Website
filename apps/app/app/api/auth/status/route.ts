@@ -58,14 +58,20 @@ export async function GET(request: NextRequest) {
       }
     }
 
+    // Get the origin from the request
+    const origin = request.headers.get('origin') || 'https://cubent.vercel.app';
+    const allowedOrigins = ['https://cubent.vercel.app', 'https://www.cubent.vercel.app', 'http://localhost:3001'];
+    const corsOrigin = allowedOrigins.includes(origin) ? origin : 'https://cubent.vercel.app';
+
     // If callback is provided, return JSONP response
     if (callback) {
       const response = `${callback}(${JSON.stringify(responseData)});`;
-      
+
       return new NextResponse(response, {
         headers: {
           'Content-Type': 'application/javascript',
-          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Origin': corsOrigin,
+          'Access-Control-Allow-Credentials': 'true',
           'Access-Control-Allow-Methods': 'GET',
           'Access-Control-Allow-Headers': 'Content-Type',
           'Cache-Control': 'no-cache, no-store, must-revalidate',
@@ -76,7 +82,8 @@ export async function GET(request: NextRequest) {
     // Otherwise return regular JSON response
     return NextResponse.json(responseData, {
       headers: {
-        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Origin': corsOrigin,
+        'Access-Control-Allow-Credentials': 'true',
         'Access-Control-Allow-Methods': 'GET',
         'Access-Control-Allow-Headers': 'Content-Type',
         'Cache-Control': 'no-cache, no-store, must-revalidate',
@@ -85,7 +92,11 @@ export async function GET(request: NextRequest) {
 
   } catch (error) {
     console.error('Auth status check failed:', error);
-    
+
+    const origin = request.headers.get('origin') || 'https://cubent.vercel.app';
+    const allowedOrigins = ['https://cubent.vercel.app', 'https://www.cubent.vercel.app', 'http://localhost:3001'];
+    const corsOrigin = allowedOrigins.includes(origin) ? origin : 'https://cubent.vercel.app';
+
     const errorResponse = {
       authenticated: false,
       user: null,
@@ -94,11 +105,12 @@ export async function GET(request: NextRequest) {
 
     if (callback) {
       const response = `${callback}(${JSON.stringify(errorResponse)});`;
-      
+
       return new NextResponse(response, {
         headers: {
           'Content-Type': 'application/javascript',
-          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Origin': corsOrigin,
+          'Access-Control-Allow-Credentials': 'true',
           'Cache-Control': 'no-cache, no-store, must-revalidate',
         },
       });
@@ -106,7 +118,8 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(errorResponse, {
       headers: {
-        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Origin': corsOrigin,
+        'Access-Control-Allow-Credentials': 'true',
         'Cache-Control': 'no-cache, no-store, must-revalidate',
       },
     });
@@ -116,11 +129,16 @@ export async function GET(request: NextRequest) {
 /**
  * Handle CORS preflight requests
  */
-export async function OPTIONS() {
+export async function OPTIONS(request: NextRequest) {
+  const origin = request.headers.get('origin') || 'https://cubent.vercel.app';
+  const allowedOrigins = ['https://cubent.vercel.app', 'https://www.cubent.vercel.app', 'http://localhost:3001'];
+  const corsOrigin = allowedOrigins.includes(origin) ? origin : 'https://cubent.vercel.app';
+
   return new NextResponse(null, {
     status: 200,
     headers: {
-      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Origin': corsOrigin,
+      'Access-Control-Allow-Credentials': 'true',
       'Access-Control-Allow-Methods': 'GET, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type',
       'Access-Control-Max-Age': '86400',
