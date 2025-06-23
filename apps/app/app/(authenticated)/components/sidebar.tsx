@@ -26,12 +26,18 @@ import {
   AnchorIcon,
   BookOpenIcon,
   BotIcon,
-
+  LayoutDashboardIcon,
   LifeBuoyIcon,
   PieChartIcon,
   SendIcon,
   Settings2Icon,
   SquareTerminalIcon,
+  MessageSquareIcon,
+  CreditCardIcon,
+  UserIcon,
+  BellIcon,
+  ShieldIcon,
+  HelpCircleIcon,
 } from 'lucide-react';
 import Link from 'next/link';
 import type { ReactNode } from 'react';
@@ -49,15 +55,15 @@ const data = {
   },
   navMain: [
     {
-      title: 'Profile',
-      url: '/profile',
-      icon: SquareTerminalIcon,
-      isActive: true,
+      title: 'Dashboard',
+      url: '/dashboard',
+      icon: LayoutDashboardIcon,
     },
     {
-      title: 'Extension',
-      url: '/profile/extension',
-      icon: BotIcon,
+      title: 'Profile',
+      url: '/profile',
+      icon: UserIcon,
+      isActive: true,
     },
     {
       title: 'Usage Analytics',
@@ -65,16 +71,43 @@ const data = {
       icon: PieChartIcon,
     },
     {
+      title: 'Conversations',
+      url: '/conversations',
+      icon: MessageSquareIcon,
+    },
+  ],
+  navAccount: [
+    {
+      title: 'Extension',
+      url: '/profile/extension',
+      icon: BotIcon,
+    },
+    {
+      title: 'Billing',
+      url: '/billing',
+      icon: CreditCardIcon,
+    },
+    {
       title: 'Settings',
       url: '/profile/settings',
       icon: Settings2Icon,
     },
+    {
+      title: 'Notifications',
+      url: '/settings/notifications',
+      icon: BellIcon,
+    },
   ],
   navSecondary: [
     {
-      title: 'Terms & Privacy',
-      url: '/terms',
-      icon: AnchorIcon,
+      title: 'Documentation',
+      url: '/docs',
+      icon: BookOpenIcon,
+    },
+    {
+      title: 'Help Center',
+      url: '/help',
+      icon: HelpCircleIcon,
     },
     {
       title: 'Support',
@@ -82,12 +115,11 @@ const data = {
       icon: LifeBuoyIcon,
     },
     {
-      title: 'Feedback',
-      url: '#',
-      icon: SendIcon,
+      title: 'Terms & Privacy',
+      url: '/terms',
+      icon: AnchorIcon,
     },
   ],
-
 };
 
 export const GlobalSidebar = ({ children }: GlobalSidebarProperties) => {
@@ -116,9 +148,25 @@ export const GlobalSidebar = ({ children }: GlobalSidebarProperties) => {
         <Search />
         <SidebarContent>
           <SidebarGroup>
-            <SidebarGroupLabel>Profile</SidebarGroupLabel>
+            <SidebarGroupLabel>Dashboard</SidebarGroupLabel>
             <SidebarMenu>
               {data.navMain.map((item) => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton asChild tooltip={item.title}>
+                    <Link href={item.url}>
+                      <item.icon />
+                      <span>{item.title}</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroup>
+
+          <SidebarGroup>
+            <SidebarGroupLabel>Account</SidebarGroupLabel>
+            <SidebarMenu>
+              {data.navAccount.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild tooltip={item.title}>
                     <Link href={item.url}>
