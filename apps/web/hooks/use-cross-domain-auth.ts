@@ -51,6 +51,10 @@ export function useCrossDomainAuth(): CrossDomainAuthState {
         const appUrl = process.env.NODE_ENV === 'production'
           ? 'https://app-cubent.vercel.app'
           : env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+
+        console.log('[Cross-Domain Auth] Checking auth at:', `${appUrl}/api/auth/check-for-website`);
+        console.log('[Cross-Domain Auth] Environment:', process.env.NODE_ENV);
+
         const response = await fetch(`${appUrl}/api/auth/check-for-website`, {
           method: 'GET',
           credentials: 'include', // Include cookies for cross-domain auth
@@ -65,6 +69,9 @@ export function useCrossDomainAuth(): CrossDomainAuthState {
 
         const data = await response.json();
 
+        console.log('[Cross-Domain Auth] Response status:', response.status);
+        console.log('[Cross-Domain Auth] Response data:', data);
+
         if (isMounted) {
           setState({
             isAuthenticated: data.isAuthenticated || false,
@@ -72,10 +79,19 @@ export function useCrossDomainAuth(): CrossDomainAuthState {
             isLoading: false,
             error: null,
           });
+
+          console.log('[Cross-Domain Auth] State updated:', {
+            isAuthenticated: data.isAuthenticated || false,
+            user: data.user || null,
+          });
         }
       } catch (error) {
-        console.error('Cross-domain auth check failed:', error);
-        
+        console.error('[Cross-Domain Auth] Check failed:', error);
+        console.error('[Cross-Domain Auth] Error details:', {
+          message: error instanceof Error ? error.message : 'Unknown error',
+          stack: error instanceof Error ? error.stack : undefined,
+        });
+
         if (isMounted) {
           setState({
             isAuthenticated: false,
