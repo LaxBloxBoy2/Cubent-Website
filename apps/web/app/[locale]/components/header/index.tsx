@@ -57,13 +57,22 @@ export const Header = ({ dictionary }: HeaderProps) => {
         if (response.ok) {
           const data = await response.json();
           console.log('✅ Direct fetch successful:', data);
+          console.log('🔍 Auth status:', data.authenticated);
+          console.log('👤 User data:', data.user);
 
           if (data.authenticated) {
+            console.log('🎯 Setting authenticated state to true');
             setIsAuthenticated(true);
             setUserProfile(data.user);
+            console.log('✅ State updated - authenticated:', true, 'user:', data.user);
+          } else {
+            console.log('❌ User not authenticated according to response');
           }
           setIsLoading(false);
+          console.log('⏹️ Loading set to false');
           return;
+        } else {
+          console.log('❌ Response not ok:', response.status, response.statusText);
         }
       } catch (error) {
         console.log('❌ Direct fetch failed:', error);
@@ -174,6 +183,10 @@ export const Header = ({ dictionary }: HeaderProps) => {
   ];
 
   const [isOpen, setOpen] = useState(false);
+
+  // Debug current state
+  console.log('🎨 Render state - isLoading:', isLoading, 'isAuthenticated:', isAuthenticated, 'userProfile:', userProfile);
+
   return (
     <header className="sticky top-0 left-0 z-40 w-full border-b bg-background">
       <div className="relative w-full max-w-none flex min-h-20 flex-row items-center justify-between" style={{paddingInline: 'clamp(1rem, 2.5%, 2rem)'}}>
