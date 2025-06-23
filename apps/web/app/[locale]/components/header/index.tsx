@@ -41,13 +41,17 @@ export const Header = ({ dictionary }: HeaderProps) => {
   // Check authentication status on mount using JSONP for cross-domain access
   useEffect(() => {
     const checkAuthStatus = () => {
+      console.log('🔍 Checking authentication status...');
+
       // Create a unique callback name
       const callbackName = `authCallback_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
       // Define the callback function
       (window as any)[callbackName] = (data: any) => {
+        console.log('📡 Auth callback received:', data);
         try {
           if (data.authenticated && data.user) {
+            console.log('✅ User is authenticated:', data.user);
             setUserInfo({
               id: data.user.id,
               name: data.user.name || 'User',
@@ -55,9 +59,11 @@ export const Header = ({ dictionary }: HeaderProps) => {
               picture: data.user.picture,
               subscriptionTier: data.user.subscriptionTier,
             });
+          } else {
+            console.log('❌ User is not authenticated');
           }
         } catch (error) {
-          console.log('Auth callback error:', error);
+          console.error('❌ Auth callback error:', error);
         } finally {
           setIsLoading(false);
           // Clean up
@@ -73,8 +79,10 @@ export const Header = ({ dictionary }: HeaderProps) => {
       const script = document.createElement('script');
       script.id = callbackName;
       script.src = `https://app-cubent.vercel.app/api/auth/status?callback=${callbackName}`;
+      console.log('📡 Making JSONP request to:', script.src);
+
       script.onerror = () => {
-        console.log('Auth check failed - script error');
+        console.error('❌ Auth check failed - script error');
         setIsLoading(false);
         delete (window as any)[callbackName];
         script.remove();
@@ -86,7 +94,7 @@ export const Header = ({ dictionary }: HeaderProps) => {
       // Timeout fallback
       setTimeout(() => {
         if ((window as any)[callbackName]) {
-          console.log('Auth check timeout');
+          console.warn('⏰ Auth check timeout');
           setIsLoading(false);
           delete (window as any)[callbackName];
           const timeoutScript = document.getElementById(callbackName);
@@ -94,7 +102,7 @@ export const Header = ({ dictionary }: HeaderProps) => {
             timeoutScript.remove();
           }
         }
-      }, 5000);
+      }, 10000); // Increased timeout to 10 seconds
     };
 
     checkAuthStatus();
@@ -225,6 +233,23 @@ export const Header = ({ dictionary }: HeaderProps) => {
               </svg>
               <span className="shrink-0 text-sm">Download</span>
             </Link>
+          </Button>
+
+          {/* Debug button - remove in production */}
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => {
+              setIsLoading(true);
+              setUserInfo(null);
+              // Re-run auth check
+              setTimeout(() => {
+                window.location.reload();
+              }, 100);
+            }}
+            className="hidden md:inline-flex"
+          >
+            🔄 Check Auth
           </Button>
 
           {/* Conditional rendering based on authentication status */}
