@@ -4,12 +4,13 @@ import { NextRequest, NextResponse } from 'next/server';
 
 /**
  * Cross-domain authentication check endpoint
- * 
+ *
  * This endpoint allows the website (cubent.vercel.app) to check if a user
  * is authenticated on the app domain (app-cubent.vercel.app) and get their
  * basic profile information.
- * 
+ *
  * CORS is enabled to allow cross-domain requests from the website.
+ * Updated to trigger deployment.
  */
 
 // CORS headers for cross-domain requests
