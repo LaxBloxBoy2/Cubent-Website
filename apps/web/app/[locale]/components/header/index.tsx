@@ -11,8 +11,7 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from '@repo/design-system/components/ui/navigation-menu';
-import { SignedIn, SignedOut, UserButton, useUser } from '@repo/auth/client';
-import { Menu, MoveRight, X, User } from 'lucide-react';
+import { Menu, MoveRight, X } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
 
@@ -154,39 +153,16 @@ export const Header = ({ dictionary }: HeaderProps) => {
             </Link>
           </Button>
 
-          {/* Show different content based on auth state */}
-          <SignedOut>
-            <Button variant="outline" asChild className="hidden md:inline-flex">
-              <Link href="/sign-up">
-                Sign Up
-              </Link>
-            </Button>
-            <Button asChild>
-              <Link href="/sign-in">
-                Sign In
-              </Link>
-            </Button>
-          </SignedOut>
-
-          <SignedIn>
-            <Button variant="outline" asChild className="hidden md:inline-flex">
-              <Link href="/profile" className="flex items-center gap-2">
-                <User className="h-4 w-4" />
-                Dashboard
-              </Link>
-            </Button>
-            <UserButton
-              appearance={{
-                elements: {
-                  avatarBox: "h-8 w-8",
-                  userButtonPopoverCard: "shadow-lg border",
-                  userButtonPopoverActionButton: "hover:bg-muted",
-                }
-              }}
-              userProfileMode="navigation"
-              userProfileUrl="/profile"
-            />
-          </SignedIn>
+          <Button variant="outline" asChild className="hidden md:inline-flex">
+            <Link href={`${env.NEXT_PUBLIC_DOCS_URL || 'https://app.cubent.com'}/sign-up`}>
+              Sign Up
+            </Link>
+          </Button>
+          <Button asChild>
+            <Link href={`${env.NEXT_PUBLIC_DOCS_URL || 'https://app.cubent.com'}/sign-in`}>
+              Sign In
+            </Link>
+          </Button>
         </div>
         <div className="flex w-12 shrink items-end justify-end lg:hidden">
           <Button variant="ghost" onClick={() => setOpen(!isOpen)}>
@@ -234,40 +210,18 @@ export const Header = ({ dictionary }: HeaderProps) => {
 
               {/* Mobile Auth Section */}
               <div className="border-t pt-4">
-                <SignedOut>
-                  <div className="flex gap-2">
-                    <Button variant="outline" asChild className="flex-1">
-                      <Link href="/sign-up">
-                        Sign Up
-                      </Link>
-                    </Button>
-                    <Button asChild className="flex-1">
-                      <Link href="/sign-in">
-                        Sign In
-                      </Link>
-                    </Button>
-                  </div>
-                </SignedOut>
-
-                <SignedIn>
-                  <div className="flex items-center justify-between">
-                    <Button variant="outline" asChild className="flex-1 mr-2">
-                      <Link href="/profile" className="flex items-center gap-2">
-                        <User className="h-4 w-4" />
-                        Dashboard
-                      </Link>
-                    </Button>
-                    <UserButton
-                      appearance={{
-                        elements: {
-                          avatarBox: "h-8 w-8",
-                        }
-                      }}
-                      userProfileMode="navigation"
-                      userProfileUrl="/profile"
-                    />
-                  </div>
-                </SignedIn>
+                <div className="flex gap-2">
+                  <Button variant="outline" asChild className="flex-1">
+                    <Link href={`${env.NEXT_PUBLIC_DOCS_URL || 'https://app.cubent.com'}/sign-up`}>
+                      Sign Up
+                    </Link>
+                  </Button>
+                  <Button asChild className="flex-1">
+                    <Link href={`${env.NEXT_PUBLIC_DOCS_URL || 'https://app.cubent.com'}/sign-in`}>
+                      Sign In
+                    </Link>
+                  </Button>
+                </div>
               </div>
             </div>
           )}

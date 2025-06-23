@@ -5,7 +5,6 @@ import { fonts } from '@repo/design-system/lib/fonts';
 import { cn } from '@repo/design-system/lib/utils';
 import { Toolbar } from '@repo/feature-flags/components/toolbar';
 import { getDictionary } from '@repo/internationalization';
-import { ClerkProvider } from '@repo/auth/client';
 import type { ReactNode } from 'react';
 import { Footer } from './components/footer';
 import { Header } from './components/header';
@@ -28,13 +27,11 @@ const RootLayout = async ({ children, params }: RootLayoutProperties) => {
       suppressHydrationWarning
     >
       <body>
-        <ClerkProvider>
-          <DesignSystemProvider>
-            <Header dictionary={dictionary} />
-            {children}
-            <Footer />
-          </DesignSystemProvider>
-        </ClerkProvider>
+        <DesignSystemProvider>
+          <Header dictionary={dictionary} />
+          {children}
+          <Footer />
+        </DesignSystemProvider>
         <Toolbar />
         <CMSToolbar />
       </body>

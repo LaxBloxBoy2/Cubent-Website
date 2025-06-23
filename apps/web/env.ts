@@ -1,4 +1,3 @@
-import { keys as auth } from '@repo/auth/keys';
 import { keys as cms } from '@repo/cms/keys';
 import { keys as email } from '@repo/email/keys';
 import { keys as flags } from '@repo/feature-flags/keys';
@@ -10,7 +9,6 @@ import { createEnv } from '@t3-oss/env-nextjs';
 
 export const env = createEnv({
   extends: [
-    auth(),
     cms(),
     core(),
     email(),
