@@ -92,19 +92,42 @@ export const Header = ({ dictionary }: HeaderProps) => {
         iframe.style.height = '1px';
         iframe.src = 'https://app-cubent.vercel.app/api/auth/check-for-website';
 
-        const handleMessage = (event: MessageEvent) => {
+        const handleMessage = async (event: MessageEvent) => {
           console.log('📨 Received message:', event.data, 'from origin:', event.origin);
 
-          if (event.data.type === 'AUTH_STATUS') {
-            console.log('✅ Auth status received:', event.data);
+          if (event.data.type === 'AUTH_TOKEN') {
+            console.log('🎫 Auth token received:', event.data);
 
-            if (event.data.authenticated) {
-              console.log('👤 User authenticated:', event.data.user);
-              setIsAuthenticated(true);
-              setUserProfile(event.data.user);
+            if (event.data.success && event.data.token) {
+              console.log('✅ Token received, verifying...');
+
+              try {
+                // Verify the token with the app
+                const verifyResponse = await fetch('https://app-cubent.vercel.app/api/auth/verify-token', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({ token: event.data.token }),
+                });
+
+                const verifyData = await verifyResponse.json();
+                console.log('🔍 Token verification result:', verifyData);
+
+                if (verifyData.authenticated) {
+                  console.log('👤 User authenticated via token:', verifyData.user);
+                  setIsAuthenticated(true);
+                  setUserProfile(verifyData.user);
+                } else {
+                  console.log('❌ Token verification failed');
+                }
+              } catch (error) {
+                console.log('❌ Token verification error:', error);
+              }
             } else {
-              console.log('🚫 User not authenticated');
+              console.log('🚫 No token received or token generation failed');
             }
+
             setIsLoading(false);
 
             // Clean up

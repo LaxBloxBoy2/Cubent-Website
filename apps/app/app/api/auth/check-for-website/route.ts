@@ -14,28 +14,29 @@ export async function GET() {
 
         (async function() {
             try {
-                console.log('📡 Fetching auth status...');
+                console.log('📡 Generating auth token...');
 
-                // Check if user is authenticated
-                const response = await fetch('/api/auth/status', {
+                // Get auth token from the app (this will work since we're in the app domain)
+                const response = await fetch('/api/auth/website-token', {
                     credentials: 'include',
                     headers: {
                         'Content-Type': 'application/json'
                     }
                 });
 
-                console.log('📊 Auth response status:', response.status);
+                console.log('📊 Token response status:', response.status);
 
                 const data = await response.json();
-                console.log('📋 Auth data:', data);
+                console.log('📋 Token data:', data);
 
                 const authMessage = {
-                    type: 'AUTH_STATUS',
-                    authenticated: data.authenticated,
-                    user: data.user || null
+                    type: 'AUTH_TOKEN',
+                    success: data.success,
+                    token: data.token || null,
+                    error: data.error || null
                 };
 
-                console.log('📤 Sending message to parent:', authMessage);
+                console.log('📤 Sending token to parent:', authMessage);
 
                 // Send to production website
                 window.parent.postMessage(authMessage, 'https://cubent.vercel.app');
@@ -43,18 +44,15 @@ export async function GET() {
                 // Send to development
                 window.parent.postMessage(authMessage, 'http://localhost:3000');
 
-                // Send to any origin as fallback
-                window.parent.postMessage(authMessage, '*');
-
-                console.log('✅ Messages sent successfully');
+                console.log('✅ Token sent successfully');
 
             } catch (error) {
-                console.error('❌ Auth check error:', error);
+                console.error('❌ Token generation error:', error);
 
                 const errorMessage = {
-                    type: 'AUTH_STATUS',
-                    authenticated: false,
-                    user: null,
+                    type: 'AUTH_TOKEN',
+                    success: false,
+                    token: null,
                     error: error.message
                 };
 
