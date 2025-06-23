@@ -38,14 +38,10 @@ export const Header = ({ dictionary }: HeaderProps) => {
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Check authentication status on mount using multiple methods
+  // Check authentication status on mount
   useEffect(() => {
     const checkAuthStatus = async () => {
-      console.log('🔍 Checking authentication status...');
-
-      // Method 1: Try direct fetch first
       try {
-        console.log('📡 Trying direct fetch...');
         const response = await fetch('https://app-cubent.vercel.app/api/auth/status', {
           method: 'GET',
           mode: 'cors',
@@ -54,12 +50,7 @@ export const Header = ({ dictionary }: HeaderProps) => {
 
         if (response.ok) {
           const data = await response.json();
-          console.log('✅ Direct fetch successful:', data);
-          console.log('🔍 Auth status:', data.authenticated);
-          console.log('🔍 User data:', data.user);
-
           if (data.authenticated && data.user) {
-            console.log('✅ User is authenticated:', data.user);
             setUserInfo({
               id: data.user.id,
               name: data.user.name || 'User',
@@ -67,77 +58,13 @@ export const Header = ({ dictionary }: HeaderProps) => {
               picture: data.user.picture,
               subscriptionTier: data.user.subscriptionTier,
             });
-          } else {
-            console.log('❌ User is not authenticated (direct fetch)');
           }
-          setIsLoading(false);
-          return; // Exit here regardless of auth status
         }
       } catch (error) {
-        console.log('❌ Direct fetch failed:', error);
-      }
-
-      // Method 2: Fallback to JSONP
-      console.log('📡 Falling back to JSONP...');
-      const callbackName = `authCallback_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-
-      // Define the callback function
-      (window as any)[callbackName] = (data: any) => {
-        console.log('📡 JSONP callback received:', data);
-        try {
-          if (data.authenticated && data.user) {
-            console.log('✅ User is authenticated via JSONP:', data.user);
-            setUserInfo({
-              id: data.user.id,
-              name: data.user.name || 'User',
-              email: data.user.email,
-              picture: data.user.picture,
-              subscriptionTier: data.user.subscriptionTier,
-            });
-          } else {
-            console.log('❌ User is not authenticated');
-          }
-        } catch (error) {
-          console.error('❌ JSONP callback error:', error);
-        } finally {
-          setIsLoading(false);
-          // Clean up
-          delete (window as any)[callbackName];
-          const script = document.getElementById(callbackName);
-          if (script) {
-            script.remove();
-          }
-        }
-      };
-
-      // Create script element for JSONP request
-      const script = document.createElement('script');
-      script.id = callbackName;
-      script.src = `https://app-cubent.vercel.app/api/auth/status?callback=${callbackName}`;
-      console.log('📡 Making JSONP request to:', script.src);
-
-      script.onerror = () => {
-        console.error('❌ JSONP failed - script error');
+        // Silently fail
+      } finally {
         setIsLoading(false);
-        delete (window as any)[callbackName];
-        script.remove();
-      };
-
-      // Add script to document
-      document.head.appendChild(script);
-
-      // Timeout fallback
-      setTimeout(() => {
-        if ((window as any)[callbackName]) {
-          console.warn('⏰ Auth check timeout');
-          setIsLoading(false);
-          delete (window as any)[callbackName];
-          const timeoutScript = document.getElementById(callbackName);
-          if (timeoutScript) {
-            timeoutScript.remove();
-          }
-        }
-      }, 10000);
+      }
     };
 
     checkAuthStatus();
@@ -268,23 +195,6 @@ export const Header = ({ dictionary }: HeaderProps) => {
               </svg>
               <span className="shrink-0 text-sm">Download</span>
             </Link>
-          </Button>
-
-          {/* Debug button - remove in production */}
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => {
-              setIsLoading(true);
-              setUserInfo(null);
-              // Re-run auth check
-              setTimeout(() => {
-                window.location.reload();
-              }, 100);
-            }}
-            className="hidden md:inline-flex"
-          >
-            🔄 Check Auth
           </Button>
 
           {/* Conditional rendering based on authentication status */}
