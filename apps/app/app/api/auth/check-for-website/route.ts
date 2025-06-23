@@ -14,14 +14,32 @@ import { NextRequest, NextResponse } from 'next/server';
  */
 
 // CORS headers for cross-domain requests
-const corsHeaders = {
-  'Access-Control-Allow-Origin': process.env.NEXT_PUBLIC_WEB_URL || 'https://cubent.vercel.app',
-  'Access-Control-Allow-Methods': 'GET, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-  'Access-Control-Allow-Credentials': 'true',
+const getAllowedOrigins = () => {
+  const webUrl = process.env.NEXT_PUBLIC_WEB_URL || 'https://cubent.vercel.app';
+  const allowedOrigins = [
+    'https://cubent.vercel.app',
+    'http://localhost:3001',
+    webUrl
+  ];
+  return allowedOrigins;
 };
 
-export async function OPTIONS() {
+const getCorsHeaders = (origin: string | null) => {
+  const allowedOrigins = getAllowedOrigins();
+  const isAllowed = origin && allowedOrigins.includes(origin);
+
+  return {
+    'Access-Control-Allow-Origin': isAllowed ? origin : 'https://cubent.vercel.app',
+    'Access-Control-Allow-Methods': 'GET, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+    'Access-Control-Allow-Credentials': 'true',
+  };
+};
+
+export async function OPTIONS(request: NextRequest) {
+  const origin = request.headers.get('origin');
+  const corsHeaders = getCorsHeaders(origin);
+
   return new NextResponse(null, {
     status: 200,
     headers: corsHeaders,
@@ -31,6 +49,8 @@ export async function OPTIONS() {
 export async function GET(request: NextRequest) {
   try {
     // Add CORS headers to the response
+    const origin = request.headers.get('origin');
+    const corsHeaders = getCorsHeaders(origin);
     const headers = new Headers(corsHeaders);
 
     // Check if user is authenticated
@@ -89,14 +109,17 @@ export async function GET(request: NextRequest) {
 
   } catch (error) {
     console.error('Cross-domain auth check error:', error);
-    
+
+    const origin = request.headers.get('origin');
+    const corsHeaders = getCorsHeaders(origin);
+
     return NextResponse.json(
-      { 
+      {
         isAuthenticated: false,
         user: null,
-        error: 'Internal server error' 
+        error: 'Internal server error'
       },
-      { 
+      {
         status: 500,
         headers: corsHeaders,
       }

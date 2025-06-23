@@ -47,7 +47,10 @@ export function useCrossDomainAuth(): CrossDomainAuthState {
       try {
         setState(prev => ({ ...prev, isLoading: true, error: null }));
 
-        const appUrl = env.NEXT_PUBLIC_APP_URL || 'https://app-cubent.vercel.app';
+        // Use production URL in production, fallback to env var or localhost in development
+        const appUrl = process.env.NODE_ENV === 'production'
+          ? 'https://app-cubent.vercel.app'
+          : env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
         const response = await fetch(`${appUrl}/api/auth/check-for-website`, {
           method: 'GET',
           credentials: 'include', // Include cookies for cross-domain auth
@@ -124,7 +127,10 @@ export function useCrossDomainAuthOnce(): CrossDomainAuthState {
 
     const checkAuth = async () => {
       try {
-        const appUrl = env.NEXT_PUBLIC_APP_URL || 'https://app-cubent.vercel.app';
+        // Use production URL in production, fallback to env var or localhost in development
+        const appUrl = process.env.NODE_ENV === 'production'
+          ? 'https://app-cubent.vercel.app'
+          : env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
         const response = await fetch(`${appUrl}/api/auth/check-for-website`, {
           method: 'GET',
           credentials: 'include',
