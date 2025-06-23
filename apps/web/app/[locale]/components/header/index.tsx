@@ -41,44 +41,90 @@ export const Header = ({ dictionary }: HeaderProps) => {
   } | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Cross-domain authentication detection using iframe
+  // Cross-domain authentication detection using multiple approaches
   useEffect(() => {
-    const checkAuth = () => {
+    const checkAuth = async () => {
+      console.log('🔍 Starting auth check...');
+
+      // Approach 1: Try direct fetch first (might work if CORS is properly configured)
       try {
-        // Create hidden iframe to check auth status
+        console.log('📡 Trying direct fetch...');
+        const response = await fetch('https://app-cubent.vercel.app/api/auth/status', {
+          credentials: 'include',
+          mode: 'cors',
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          console.log('✅ Direct fetch successful:', data);
+
+          if (data.authenticated) {
+            setIsAuthenticated(true);
+            setUserProfile(data.user);
+          }
+          setIsLoading(false);
+          return;
+        }
+      } catch (error) {
+        console.log('❌ Direct fetch failed:', error);
+      }
+
+      // Approach 2: Fallback to iframe method
+      try {
+        console.log('📡 Trying iframe method...');
+
         const iframe = document.createElement('iframe');
         iframe.style.display = 'none';
+        iframe.style.width = '1px';
+        iframe.style.height = '1px';
         iframe.src = 'https://app-cubent.vercel.app/api/auth/check-for-website';
 
         const handleMessage = (event: MessageEvent) => {
-          if (event.origin !== 'https://app-cubent.vercel.app') return;
+          console.log('📨 Received message:', event.data, 'from origin:', event.origin);
 
           if (event.data.type === 'AUTH_STATUS') {
+            console.log('✅ Auth status received:', event.data);
+
             if (event.data.authenticated) {
+              console.log('👤 User authenticated:', event.data.user);
               setIsAuthenticated(true);
               setUserProfile(event.data.user);
+            } else {
+              console.log('🚫 User not authenticated');
             }
             setIsLoading(false);
 
             // Clean up
-            document.body.removeChild(iframe);
+            if (document.body.contains(iframe)) {
+              document.body.removeChild(iframe);
+            }
             window.removeEventListener('message', handleMessage);
           }
+        };
+
+        iframe.onload = () => {
+          console.log('🎯 Iframe loaded successfully');
+        };
+
+        iframe.onerror = (error) => {
+          console.log('❌ Iframe error:', error);
+          setIsLoading(false);
         };
 
         window.addEventListener('message', handleMessage);
         document.body.appendChild(iframe);
 
-        // Timeout after 3 seconds
+        // Timeout after 5 seconds
         setTimeout(() => {
+          console.log('⏰ Auth check timeout');
           setIsLoading(false);
           if (document.body.contains(iframe)) {
             document.body.removeChild(iframe);
           }
           window.removeEventListener('message', handleMessage);
-        }, 3000);
+        }, 5000);
       } catch (error) {
-        console.log('Auth check failed:', error);
+        console.log('❌ Auth check failed:', error);
         setIsLoading(false);
       }
     };

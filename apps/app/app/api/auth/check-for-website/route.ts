@@ -10,36 +10,55 @@ export async function GET() {
 </head>
 <body>
     <script>
+        console.log('🚀 Auth check iframe loaded');
+
         (async function() {
             try {
+                console.log('📡 Fetching auth status...');
+
                 // Check if user is authenticated
                 const response = await fetch('/api/auth/status', {
-                    credentials: 'include'
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
                 });
-                
+
+                console.log('📊 Auth response status:', response.status);
+
                 const data = await response.json();
-                
-                // Send auth status to parent window
-                window.parent.postMessage({
+                console.log('📋 Auth data:', data);
+
+                const authMessage = {
                     type: 'AUTH_STATUS',
                     authenticated: data.authenticated,
                     user: data.user || null
-                }, 'https://cubent.vercel.app');
-                
-                // Also send to localhost for development
-                window.parent.postMessage({
-                    type: 'AUTH_STATUS',
-                    authenticated: data.authenticated,
-                    user: data.user || null
-                }, 'http://localhost:3000');
-                
+                };
+
+                console.log('📤 Sending message to parent:', authMessage);
+
+                // Send to production website
+                window.parent.postMessage(authMessage, 'https://cubent.vercel.app');
+
+                // Send to development
+                window.parent.postMessage(authMessage, 'http://localhost:3000');
+
+                // Send to any origin as fallback
+                window.parent.postMessage(authMessage, '*');
+
+                console.log('✅ Messages sent successfully');
+
             } catch (error) {
-                console.error('Auth check error:', error);
-                window.parent.postMessage({
+                console.error('❌ Auth check error:', error);
+
+                const errorMessage = {
                     type: 'AUTH_STATUS',
                     authenticated: false,
-                    user: null
-                }, '*');
+                    user: null,
+                    error: error.message
+                };
+
+                window.parent.postMessage(errorMessage, '*');
             }
         })();
     </script>
@@ -49,7 +68,8 @@ export async function GET() {
   return new NextResponse(html, {
     headers: {
       'Content-Type': 'text/html',
-      'X-Frame-Options': 'ALLOWALL',
+      'X-Frame-Options': 'SAMEORIGIN',
+      'Content-Security-Policy': "frame-ancestors 'self' https://cubent.vercel.app http://localhost:3000;",
     },
   });
 }
