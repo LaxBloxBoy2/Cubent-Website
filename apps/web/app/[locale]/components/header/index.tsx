@@ -55,6 +55,8 @@ export const Header = ({ dictionary }: HeaderProps) => {
         if (response.ok) {
           const data = await response.json();
           console.log('✅ Direct fetch successful:', data);
+          console.log('🔍 Auth status:', data.authenticated);
+          console.log('🔍 User data:', data.user);
 
           if (data.authenticated && data.user) {
             console.log('✅ User is authenticated:', data.user);
@@ -65,9 +67,11 @@ export const Header = ({ dictionary }: HeaderProps) => {
               picture: data.user.picture,
               subscriptionTier: data.user.subscriptionTier,
             });
-            setIsLoading(false);
-            return;
+          } else {
+            console.log('❌ User is not authenticated (direct fetch)');
           }
+          setIsLoading(false);
+          return; // Exit here regardless of auth status
         }
       } catch (error) {
         console.log('❌ Direct fetch failed:', error);
