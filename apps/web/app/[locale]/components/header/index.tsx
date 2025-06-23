@@ -41,41 +41,68 @@ export const Header = ({ dictionary }: HeaderProps) => {
   } | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Check authentication status from the app
+  // Check authentication status from URL params or localStorage
   useEffect(() => {
-    const checkAuthStatus = async () => {
+    const checkAuthStatus = () => {
       try {
-        const appUrl = env.NEXT_PUBLIC_DOCS_URL || 'https://app-cubent.vercel.app';
-        console.log('Checking auth status at:', `${appUrl}/api/auth/status`);
+        // Check if user data was passed via URL params (from app redirect)
+        const urlParams = new URLSearchParams(window.location.search);
+        const authData = urlParams.get('auth');
 
-        const response = await fetch(`${appUrl}/api/auth/status`, {
-          credentials: 'include',
-          mode: 'cors',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-
-        console.log('Auth response status:', response.status);
-
-        if (response.ok) {
-          const data = await response.json();
-          console.log('Auth response data:', data);
-
-          if (data.authenticated) {
+        if (authData) {
+          try {
+            const userData = JSON.parse(decodeURIComponent(authData));
             setIsAuthenticated(true);
-            setUserProfile(data.user);
-            console.log('User authenticated:', data.user);
-          } else {
-            console.log('User not authenticated');
+            setUserProfile(userData);
+            // Store in localStorage for future visits
+            localStorage.setItem('cubent_user', JSON.stringify(userData));
+            // Clean up URL
+            window.history.replaceState({}, document.title, window.location.pathname);
+            setIsLoading(false);
+            return;
+          } catch (e) {
+            console.log('Failed to parse auth data from URL');
           }
-        } else {
-          console.log('Auth check response not ok:', response.status, response.statusText);
         }
+
+        // Check localStorage for cached user data
+        const cachedUser = localStorage.getItem('cubent_user');
+        if (cachedUser) {
+          try {
+            const userData = JSON.parse(cachedUser);
+            // Verify the cached data is still valid by making a simple request
+            fetch(`${env.NEXT_PUBLIC_DOCS_URL || 'https://app-cubent.vercel.app'}/api/auth/status`, {
+              credentials: 'include',
+              mode: 'cors',
+            })
+            .then(response => response.json())
+            .then(data => {
+              if (data.authenticated) {
+                setIsAuthenticated(true);
+                setUserProfile(data.user);
+                // Update cached data
+                localStorage.setItem('cubent_user', JSON.stringify(data.user));
+              } else {
+                // Clear invalid cached data
+                localStorage.removeItem('cubent_user');
+              }
+            })
+            .catch(() => {
+              // If we can't verify, use cached data anyway
+              setIsAuthenticated(true);
+              setUserProfile(userData);
+            })
+            .finally(() => setIsLoading(false));
+            return;
+          } catch (e) {
+            localStorage.removeItem('cubent_user');
+          }
+        }
+
+        // No cached data, assume not authenticated
+        setIsLoading(false);
       } catch (error) {
-        // If we can't reach the app or there's an error, assume not authenticated
         console.log('Auth check failed:', error);
-      } finally {
         setIsLoading(false);
       }
     };

@@ -38,6 +38,7 @@ import {
   BellIcon,
   ShieldIcon,
   HelpCircleIcon,
+  GlobeIcon,
 } from 'lucide-react';
 import Link from 'next/link';
 import type { ReactNode } from 'react';
@@ -99,6 +100,11 @@ const data = {
     },
   ],
   navSecondary: [
+    {
+      title: 'Website',
+      url: '/api/auth/sync-website',
+      icon: GlobeIcon,
+    },
     {
       title: 'Documentation',
       url: '/docs',
