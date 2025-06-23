@@ -13,7 +13,17 @@ export async function GET(request: NextRequest) {
   try {
     const { userId } = await auth();
     
-    let responseData = {
+    let responseData: {
+      authenticated: boolean;
+      user: {
+        id: string;
+        name: string;
+        email: string;
+        picture: string | null;
+        subscriptionTier: string | null;
+      } | null;
+      timestamp: number;
+    } = {
       authenticated: false,
       user: null,
       timestamp: Date.now(),
