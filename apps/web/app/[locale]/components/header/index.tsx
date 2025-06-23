@@ -11,17 +11,11 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from '@repo/design-system/components/ui/navigation-menu';
+import { Avatar, AvatarFallback, AvatarImage } from '@repo/design-system/components/ui/avatar';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@repo/design-system/components/ui/dropdown-menu';
 import { Menu, MoveRight, X, User, Settings, LogOut } from 'lucide-react';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
-import { Avatar, AvatarFallback, AvatarImage } from '@repo/design-system/components/ui/avatar';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@repo/design-system/components/ui/dropdown-menu';
 
 import type { Dictionary } from '@repo/internationalization';
 import Image from 'next/image';
@@ -32,142 +26,79 @@ type HeaderProps = {
   dictionary: Dictionary;
 };
 
+interface UserInfo {
+  id: string;
+  name: string;
+  email: string;
+  picture?: string;
+  subscriptionTier?: string;
+}
+
 export const Header = ({ dictionary }: HeaderProps) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [userProfile, setUserProfile] = useState<{
-    name: string;
-    email: string;
-    imageUrl?: string;
-  } | null>(null);
+  const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Cross-domain authentication detection using multiple approaches
+  // Check authentication status on mount using JSONP for cross-domain access
   useEffect(() => {
-    const checkAuth = async () => {
-      console.log('🔍 Starting auth check...');
+    const checkAuthStatus = () => {
+      // Create a unique callback name
+      const callbackName = `authCallback_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
-      // Approach 1: Try direct fetch first (might work if CORS is properly configured)
-      try {
-        console.log('📡 Trying direct fetch...');
-        const response = await fetch('https://app-cubent.vercel.app/api/auth/status', {
-          method: 'GET',
-          credentials: 'include',
-          mode: 'cors',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          console.log('✅ Direct fetch successful:', data);
-          console.log('🔍 Auth status:', data.authenticated);
-          console.log('👤 User data:', data.user);
-
-          if (data.authenticated) {
-            console.log('🎯 Setting authenticated state to true');
-            setIsAuthenticated(true);
-            setUserProfile(data.user);
-            console.log('✅ State updated - authenticated:', true, 'user:', data.user);
-          } else {
-            console.log('❌ User not authenticated according to response');
+      // Define the callback function
+      (window as any)[callbackName] = (data: any) => {
+        try {
+          if (data.authenticated && data.user) {
+            setUserInfo({
+              id: data.user.id,
+              name: data.user.name || 'User',
+              email: data.user.email,
+              picture: data.user.picture,
+              subscriptionTier: data.user.subscriptionTier,
+            });
           }
+        } catch (error) {
+          console.log('Auth callback error:', error);
+        } finally {
           setIsLoading(false);
-          console.log('⏹️ Loading set to false');
-          return;
-        } else {
-          console.log('❌ Response not ok:', response.status, response.statusText);
+          // Clean up
+          delete (window as any)[callbackName];
+          const script = document.getElementById(callbackName);
+          if (script) {
+            script.remove();
+          }
         }
-      } catch (error) {
-        console.log('❌ Direct fetch failed:', error);
-      }
+      };
 
-      // Approach 2: Fallback to iframe method
-      try {
-        console.log('📡 Trying iframe method...');
-
-        const iframe = document.createElement('iframe');
-        iframe.style.display = 'none';
-        iframe.style.width = '1px';
-        iframe.style.height = '1px';
-        iframe.src = 'https://app-cubent.vercel.app/api/auth/check-for-website';
-
-        const handleMessage = async (event: MessageEvent) => {
-          console.log('📨 Received message:', event.data, 'from origin:', event.origin);
-
-          if (event.data.type === 'AUTH_TOKEN') {
-            console.log('🎫 Auth token received:', event.data);
-
-            if (event.data.success && event.data.token) {
-              console.log('✅ Token received, verifying...');
-
-              try {
-                // Verify the token with the app
-                const verifyResponse = await fetch('https://app-cubent.vercel.app/api/auth/verify-token', {
-                  method: 'POST',
-                  headers: {
-                    'Content-Type': 'application/json',
-                  },
-                  body: JSON.stringify({ token: event.data.token }),
-                });
-
-                const verifyData = await verifyResponse.json();
-                console.log('🔍 Token verification result:', verifyData);
-
-                if (verifyData.authenticated) {
-                  console.log('👤 User authenticated via token:', verifyData.user);
-                  setIsAuthenticated(true);
-                  setUserProfile(verifyData.user);
-                } else {
-                  console.log('❌ Token verification failed');
-                }
-              } catch (error) {
-                console.log('❌ Token verification error:', error);
-              }
-            } else {
-              console.log('🚫 No token received or token generation failed');
-            }
-
-            setIsLoading(false);
-
-            // Clean up
-            if (document.body.contains(iframe)) {
-              document.body.removeChild(iframe);
-            }
-            window.removeEventListener('message', handleMessage);
-          }
-        };
-
-        iframe.onload = () => {
-          console.log('🎯 Iframe loaded successfully');
-        };
-
-        iframe.onerror = (error) => {
-          console.log('❌ Iframe error:', error);
-          setIsLoading(false);
-        };
-
-        window.addEventListener('message', handleMessage);
-        document.body.appendChild(iframe);
-
-        // Timeout after 5 seconds
-        setTimeout(() => {
-          console.log('⏰ Auth check timeout');
-          setIsLoading(false);
-          if (document.body.contains(iframe)) {
-            document.body.removeChild(iframe);
-          }
-          window.removeEventListener('message', handleMessage);
-        }, 5000);
-      } catch (error) {
-        console.log('❌ Auth check failed:', error);
+      // Create script element for JSONP request
+      const script = document.createElement('script');
+      script.id = callbackName;
+      script.src = `https://app-cubent.vercel.app/api/auth/status?callback=${callbackName}`;
+      script.onerror = () => {
+        console.log('Auth check failed - script error');
         setIsLoading(false);
-      }
+        delete (window as any)[callbackName];
+        script.remove();
+      };
+
+      // Add script to document
+      document.head.appendChild(script);
+
+      // Timeout fallback
+      setTimeout(() => {
+        if ((window as any)[callbackName]) {
+          console.log('Auth check timeout');
+          setIsLoading(false);
+          delete (window as any)[callbackName];
+          const timeoutScript = document.getElementById(callbackName);
+          if (timeoutScript) {
+            timeoutScript.remove();
+          }
+        }
+      }, 5000);
     };
 
-    checkAuth();
+    checkAuthStatus();
   }, []);
-
   const navigationItems = [
     {
       title: dictionary.web.header.home,
@@ -210,10 +141,6 @@ export const Header = ({ dictionary }: HeaderProps) => {
   ];
 
   const [isOpen, setOpen] = useState(false);
-
-  // Debug current state
-  console.log('🎨 Render state - isLoading:', isLoading, 'isAuthenticated:', isAuthenticated, 'userProfile:', userProfile);
-
   return (
     <header className="sticky top-0 left-0 z-40 w-full border-b bg-background">
       <div className="relative w-full max-w-none flex min-h-20 flex-row items-center justify-between" style={{paddingInline: 'clamp(1rem, 2.5%, 2rem)'}}>
@@ -299,61 +226,59 @@ export const Header = ({ dictionary }: HeaderProps) => {
               <span className="shrink-0 text-sm">Download</span>
             </Link>
           </Button>
-          {/* Authentication-aware buttons */}
-          {isLoading ? (
-            <div className="w-16 h-10 bg-muted animate-pulse rounded"></div>
-          ) : isAuthenticated && userProfile ? (
-            <div className="flex items-center gap-2">
-              <Button variant="outline" asChild className="hidden md:inline-flex">
-                <Link href="https://app-cubent.vercel.app/profile">
-                  <User className="h-4 w-4 mr-2" />
-                  Dashboard
-                </Link>
-              </Button>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-                    <Avatar className="h-8 w-8">
-                      <AvatarImage src={userProfile.imageUrl} alt={userProfile.name} />
-                      <AvatarFallback>
-                        {userProfile.name?.charAt(0)?.toUpperCase() || 'U'}
-                      </AvatarFallback>
-                    </Avatar>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-56" align="end" forceMount>
-                  <div className="flex items-center justify-start gap-2 p-2">
-                    <div className="flex flex-col space-y-1 leading-none">
-                      <p className="font-medium">{userProfile.name}</p>
-                      <p className="w-[200px] truncate text-sm text-muted-foreground">
-                        {userProfile.email}
+
+          {/* Conditional rendering based on authentication status */}
+          {!isLoading && userInfo ? (
+            // User is authenticated - show user dropdown
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="relative h-10 w-10 rounded-full">
+                  <Avatar className="h-8 w-8">
+                    <AvatarImage src={userInfo.picture} alt={userInfo.name} />
+                    <AvatarFallback>
+                      {userInfo.name.split(' ').map(n => n[0]).join('').toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-56" align="end" forceMount>
+                <div className="flex items-center justify-start gap-2 p-2">
+                  <div className="flex flex-col space-y-1 leading-none">
+                    <p className="font-medium">{userInfo.name}</p>
+                    <p className="w-[200px] truncate text-sm text-muted-foreground">
+                      {userInfo.email}
+                    </p>
+                    {userInfo.subscriptionTier && (
+                      <p className="text-xs text-muted-foreground capitalize">
+                        {userInfo.subscriptionTier.toLowerCase()} plan
                       </p>
-                    </div>
+                    )}
                   </div>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem asChild>
-                    <Link href="https://app-cubent.vercel.app/profile">
-                      <User className="mr-2 h-4 w-4" />
-                      Profile
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link href="https://app-cubent.vercel.app/profile/settings">
-                      <Settings className="mr-2 h-4 w-4" />
-                      Settings
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem asChild>
-                    <Link href="https://app-cubent.vercel.app/sign-out">
-                      <LogOut className="mr-2 h-4 w-4" />
-                      Sign out
-                    </Link>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
+                </div>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <Link href="https://app-cubent.vercel.app/profile" className="flex items-center">
+                    <User className="mr-2 h-4 w-4" />
+                    Profile
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="https://app-cubent.vercel.app/settings" className="flex items-center">
+                    <Settings className="mr-2 h-4 w-4" />
+                    Settings
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <Link href="https://app-cubent.vercel.app/sign-out" className="flex items-center">
+                    <LogOut className="mr-2 h-4 w-4" />
+                    Sign out
+                  </Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           ) : (
+            // User is not authenticated - show sign in button
             <Button asChild>
               <Link href="https://app-cubent.vercel.app/sign-in">
                 Sign In
@@ -404,38 +329,6 @@ export const Header = ({ dictionary }: HeaderProps) => {
                   </div>
                 </div>
               ))}
-
-              {/* Mobile Auth Section */}
-              <div className="border-t pt-4">
-                {isAuthenticated && userProfile ? (
-                  <div className="space-y-2">
-                    <div className="flex items-center gap-3 p-2">
-                      <Avatar className="h-8 w-8">
-                        <AvatarImage src={userProfile.imageUrl} alt={userProfile.name} />
-                        <AvatarFallback>
-                          {userProfile.name?.charAt(0)?.toUpperCase() || 'U'}
-                        </AvatarFallback>
-                      </Avatar>
-                      <div>
-                        <p className="font-medium text-sm">{userProfile.name}</p>
-                        <p className="text-xs text-muted-foreground">{userProfile.email}</p>
-                      </div>
-                    </div>
-                    <Button asChild className="w-full">
-                      <Link href="https://app-cubent.vercel.app/profile">
-                        <User className="h-4 w-4 mr-2" />
-                        Go to Dashboard
-                      </Link>
-                    </Button>
-                  </div>
-                ) : (
-                  <Button asChild className="w-full">
-                    <Link href="https://app-cubent.vercel.app/sign-in">
-                      Sign In
-                    </Link>
-                  </Button>
-                )}
-              </div>
             </div>
           )}
         </div>

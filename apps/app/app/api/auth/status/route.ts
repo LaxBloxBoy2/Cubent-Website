@@ -1,82 +1,104 @@
-import { auth, currentUser } from '@repo/auth/server';
+import { auth } from '@repo/auth/server';
+import { database } from '@repo/database';
 import { NextRequest, NextResponse } from 'next/server';
 
+/**
+ * Cross-domain authentication status endpoint
+ * Returns user authentication status in JSONP format for cross-domain access
+ */
 export async function GET(request: NextRequest) {
-  const origin = request.headers.get('origin');
-  console.log('🌐 Auth status request from origin:', origin);
-
-  const allowedOrigins = [
-    'https://cubent.vercel.app',
-    'http://localhost:3000',
-  ];
-
-  const corsHeaders = {
-    'Access-Control-Allow-Origin': allowedOrigins.includes(origin || '') ? (origin || 'https://cubent.vercel.app') : 'https://cubent.vercel.app',
-    'Access-Control-Allow-Methods': 'GET, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-    'Access-Control-Allow-Credentials': 'true',
-    'Vary': 'Origin',
-  };
-
-  console.log('🔧 CORS headers:', corsHeaders);
-
+  const { searchParams } = new URL(request.url);
+  const callback = searchParams.get('callback');
+  
   try {
-    console.log('🔐 Checking auth...');
     const { userId } = await auth();
-    console.log('👤 User ID from auth():', userId);
+    
+    let responseData = {
+      authenticated: false,
+      user: null,
+      timestamp: Date.now(),
+    };
 
-    if (!userId) {
-      console.log('❌ No user ID found');
-      return NextResponse.json({
-        authenticated: false
-      }, {
-        headers: corsHeaders
+    if (userId) {
+      // Get user from database
+      const dbUser = await database.user.findUnique({
+        where: { clerkId: userId },
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          picture: true,
+          subscriptionTier: true,
+          subscriptionStatus: true,
+        },
+      });
+
+      if (dbUser) {
+        responseData = {
+          authenticated: true,
+          user: {
+            id: dbUser.id,
+            name: dbUser.name || 'User',
+            email: dbUser.email,
+            picture: dbUser.picture,
+            subscriptionTier: dbUser.subscriptionTier,
+          },
+          timestamp: Date.now(),
+        };
+      }
+    }
+
+    // If callback is provided, return JSONP response
+    if (callback) {
+      const response = `${callback}(${JSON.stringify(responseData)});`;
+      
+      return new NextResponse(response, {
+        headers: {
+          'Content-Type': 'application/javascript',
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Methods': 'GET',
+          'Access-Control-Allow-Headers': 'Content-Type',
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+        },
       });
     }
 
-    console.log('✅ User ID found, getting user details...');
-    const user = await currentUser();
-    console.log('👤 Current user:', user?.id, user?.firstName, user?.lastName);
-
-    return NextResponse.json({
-      authenticated: true,
-      user: {
-        id: user?.id,
-        name: user?.firstName && user?.lastName
-          ? `${user.firstName} ${user.lastName}`
-          : user?.firstName || user?.username || 'User',
-        email: user?.emailAddresses?.[0]?.emailAddress || '',
-        imageUrl: user?.imageUrl,
-      }
-    }, {
-      headers: corsHeaders
+    // Otherwise return regular JSON response
+    return NextResponse.json(responseData, {
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET',
+        'Access-Control-Allow-Headers': 'Content-Type',
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+      },
     });
+
   } catch (error) {
-    console.error('Auth status check error:', error);
-    return NextResponse.json({
-      authenticated: false
-    }, {
-      status: 500,
-      headers: corsHeaders
+    console.error('Auth status check failed:', error);
+    
+    const errorResponse = {
+      authenticated: false,
+      user: null,
+      timestamp: Date.now(),
+    };
+
+    if (callback) {
+      const response = `${callback}(${JSON.stringify(errorResponse)});`;
+      
+      return new NextResponse(response, {
+        headers: {
+          'Content-Type': 'application/javascript',
+          'Access-Control-Allow-Origin': '*',
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+        },
+      });
+    }
+
+    return NextResponse.json(errorResponse, {
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+      },
     });
   }
-}
-
-// Handle preflight requests
-export async function OPTIONS(request: NextRequest) {
-  const origin = request.headers.get('origin');
-  const allowedOrigins = [
-    'https://cubent.vercel.app',
-    'http://localhost:3000',
-  ];
-
-  return new NextResponse(null, {
-    status: 200,
-    headers: {
-      'Access-Control-Allow-Origin': allowedOrigins.includes(origin || '') ? (origin || 'https://cubent.vercel.app') : 'https://cubent.vercel.app',
-      'Access-Control-Allow-Methods': 'GET, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type',
-      'Access-Control-Allow-Credentials': 'true',
-    },
-  });
 }
