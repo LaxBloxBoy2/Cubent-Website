@@ -24,7 +24,21 @@ const securityHeaders = env.FLAGS_SECRET
   ? noseconeMiddleware(noseconeOptionsWithToolbar)
   : noseconeMiddleware(noseconeOptions);
 
-const middleware = authMiddleware(async (_auth, request) => {
+const middleware = authMiddleware(async (auth, request) => {
+  // Handle redirects to app for authenticated users
+  if (request.nextUrl.pathname === '/profile' || request.nextUrl.pathname.startsWith('/profile/')) {
+    if (auth.userId) {
+      // Redirect authenticated users to the app
+      const appUrl = env.NEXT_PUBLIC_DOCS_URL || 'https://app.cubent.com';
+      return NextResponse.redirect(new URL(request.nextUrl.pathname, appUrl));
+    } else {
+      // Redirect unauthenticated users to sign in
+      const signInUrl = new URL('/sign-in', request.url);
+      signInUrl.searchParams.set('redirect_url', request.nextUrl.pathname);
+      return NextResponse.redirect(signInUrl);
+    }
+  }
+
   const i18nResponse = internationalizationMiddleware(
     request as unknown as NextRequest
   );
