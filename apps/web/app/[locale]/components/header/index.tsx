@@ -46,17 +46,31 @@ export const Header = ({ dictionary }: HeaderProps) => {
     const checkAuthStatus = async () => {
       try {
         const appUrl = env.NEXT_PUBLIC_DOCS_URL || 'https://app-cubent.vercel.app';
+        console.log('Checking auth status at:', `${appUrl}/api/auth/status`);
+
         const response = await fetch(`${appUrl}/api/auth/status`, {
           credentials: 'include',
           mode: 'cors',
+          headers: {
+            'Content-Type': 'application/json',
+          },
         });
+
+        console.log('Auth response status:', response.status);
 
         if (response.ok) {
           const data = await response.json();
+          console.log('Auth response data:', data);
+
           if (data.authenticated) {
             setIsAuthenticated(true);
             setUserProfile(data.user);
+            console.log('User authenticated:', data.user);
+          } else {
+            console.log('User not authenticated');
           }
+        } else {
+          console.log('Auth check response not ok:', response.status, response.statusText);
         }
       } catch (error) {
         // If we can't reach the app or there's an error, assume not authenticated
