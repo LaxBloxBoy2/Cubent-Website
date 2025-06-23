@@ -42,50 +42,45 @@ export function UsageChart({ data }: UsageChartProps) {
     return filledData;
   }, [data]);
 
-  // Improved scaling with better minimum values and edge case handling
-  const maxCubentUnits = Math.max(...chartData.map(d => d.cubentUnits), 0.1);
+  const maxCubentUnits = Math.max(...chartData.map(d => d.cubentUnits), 1);
   const maxRequests = Math.max(...chartData.map(d => d.requests), 1);
 
-  // Calculate proper chart dimensions
-  const chartWidth = Math.max(chartData.length * 12, 360); // Minimum width of 360px
-  const chartHeight = 200;
-  const padding = 20;
-
   const createSmoothPath = (points: { x: number; y: number }[]) => {
-    if (points.length === 0) return '';
-    if (points.length === 1) return `M ${points[0].x} ${points[0].y}`;
-    if (points.length === 2) return `M ${points[0].x} ${points[0].y} L ${points[1].x} ${points[1].y}`;
+    if (points.length < 2) return '';
 
     let path = `M ${points[0].x} ${points[0].y}`;
 
-    // Use simpler quadratic curves for better reliability
     for (let i = 1; i < points.length; i++) {
       const prev = points[i - 1];
       const curr = points[i];
+      const next = points[i + 1];
 
       if (i === 1) {
-        // First segment - simple line to start
-        path += ` L ${curr.x} ${curr.y}`;
+        // First curve
+        const cp1x = prev.x + (curr.x - prev.x) * 0.3;
+        const cp1y = prev.y;
+        const cp2x = curr.x - (curr.x - prev.x) * 0.3;
+        const cp2y = curr.y;
+        path += ` C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${curr.x} ${curr.y}`;
+      } else if (i === points.length - 1) {
+        // Last curve
+        const cp1x = prev.x + (curr.x - prev.x) * 0.3;
+        const cp1y = prev.y;
+        const cp2x = curr.x - (curr.x - prev.x) * 0.3;
+        const cp2y = curr.y;
+        path += ` C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${curr.x} ${curr.y}`;
       } else {
-        // Use quadratic curves for smoother lines
-        const midX = (prev.x + curr.x) / 2;
-        const midY = (prev.y + curr.y) / 2;
-        path += ` Q ${prev.x} ${prev.y}, ${midX} ${midY}`;
-
-        // If this is the last point, complete the curve
-        if (i === points.length - 1) {
-          path += ` L ${curr.x} ${curr.y}`;
-        }
+        // Middle curves
+        const cp1x = prev.x + (curr.x - prev.x) * 0.3;
+        const cp1y = prev.y + (next.y - points[i - 2]?.y || 0) * 0.1;
+        const cp2x = curr.x - (curr.x - prev.x) * 0.3;
+        const cp2y = curr.y - (points[i + 1]?.y - prev.y || 0) * 0.1;
+        path += ` C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${curr.x} ${curr.y}`;
       }
     }
 
     return path;
   };
-
-  // Check if we have meaningful data to display
-  const hasData = chartData.some(item => item.cubentUnits > 0 || item.requests > 0);
-  const totalUnits = chartData.reduce((sum, item) => sum + item.cubentUnits, 0);
-  const totalRequests = chartData.reduce((sum, item) => sum + item.requests, 0);
 
   return (
     <div className="w-full">
@@ -109,59 +104,44 @@ export function UsageChart({ data }: UsageChartProps) {
 
         {/* SVG Chart */}
         <div className="relative h-full ml-12 py-4">
-          {!hasData ? (
-            /* Empty state */
-            <div className="flex items-center justify-center h-full text-gray-400 dark:text-gray-500">
-              <div className="text-center">
-                <div className="text-sm font-medium">No usage data available</div>
-                <div className="text-xs mt-1">Start using Cubent to see your usage patterns</div>
-              </div>
-            </div>
-          ) : (
-            <svg className="w-full h-full" viewBox={`0 0 ${chartWidth} ${chartHeight}`} preserveAspectRatio="none">
-              {/* Gradient definitions */}
-              <defs>
-                <linearGradient id="blueGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.3" />
-                  <stop offset="100%" stopColor="#3b82f6" stopOpacity="0.05" />
-                </linearGradient>
-                <linearGradient id="greenGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" stopColor="#10b981" stopOpacity="0.3" />
-                  <stop offset="100%" stopColor="#10b981" stopOpacity="0.05" />
-                </linearGradient>
-              </defs>
+          <svg className="w-full h-full" viewBox={`0 0 ${chartData.length * 10} 200`}>
+            {/* Gradient definitions */}
+            <defs>
+              <linearGradient id="blueGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.3" />
+                <stop offset="100%" stopColor="#3b82f6" stopOpacity="0.05" />
+              </linearGradient>
+              <linearGradient id="greenGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stopColor="#10b981" stopOpacity="0.3" />
+                <stop offset="100%" stopColor="#10b981" stopOpacity="0.05" />
+              </linearGradient>
+            </defs>
 
             {/* Cubent Units Line */}
             {(() => {
               const points = chartData.map((item, index) => ({
-                x: padding + (index * (chartWidth - 2 * padding)) / Math.max(chartData.length - 1, 1),
-                y: chartHeight - padding - (maxCubentUnits > 0 ? (item.cubentUnits / maxCubentUnits) * (chartHeight - 2 * padding) : 0)
+                x: (index * 10) + 5,
+                y: 200 - (maxCubentUnits > 0 ? (item.cubentUnits / maxCubentUnits) * 180 : 0)
               }));
 
               const pathData = createSmoothPath(points);
-              const areaPath = points.length > 0
-                ? `${pathData} L ${points[points.length - 1].x} ${chartHeight - padding} L ${points[0].x} ${chartHeight - padding} Z`
-                : '';
+              const areaPath = pathData + ` L ${points[points.length - 1].x} 200 L ${points[0].x} 200 Z`;
 
               return (
                 <>
                   {/* Area fill */}
-                  {areaPath && (
-                    <path
-                      d={areaPath}
-                      fill="url(#blueGradient)"
-                    />
-                  )}
+                  <path
+                    d={areaPath}
+                    fill="url(#blueGradient)"
+                  />
                   {/* Line */}
-                  {pathData && (
-                    <path
-                      d={pathData}
-                      stroke="#3b82f6"
-                      strokeWidth="2"
-                      fill="none"
-                      className="drop-shadow-sm"
-                    />
-                  )}
+                  <path
+                    d={pathData}
+                    stroke="#3b82f6"
+                    strokeWidth="2"
+                    fill="none"
+                    className="drop-shadow-sm"
+                  />
                   {/* Data points */}
                   {points.map((point, index) => (
                     <circle
@@ -180,8 +160,8 @@ export function UsageChart({ data }: UsageChartProps) {
             {/* Messages Line */}
             {(() => {
               const points = chartData.map((item, index) => ({
-                x: padding + (index * (chartWidth - 2 * padding)) / Math.max(chartData.length - 1, 1),
-                y: chartHeight - padding - (maxRequests > 0 ? (item.requests / maxRequests) * (chartHeight - 2 * padding) * 0.3 : 0)
+                x: (index * 10) + 5,
+                y: 200 - (maxRequests > 0 ? (item.requests / maxRequests) * 60 : 0)
               }));
 
               const pathData = createSmoothPath(points);
@@ -189,16 +169,14 @@ export function UsageChart({ data }: UsageChartProps) {
               return (
                 <>
                   {/* Line */}
-                  {pathData && (
-                    <path
-                      d={pathData}
-                      stroke="#10b981"
-                      strokeWidth="2"
-                      fill="none"
-                      strokeDasharray="5,5"
-                      className="opacity-70"
-                    />
-                  )}
+                  <path
+                    d={pathData}
+                    stroke="#10b981"
+                    strokeWidth="2"
+                    fill="none"
+                    strokeDasharray="5,5"
+                    className="opacity-70"
+                  />
                   {/* Data points */}
                   {points.map((point, index) => (
                     <circle
@@ -213,12 +191,10 @@ export function UsageChart({ data }: UsageChartProps) {
                 </>
               );
             })()}
-            </svg>
-          )}
+          </svg>
 
-          {/* Interactive overlay for tooltips - only show if we have data */}
-          {hasData && (
-            <div className="absolute inset-0 flex">
+          {/* Interactive overlay for tooltips */}
+          <div className="absolute inset-0 flex">
             {chartData.map((item, index) => (
               <div
                 key={index}
@@ -235,8 +211,7 @@ export function UsageChart({ data }: UsageChartProps) {
                 </div>
               </div>
             ))}
-            </div>
-          )}
+          </div>
         </div>
 
         {/* X-axis labels */}
@@ -256,20 +231,20 @@ export function UsageChart({ data }: UsageChartProps) {
         <div className="grid grid-cols-3 gap-4 text-center">
           <div>
             <p className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-              {totalUnits.toFixed(1)}
+              {chartData.reduce((sum, item) => sum + item.cubentUnits, 0).toFixed(1)}
             </p>
             <p className="text-xs text-gray-500 dark:text-gray-400">Total Units</p>
           </div>
           <div>
             <p className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-              {totalRequests}
+              {chartData.reduce((sum, item) => sum + item.requests, 0)}
             </p>
             <p className="text-xs text-gray-500 dark:text-gray-400">Total Messages</p>
           </div>
           <div>
             <p className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-              {totalUnits > 0 && totalRequests > 0
-                ? (totalUnits / totalRequests).toFixed(2)
+              {chartData.reduce((sum, item) => sum + item.cubentUnits, 0) > 0 && chartData.reduce((sum, item) => sum + item.requests, 0) > 0
+                ? (chartData.reduce((sum, item) => sum + item.cubentUnits, 0) / chartData.reduce((sum, item) => sum + item.requests, 0)).toFixed(2)
                 : '0.00'
               }
             </p>
