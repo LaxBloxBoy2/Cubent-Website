@@ -41,7 +41,7 @@ export function useCrossDomainAuth(): CrossDomainAuthState {
 
   useEffect(() => {
     let isMounted = true;
-    let timeoutId: NodeJS.Timeout;
+    let timeoutId: NodeJS.Timeout | undefined;
 
     const checkAuth = async () => {
       try {
