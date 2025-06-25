@@ -8,7 +8,7 @@
 const https = require('https');
 const { URL } = require('url');
 
-const API_BASE_URL = process.env.API_BASE_URL || 'https://app-cubent.vercel.app';
+const API_BASE_URL = process.env.API_BASE_URL || 'https://app.cubent.dev';
 const TEST_TOKEN = process.env.TEST_TOKEN; // Set this to a valid auth token
 
 // Test configuration
@@ -323,7 +323,7 @@ Options:
 
 Examples:
   # Test against production
-  API_BASE_URL=https://app-cubent.vercel.app TEST_TOKEN=your_token node test-extension-integration.js
+  API_BASE_URL=https://app.cubent.dev TEST_TOKEN=your_token node test-extension-integration.js
   
   # Test against local development
   API_BASE_URL=http://localhost:3000 TEST_TOKEN=your_token node test-extension-integration.js

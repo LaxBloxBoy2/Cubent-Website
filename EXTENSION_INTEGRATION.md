@@ -49,7 +49,7 @@ Update your extension's configuration to point to the web app:
 ```typescript
 // In your extension's Config.ts
 export const Config = {
-  API_BASE_URL: process.env.ROO_CODE_API_URL || 'https://app-cubent.vercel.app',
+  API_BASE_URL: process.env.ROO_CODE_API_URL || 'https://app.cubent.dev',
   AUTH_ENDPOINTS: {
     SIGN_IN: '/api/extension/sign-in',
     PROFILE: '/api/extension/profile',
@@ -235,7 +235,7 @@ if (DEBUG) {
 ### Check API Responses
 ```bash
 # Test endpoints manually
-curl -X GET "https://app-cubent.vercel.app/api/extension/status" \
+curl -X GET "https://app.cubent.dev/api/extension/status" \
   -H "Authorization: Bearer YOUR_TOKEN"
 ```
 

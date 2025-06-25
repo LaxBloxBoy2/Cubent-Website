@@ -22,8 +22,8 @@ export default function AuthSuccessPage() {
         // Only allow redirects to our own domain or extension callbacks
         const allowedHosts = [
           'localhost',
-          'app-cubent.vercel.app',
-          'cubent.com',
+          'app.cubent.dev',
+          'cubent.dev',
         ];
         
         const isExtensionCallback = url.protocol === 'vscode:';

@@ -5,7 +5,7 @@
 ### **Device OAuth Flow (Primary - "Connect to Cubent Cloud")**
 
 1. **Extension Action**: Click "Connect to Cubent Cloud" button
-2. **Expected URL**: `https://app-cubent.vercel.app/sign-in?device_id=abc123&state=xyz789`
+2. **Expected URL**: `https://app.cubent.dev/sign-in?device_id=abc123&state=xyz789`
 3. **Web App Behavior**: 
    - Detects `device_id` and `state` parameters
    - Redirects to `/login?device_id=abc123&state=xyz789`
@@ -19,7 +19,7 @@
 ### **Legacy Flow ("Sign In (Legacy)")**
 
 1. **Extension Action**: Click "Sign In (Legacy)" button  
-2. **Expected URL**: `https://app-cubent.vercel.app/api/extension/sign-in?state=xyz&auth_redirect=vscode://...`
+2. **Expected URL**: `https://app.cubent.dev/api/extension/sign-in?state=xyz&auth_redirect=vscode://...`
 3. **Web App Behavior**:
    - If authenticated: Creates ticket and redirects to extension
    - If not authenticated: Redirects to sign-in with proper redirect_url

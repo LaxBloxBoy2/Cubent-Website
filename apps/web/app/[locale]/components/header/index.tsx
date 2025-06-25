@@ -14,17 +14,22 @@ import {
 import { Menu, MoveRight, X } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
+import { useAuth, useUser } from '@clerk/nextjs';
 
 import type { Dictionary } from '@repo/internationalization';
 import Image from 'next/image';
 
 import Logo from './logo.svg';
+import { UserProfile } from './user-profile';
 
 type HeaderProps = {
   dictionary: Dictionary;
 };
 
 export const Header = ({ dictionary }: HeaderProps) => {
+  const { isSignedIn } = useAuth();
+  const { user } = useUser();
+
   const navigationItems = [
     {
       title: dictionary.web.header.home,
@@ -152,11 +157,15 @@ export const Header = ({ dictionary }: HeaderProps) => {
               <span className="shrink-0 text-sm">Download</span>
             </Link>
           </Button>
-          <Button asChild>
-            <Link href={`${env.NEXT_PUBLIC_DOCS_URL || 'https://docs.cubent.com'}`}>
-              Sign In
-            </Link>
-          </Button>
+          {isSignedIn && user ? (
+            <UserProfile user={user} />
+          ) : (
+            <Button asChild>
+              <Link href={`${env.NEXT_PUBLIC_APP_URL || 'https://app.cubent.dev'}/sign-in`}>
+                Sign In
+              </Link>
+            </Button>
+          )}
         </div>
         <div className="flex w-12 shrink items-end justify-end lg:hidden">
           <Button variant="ghost" onClick={() => setOpen(!isOpen)}>
