@@ -14,10 +14,9 @@ import { useClerk } from '@clerk/nextjs';
 import { LogOut, Settings, User } from 'lucide-react';
 import Link from 'next/link';
 import { env } from '@/env';
-import type { UserResource } from '@clerk/nextjs';
 
 type UserProfileProps = {
-  user: UserResource;
+  user: NonNullable<ReturnType<typeof import('@clerk/nextjs').useUser>['user']>;
 };
 
 export const UserProfile = ({ user }: UserProfileProps) => {
