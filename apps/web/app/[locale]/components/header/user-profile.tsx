@@ -14,10 +14,10 @@ import { useClerk } from '@clerk/nextjs';
 import { LogOut, Settings, User } from 'lucide-react';
 import Link from 'next/link';
 import { env } from '@/env';
-import type { User as ClerkUser } from '@clerk/nextjs/server';
+import type { UserResource } from '@clerk/types';
 
 type UserProfileProps = {
-  user: ClerkUser;
+  user: UserResource;
 };
 
 export const UserProfile = ({ user }: UserProfileProps) => {
