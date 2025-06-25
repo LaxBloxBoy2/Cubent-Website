@@ -14,7 +14,7 @@ import { useClerk } from '@clerk/nextjs';
 import { LogOut, Settings, User } from 'lucide-react';
 import Link from 'next/link';
 import { env } from '@/env';
-import type { UserResource } from '@clerk/types';
+import type { UserResource } from '@clerk/nextjs';
 
 type UserProfileProps = {
   user: UserResource;
