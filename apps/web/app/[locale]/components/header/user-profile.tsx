@@ -10,20 +10,26 @@ import {
   DropdownMenuTrigger,
 } from '@repo/design-system/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@repo/design-system/components/ui/avatar';
-import { useClerk } from '@clerk/nextjs';
 import { LogOut, Settings, User } from 'lucide-react';
 import Link from 'next/link';
-import { env } from '@/env';
+
+type AuthUser = {
+  id: string;
+  fullName: string | null;
+  firstName: string | null;
+  lastName: string | null;
+  emailAddresses: Array<{ emailAddress: string }>;
+  imageUrl: string;
+};
 
 type UserProfileProps = {
-  user: NonNullable<ReturnType<typeof import('@clerk/nextjs').useUser>['user']>;
+  user: AuthUser;
 };
 
 export const UserProfile = ({ user }: UserProfileProps) => {
-  const { signOut } = useClerk();
-
   const handleSignOut = () => {
-    signOut();
+    // Redirect to app.cubent.dev sign out
+    window.location.href = 'https://app.cubent.dev/sign-out';
   };
 
   const getInitials = (name: string | null) => {
@@ -62,13 +68,13 @@ export const UserProfile = ({ user }: UserProfileProps) => {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
-          <Link href={`${env.NEXT_PUBLIC_APP_URL || 'https://app.cubent.dev'}`} className="flex items-center">
+          <Link href="https://app.cubent.dev" className="flex items-center">
             <User className="mr-2 h-4 w-4" />
             <span>Dashboard</span>
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <Link href={`${env.NEXT_PUBLIC_APP_URL || 'https://app.cubent.dev'}/settings`} className="flex items-center">
+          <Link href="https://app.cubent.dev/settings" className="flex items-center">
             <Settings className="mr-2 h-4 w-4" />
             <span>Settings</span>
           </Link>

@@ -5,8 +5,6 @@ import { fonts } from '@repo/design-system/lib/fonts';
 import { cn } from '@repo/design-system/lib/utils';
 import { Toolbar } from '@repo/feature-flags/components/toolbar';
 import { getDictionary } from '@repo/internationalization';
-import { AuthProvider } from '@repo/auth/provider';
-import { env } from '@/env';
 import type { ReactNode } from 'react';
 import { Footer } from './components/footer';
 import { Header } from './components/header';
@@ -29,17 +27,11 @@ const RootLayout = async ({ children, params }: RootLayoutProperties) => {
       suppressHydrationWarning
     >
       <body>
-        <AuthProvider
-          privacyUrl={new URL('/legal/privacy', env.NEXT_PUBLIC_WEB_URL || 'https://cubent.dev').toString()}
-          termsUrl={new URL('/legal/terms', env.NEXT_PUBLIC_WEB_URL || 'https://cubent.dev').toString()}
-          helpUrl={env.NEXT_PUBLIC_DOCS_URL || 'https://docs.cubent.dev'}
-        >
-          <DesignSystemProvider>
-            <Header dictionary={dictionary} />
-            {children}
-            <Footer />
-          </DesignSystemProvider>
-        </AuthProvider>
+        <DesignSystemProvider>
+          <Header dictionary={dictionary} />
+          {children}
+          <Footer />
+        </DesignSystemProvider>
         <Toolbar />
         <CMSToolbar />
       </body>

@@ -14,21 +14,20 @@ import {
 import { Menu, MoveRight, X } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
-import { useAuth, useUser } from '@clerk/nextjs';
 
 import type { Dictionary } from '@repo/internationalization';
 import Image from 'next/image';
 
 import Logo from './logo.svg';
 import { UserProfile } from './user-profile';
+import { useAuthStatus } from '../hooks/useAuthStatus';
 
 type HeaderProps = {
   dictionary: Dictionary;
 };
 
 export const Header = ({ dictionary }: HeaderProps) => {
-  const { isSignedIn } = useAuth();
-  const { user } = useUser();
+  const { isAuthenticated, user, isLoading } = useAuthStatus();
 
   const navigationItems = [
     {
@@ -157,11 +156,13 @@ export const Header = ({ dictionary }: HeaderProps) => {
               <span className="shrink-0 text-sm">Download</span>
             </Link>
           </Button>
-          {isSignedIn && user ? (
+          {isLoading ? (
+            <div className="h-10 w-10 animate-pulse bg-gray-200 rounded-full"></div>
+          ) : isAuthenticated && user ? (
             <UserProfile user={user} />
           ) : (
             <Button asChild>
-              <Link href={`${env.NEXT_PUBLIC_APP_URL || 'https://app.cubent.dev'}/sign-in`}>
+              <Link href="https://app.cubent.dev/sign-in">
                 Sign In
               </Link>
             </Button>
