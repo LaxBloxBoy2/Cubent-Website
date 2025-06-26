@@ -20,7 +20,7 @@ import Image from 'next/image';
 
 import Logo from './logo.svg';
 import { UserProfile } from './user-profile';
-import { useAuthStatus } from '../hooks/useAuthStatus';
+import { useAuthStatus } from '../../hooks/useAuthStatus';
 
 type HeaderProps = {
   dictionary: Dictionary;
