@@ -25,27 +25,56 @@ export function useAuthStatus(): AuthStatus {
   });
 
   useEffect(() => {
-    async function checkAuthStatus() {
-      try {
-        const response = await fetch('/api/auth-status');
-        const data = await response.json();
-        
-        setAuthStatus({
-          isAuthenticated: data.isAuthenticated,
-          user: data.user || null,
-          isLoading: false,
-        });
-      } catch (error) {
-        console.error('Failed to check auth status:', error);
+    let timeoutId: NodeJS.Timeout;
+
+    function checkAuthStatus() {
+      // Create a hidden iframe to check auth status from app.cubent.dev
+      const iframe = document.createElement('iframe');
+      iframe.style.display = 'none';
+      iframe.src = 'https://app.cubent.dev/auth-check';
+
+      // Listen for messages from the iframe
+      const handleMessage = (event: MessageEvent) => {
+        if (event.origin !== 'https://app.cubent.dev') return;
+
+        if (event.data.type === 'AUTH_STATUS') {
+          setAuthStatus({
+            isAuthenticated: event.data.isAuthenticated,
+            user: event.data.user || null,
+            isLoading: false,
+          });
+
+          // Clean up
+          document.body.removeChild(iframe);
+          window.removeEventListener('message', handleMessage);
+          clearTimeout(timeoutId);
+        }
+      };
+
+      window.addEventListener('message', handleMessage);
+      document.body.appendChild(iframe);
+
+      // Timeout after 5 seconds
+      timeoutId = setTimeout(() => {
         setAuthStatus({
           isAuthenticated: false,
           user: null,
           isLoading: false,
         });
-      }
+
+        // Clean up
+        if (document.body.contains(iframe)) {
+          document.body.removeChild(iframe);
+        }
+        window.removeEventListener('message', handleMessage);
+      }, 5000);
     }
 
     checkAuthStatus();
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
   }, []);
 
   return authStatus;
