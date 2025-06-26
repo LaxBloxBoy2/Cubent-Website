@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 type AuthUser = {
   id: string;
@@ -18,11 +18,64 @@ type AuthStatus = {
 };
 
 export function useAuthStatus(): AuthStatus {
-  // For now, just return not authenticated since cross-domain auth is complex
-  // The user will need to click "Sign In" to go to app.cubent.dev
-  return {
+  const [authStatus, setAuthStatus] = useState<AuthStatus>({
     isAuthenticated: false,
     user: null,
-    isLoading: false,
-  };
+    isLoading: true,
+  });
+
+  useEffect(() => {
+    async function checkAuthStatus() {
+      try {
+        // Check if we have the Clerk session cookie
+        const sessionCookie = document.cookie
+          .split('; ')
+          .find(row => row.startsWith('__session='));
+
+        if (!sessionCookie) {
+          setAuthStatus({
+            isAuthenticated: false,
+            user: null,
+            isLoading: false,
+          });
+          return;
+        }
+
+        // Try to fetch user info from app.cubent.dev API
+        const response = await fetch('https://app.cubent.dev/api/auth/user', {
+          method: 'GET',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (response.ok) {
+          const userData = await response.json();
+          setAuthStatus({
+            isAuthenticated: true,
+            user: userData,
+            isLoading: false,
+          });
+        } else {
+          setAuthStatus({
+            isAuthenticated: false,
+            user: null,
+            isLoading: false,
+          });
+        }
+      } catch (error) {
+        console.error('Failed to check auth status:', error);
+        setAuthStatus({
+          isAuthenticated: false,
+          user: null,
+          isLoading: false,
+        });
+      }
+    }
+
+    checkAuthStatus();
+  }, []);
+
+  return authStatus;
 }

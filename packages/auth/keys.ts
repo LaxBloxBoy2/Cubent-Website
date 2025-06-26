@@ -9,6 +9,7 @@ export const keys = () =>
     },
     client: {
       NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: z.string().startsWith('pk_'),
+      NEXT_PUBLIC_CLERK_DOMAIN: z.string().optional(),
       NEXT_PUBLIC_CLERK_SIGN_IN_URL: z.string().startsWith('/'),
       NEXT_PUBLIC_CLERK_SIGN_UP_URL: z.string().startsWith('/'),
       NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL: z.string().startsWith('/'),
@@ -19,6 +20,7 @@ export const keys = () =>
       CLERK_WEBHOOK_SECRET: process.env.CLERK_WEBHOOK_SECRET,
       NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY:
         process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
+      NEXT_PUBLIC_CLERK_DOMAIN: process.env.NEXT_PUBLIC_CLERK_DOMAIN,
       NEXT_PUBLIC_CLERK_SIGN_IN_URL: process.env.NEXT_PUBLIC_CLERK_SIGN_IN_URL,
       NEXT_PUBLIC_CLERK_SIGN_UP_URL: process.env.NEXT_PUBLIC_CLERK_SIGN_UP_URL,
       NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL:
