@@ -27,10 +27,10 @@ const SignInPage = async ({ searchParams }: SignInPageProps) => {
     redirect(`/login?device_id=${params.device_id}&state=${params.state}`);
   }
 
-  // Handle redirect_url parameter by updating the after-sign-in URL
-  let afterSignInUrl = '/auth-success';
+  // Handle redirect_url parameter by updating the fallback redirect URL
+  let fallbackRedirectUrl = '/auth-success';
   if (params.redirect_url) {
-    afterSignInUrl = `/auth-success?redirect_url=${encodeURIComponent(params.redirect_url)}`;
+    fallbackRedirectUrl = `/auth-success?redirect_url=${encodeURIComponent(params.redirect_url)}`;
   }
 
   return (
@@ -39,7 +39,7 @@ const SignInPage = async ({ searchParams }: SignInPageProps) => {
         <h1 className="font-semibold text-2xl tracking-tight">{title}</h1>
         <p className="text-muted-foreground text-sm">{description}</p>
       </div>
-      <SignIn afterSignInUrl={afterSignInUrl} />
+      <SignIn fallbackRedirectUrl={fallbackRedirectUrl} />
     </>
   );
 };
