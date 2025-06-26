@@ -1,3 +1,4 @@
+// Main layout component for the Cubent website
 import './styles.css';
 import { Toolbar as CMSToolbar } from '@repo/cms/components/toolbar';
 import { DesignSystemProvider } from '@repo/design-system';
