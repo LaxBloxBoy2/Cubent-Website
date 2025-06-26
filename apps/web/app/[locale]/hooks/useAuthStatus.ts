@@ -48,7 +48,8 @@ export function useAuthStatus(): AuthStatus {
         }
 
         // Extract and decode the token
-        const token = authTokenCookie.split('=')[1];
+        const rawToken = authTokenCookie.split('=')[1];
+        const token = decodeURIComponent(rawToken); // URL decode first
         console.log('[AUTH] Token found:', token.substring(0, 50) + '...');
 
         try {
