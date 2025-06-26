@@ -24,9 +24,21 @@ const ProfilePage = async () => {
     redirect('/sign-in');
   }
 
-  // Find or create user in database
-  let dbUser = await database.user.findUnique({
+  // Find or create user in database using upsert to handle duplicates
+  const dbUser = await database.user.upsert({
     where: { clerkId: userId },
+    update: {
+      // Update existing user with latest info from Clerk
+      email: user.emailAddresses[0]?.emailAddress || '',
+      name: `${user.firstName || ''} ${user.lastName || ''}`.trim() || null,
+      picture: user.imageUrl,
+    },
+    create: {
+      clerkId: userId,
+      email: user.emailAddresses[0]?.emailAddress || '',
+      name: `${user.firstName || ''} ${user.lastName || ''}`.trim() || null,
+      picture: user.imageUrl,
+    },
     include: {
       extensionSessions: {
         where: { isActive: true },
@@ -38,28 +50,6 @@ const ProfilePage = async () => {
       },
     },
   });
-
-  if (!dbUser) {
-    // Create new user
-    dbUser = await database.user.create({
-      data: {
-        clerkId: userId,
-        email: user.emailAddresses[0]?.emailAddress || '',
-        name: `${user.firstName || ''} ${user.lastName || ''}`.trim() || null,
-        picture: user.imageUrl,
-      },
-      include: {
-        extensionSessions: {
-          where: { isActive: true },
-          orderBy: { lastActiveAt: 'desc' },
-        },
-        usageMetrics: {
-          orderBy: { date: 'desc' },
-          take: 30,
-        },
-      },
-    });
-  }
 
   const isExtensionConnected = dbUser.extensionSessions.length > 0;
   const totalUsage = dbUser.usageMetrics.reduce(

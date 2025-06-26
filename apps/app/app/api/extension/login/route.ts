@@ -45,26 +45,28 @@ export const POST = async (request: Request) => {
     const body = await request.json();
     const { deviceId, state, acceptTerms } = loginSchema.parse(body);
 
-    // Find or create user in database
-    let user = await database.user.findUnique({
+    // Find or create user in database using upsert to handle duplicates
+    let user = await database.user.upsert({
       where: { clerkId: userId },
+      update: {
+        // Update existing user with latest info from Clerk
+        email: clerkUser.emailAddresses[0]?.emailAddress || '',
+        firstName: clerkUser.firstName,
+        lastName: clerkUser.lastName,
+        imageUrl: clerkUser.imageUrl,
+      },
+      create: {
+        clerkId: userId,
+        email: clerkUser.emailAddresses[0]?.emailAddress || '',
+        firstName: clerkUser.firstName,
+        lastName: clerkUser.lastName,
+        imageUrl: clerkUser.imageUrl,
+      },
     });
-
-    if (!user) {
-      // Create new user automatically for social login users
-      user = await database.user.create({
-        data: {
-          clerkId: userId,
-          email: clerkUser.emailAddresses[0]?.emailAddress || '',
-          name: `${clerkUser.firstName || ''} ${clerkUser.lastName || ''}`.trim() || null,
-          picture: clerkUser.imageUrl,
-        },
-      });
-    }
 
     // Update terms acceptance if needed
     if (acceptTerms && !user.termsAccepted) {
-      await database.user.update({
+      user = await database.user.update({
         where: { id: user.id },
         data: {
           termsAccepted: true,

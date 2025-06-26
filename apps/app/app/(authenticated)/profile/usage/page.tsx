@@ -18,9 +18,21 @@ const UsagePage = async () => {
     redirect('/sign-in');
   }
 
-  // Find or create user in database
-  let dbUser = await database.user.findUnique({
+  // Find or create user in database using upsert to handle duplicates
+  const dbUser = await database.user.upsert({
     where: { clerkId: userId },
+    update: {
+      // Update existing user with latest info from Clerk
+      email: user.emailAddresses[0]?.emailAddress || '',
+      name: `${user.firstName || ''} ${user.lastName || ''}`.trim() || null,
+      picture: user.imageUrl,
+    },
+    create: {
+      clerkId: userId,
+      email: user.emailAddresses[0]?.emailAddress || '',
+      name: `${user.firstName || ''} ${user.lastName || ''}`.trim() || null,
+      picture: user.imageUrl,
+    },
     select: {
       id: true,
       cubentUnitsUsed: true,
@@ -37,34 +49,6 @@ const UsagePage = async () => {
       }
     }
   });
-
-  if (!dbUser) {
-    // Create new user automatically for social login users
-    const newUser = await database.user.create({
-      data: {
-        clerkId: userId,
-        email: user.emailAddresses[0]?.emailAddress || '',
-        name: `${user.firstName || ''} ${user.lastName || ''}`.trim() || null,
-        picture: user.imageUrl,
-      },
-      select: {
-        id: true,
-        cubentUnitsUsed: true,
-        cubentUnitsLimit: true,
-        subscriptionTier: true,
-        usageMetrics: {
-          orderBy: { date: 'desc' },
-          take: 30,
-          select: {
-            date: true,
-            cubentUnitsUsed: true,
-            requestsMade: true,
-          }
-        }
-      }
-    });
-    dbUser = newUser;
-  }
 
   // Get total messages from usage analytics
   const totalMessages = await database.usageAnalytics.count({
