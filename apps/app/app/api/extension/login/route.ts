@@ -51,16 +51,14 @@ export const POST = async (request: Request) => {
       update: {
         // Update existing user with latest info from Clerk
         email: clerkUser.emailAddresses[0]?.emailAddress || '',
-        firstName: clerkUser.firstName,
-        lastName: clerkUser.lastName,
-        imageUrl: clerkUser.imageUrl,
+        name: `${clerkUser.firstName || ''} ${clerkUser.lastName || ''}`.trim() || null,
+        picture: clerkUser.imageUrl,
       },
       create: {
         clerkId: userId,
         email: clerkUser.emailAddresses[0]?.emailAddress || '',
-        firstName: clerkUser.firstName,
-        lastName: clerkUser.lastName,
-        imageUrl: clerkUser.imageUrl,
+        name: `${clerkUser.firstName || ''} ${clerkUser.lastName || ''}`.trim() || null,
+        picture: clerkUser.imageUrl,
       },
     });
 
