@@ -161,7 +161,7 @@ model PendingLogin {
   deviceId  String
   state     String
   token     String
-  userId    String   // Store the user ID for token validation
+  userId    String // Store the user ID for token validation
   createdAt DateTime @default(now())
   expiresAt DateTime
 

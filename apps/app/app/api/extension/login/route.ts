@@ -82,15 +82,9 @@ export const POST = async (request: Request) => {
       );
     }
 
-    // Generate a short-lived session using Clerk
-    const clerk = await clerkClient();
-
-    // Create a session (Clerk handles expiration automatically)
-    const session = await clerk.sessions.createSession({
-      userId,
-    });
-
-    const authToken = session.id;
+    // Generate a secure random token for the extension
+    const { randomBytes } = await import('crypto');
+    const authToken = `cubent_ext_${randomBytes(32).toString('hex')}`;
 
     // Set expiration time (10 minutes from now)
     // Note: Clerk session expiration is handled by Clerk, but we enforce our own expiration
@@ -112,6 +106,7 @@ export const POST = async (request: Request) => {
         deviceId,
         state,
         token: authToken,
+        userId,
         expiresAt,
       },
     });
