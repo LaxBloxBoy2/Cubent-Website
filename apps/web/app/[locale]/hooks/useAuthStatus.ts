@@ -25,20 +25,20 @@ export function useAuthStatus(): AuthStatus {
   });
 
   useEffect(() => {
-    async function checkAuthStatus() {
+    function checkAuthStatus() {
       try {
         console.log('[AUTH] Checking authentication status...');
         console.log('[AUTH] All cookies:', document.cookie);
 
-        // Check if we have the Clerk session cookie
-        const sessionCookie = document.cookie
+        // Check if we have our custom auth token
+        const authTokenCookie = document.cookie
           .split('; ')
-          .find(row => row.startsWith('__session='));
+          .find(row => row.startsWith('cubent_auth_token='));
 
-        console.log('[AUTH] Session cookie found:', !!sessionCookie);
+        console.log('[AUTH] Auth token cookie found:', !!authTokenCookie);
 
-        if (!sessionCookie) {
-          console.log('[AUTH] No session cookie, setting not authenticated');
+        if (!authTokenCookie) {
+          console.log('[AUTH] No auth token cookie, setting not authenticated');
           setAuthStatus({
             isAuthenticated: false,
             user: null,
@@ -47,30 +47,35 @@ export function useAuthStatus(): AuthStatus {
           return;
         }
 
-        console.log('[AUTH] Making API call to app.cubent.dev...');
+        // Extract and decode the token
+        const token = authTokenCookie.split('=')[1];
+        console.log('[AUTH] Token found:', token.substring(0, 50) + '...');
 
-        // Try to fetch user info from app.cubent.dev API
-        const response = await fetch('https://app.cubent.dev/api/auth/user', {
-          method: 'GET',
-          credentials: 'include',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
+        try {
+          const userData = JSON.parse(atob(token));
+          console.log('[AUTH] User data decoded:', userData);
 
-        console.log('[AUTH] API response status:', response.status);
+          // Check if token is not too old (7 days)
+          const tokenAge = Date.now() - userData.timestamp;
+          const maxAge = 7 * 24 * 60 * 60 * 1000; // 7 days in milliseconds
 
-        if (response.ok) {
-          const userData = await response.json();
-          console.log('[AUTH] User data received:', userData);
+          if (tokenAge > maxAge) {
+            console.log('[AUTH] Token expired, setting not authenticated');
+            setAuthStatus({
+              isAuthenticated: false,
+              user: null,
+              isLoading: false,
+            });
+            return;
+          }
+
           setAuthStatus({
             isAuthenticated: true,
             user: userData,
             isLoading: false,
           });
-        } else {
-          const errorText = await response.text();
-          console.log('[AUTH] API error response:', errorText);
+        } catch (decodeError) {
+          console.error('[AUTH] Failed to decode token:', decodeError);
           setAuthStatus({
             isAuthenticated: false,
             user: null,
