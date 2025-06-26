@@ -35,20 +35,9 @@ export async function POST(request: NextRequest) {
       });
 
       if (pendingLogin) {
-        // Token is valid, but we need to get the user ID from the session
-        // The token is actually a Clerk session ID, so we can use it to get user info
-        try {
-          const { clerkClient } = await import('@repo/auth/server');
-          const client = await clerkClient();
-          const session = await client.sessions.getSession(token);
-          userId = session.userId;
-        } catch (error) {
-          console.error('Extension usage tracking - Invalid session token:', error);
-          return NextResponse.json(
-            { error: 'Invalid token' },
-            { status: 401 }
-          );
-        }
+        // Token is valid, get the user ID from the pending login record
+        userId = pendingLogin.userId;
+        console.log('Extension usage tracking - PendingLogin validation successful:', { userId });
       } else {
         console.error('Extension usage tracking - Token not found in pendingLogin table');
         return NextResponse.json(
