@@ -27,12 +27,18 @@ export function useAuthStatus(): AuthStatus {
   useEffect(() => {
     async function checkAuthStatus() {
       try {
+        console.log('[AUTH] Checking authentication status...');
+        console.log('[AUTH] All cookies:', document.cookie);
+
         // Check if we have the Clerk session cookie
         const sessionCookie = document.cookie
           .split('; ')
           .find(row => row.startsWith('__session='));
 
+        console.log('[AUTH] Session cookie found:', !!sessionCookie);
+
         if (!sessionCookie) {
+          console.log('[AUTH] No session cookie, setting not authenticated');
           setAuthStatus({
             isAuthenticated: false,
             user: null,
@@ -40,6 +46,8 @@ export function useAuthStatus(): AuthStatus {
           });
           return;
         }
+
+        console.log('[AUTH] Making API call to app.cubent.dev...');
 
         // Try to fetch user info from app.cubent.dev API
         const response = await fetch('https://app.cubent.dev/api/auth/user', {
@@ -50,14 +58,19 @@ export function useAuthStatus(): AuthStatus {
           },
         });
 
+        console.log('[AUTH] API response status:', response.status);
+
         if (response.ok) {
           const userData = await response.json();
+          console.log('[AUTH] User data received:', userData);
           setAuthStatus({
             isAuthenticated: true,
             user: userData,
             isLoading: false,
           });
         } else {
+          const errorText = await response.text();
+          console.log('[AUTH] API error response:', errorText);
           setAuthStatus({
             isAuthenticated: false,
             user: null,
@@ -65,7 +78,7 @@ export function useAuthStatus(): AuthStatus {
           });
         }
       } catch (error) {
-        console.error('Failed to check auth status:', error);
+        console.error('[AUTH] Failed to check auth status:', error);
         setAuthStatus({
           isAuthenticated: false,
           user: null,
