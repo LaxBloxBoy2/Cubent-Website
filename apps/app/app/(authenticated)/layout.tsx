@@ -7,7 +7,6 @@ import { secure } from '@repo/security';
 import type { ReactNode } from 'react';
 import { PostHogIdentifier } from './components/posthog-identifier';
 import { GlobalSidebar } from './components/sidebar';
-import { CrossDomainAuthSync } from './components/CrossDomainAuthSync';
 
 type AppLayoutProperties = {
   readonly children: ReactNode;
@@ -38,7 +37,6 @@ const AppLayout = async ({ children }: AppLayoutProperties) => {
           {children}
         </GlobalSidebar>
         <PostHogIdentifier />
-        <CrossDomainAuthSync />
       </SidebarProvider>
     </NotificationsProvider>
   );
