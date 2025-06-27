@@ -27,6 +27,10 @@ export const AnimatedList: React.FC<AnimatedListProps> = ({
   const [visibleItems, setVisibleItems] = useState<AnimatedListItem[]>([]);
 
   useEffect(() => {
+    if (!items || !Array.isArray(items)) {
+      return;
+    }
+
     items.forEach((item, index) => {
       setTimeout(() => {
         setVisibleItems((prev) => [...prev, item]);
@@ -39,7 +43,7 @@ export const AnimatedList: React.FC<AnimatedListProps> = ({
   return (
     <div className={cn("space-y-2", className)}>
       <AnimatePresence>
-        {visibleItems.map((item, index) => (
+        {visibleItems && Array.isArray(visibleItems) && visibleItems.map((item, index) => (
           <motion.div
             key={item.id}
             initial={{ opacity: 0, y: 20, scale: 0.95 }}
