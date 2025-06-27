@@ -7,8 +7,8 @@ type FeaturesProps = {
 };
 
 export const Features = ({ dictionary }: FeaturesProps) => (
-  <div className="w-full py-20 lg:py-40 bg-gray-950">
-    <div className="container mx-auto px-8 sm:px-12 lg:px-16">
+  <div className="w-full py-20 lg:py-40">
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8">
       <div className="flex flex-col gap-10">
         <div className="flex flex-col items-start gap-4">
           <div className="flex flex-col gap-2">
@@ -20,9 +20,9 @@ export const Features = ({ dictionary }: FeaturesProps) => (
             </p>
           </div>
         </div>
-        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 px-4 sm:px-8 lg:px-12">
+        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
           {/* Feature 1: Context Intelligence */}
-          <div className="flex flex-col rounded-xl bg-muted overflow-hidden shadow-lg shadow-black/20 aspect-square">
+          <div className="flex flex-col rounded-xl bg-muted overflow-hidden shadow-lg shadow-black/20">
             <div className="relative h-48 w-full">
               <Image
                 src="/images/cubent-feature-1.png"
@@ -31,7 +31,7 @@ export const Features = ({ dictionary }: FeaturesProps) => (
                 className="object-cover rounded-t-xl"
               />
             </div>
-            <div className="p-6 flex-1 flex flex-col justify-center">
+            <div className="p-6">
               <h3 className="text-xl tracking-tight mb-2">
                 @ Context Intelligence
               </h3>
@@ -42,7 +42,7 @@ export const Features = ({ dictionary }: FeaturesProps) => (
           </div>
 
           {/* Feature 2: AI Analysis */}
-          <div className="flex flex-col rounded-xl bg-muted overflow-hidden shadow-lg shadow-black/20 aspect-square">
+          <div className="flex flex-col rounded-xl bg-muted overflow-hidden shadow-lg shadow-black/20">
             <div className="relative h-48 w-full">
               <Image
                 src="/images/cubent-feature-2.png"
@@ -51,7 +51,7 @@ export const Features = ({ dictionary }: FeaturesProps) => (
                 className="object-cover rounded-t-xl"
               />
             </div>
-            <div className="p-6 flex-1 flex flex-col justify-center">
+            <div className="p-6">
               <h3 className="text-xl tracking-tight mb-2">
                 AI Screenshot Analysis
               </h3>
@@ -62,7 +62,7 @@ export const Features = ({ dictionary }: FeaturesProps) => (
           </div>
 
           {/* Feature 3: Code Intelligence */}
-          <div className="flex flex-col rounded-xl bg-muted overflow-hidden shadow-lg shadow-black/20 aspect-square">
+          <div className="flex flex-col rounded-xl bg-muted overflow-hidden shadow-lg shadow-black/20">
             <div className="relative h-48 w-full">
               <Image
                 src="/images/cubent-feature-3.png"
@@ -71,7 +71,7 @@ export const Features = ({ dictionary }: FeaturesProps) => (
                 className="object-cover rounded-t-xl"
               />
             </div>
-            <div className="p-6 flex-1 flex flex-col justify-center">
+            <div className="p-6">
               <h3 className="text-xl tracking-tight mb-2">
                 Smart Code Editing
               </h3>
@@ -82,7 +82,7 @@ export const Features = ({ dictionary }: FeaturesProps) => (
           </div>
 
           {/* Feature 4: Autocomplete */}
-          <div className="flex flex-col rounded-xl bg-muted overflow-hidden shadow-lg shadow-black/20 aspect-square">
+          <div className="flex flex-col rounded-xl bg-muted overflow-hidden shadow-lg shadow-black/20">
             <div className="relative h-48 w-full">
               <Image
                 src="/images/cubent-feature-4.png"
@@ -91,7 +91,7 @@ export const Features = ({ dictionary }: FeaturesProps) => (
                 className="object-cover rounded-t-xl"
               />
             </div>
-            <div className="p-6 flex-1 flex flex-col justify-center">
+            <div className="p-6">
               <h3 className="text-xl tracking-tight mb-2">
                 Smart Autocomplete
               </h3>
