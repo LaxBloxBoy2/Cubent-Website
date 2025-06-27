@@ -22,13 +22,13 @@ export const Features = ({ dictionary }: FeaturesProps) => (
         </div>
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
           {/* Feature 1: Context Intelligence */}
-          <div className="flex flex-col rounded-md bg-muted overflow-hidden">
-            <div className="relative h-48 w-full">
+          <div className="flex flex-col rounded-xl bg-muted overflow-hidden shadow-lg shadow-black/20">
+            <div className="relative aspect-square w-full">
               <Image
                 src="/images/cubent-feature-1.png"
                 alt="Cubent Context Intelligence"
                 fill
-                className="object-cover"
+                className="object-cover rounded-t-xl"
               />
             </div>
             <div className="p-6">
@@ -42,13 +42,13 @@ export const Features = ({ dictionary }: FeaturesProps) => (
           </div>
 
           {/* Feature 2: AI Analysis */}
-          <div className="flex flex-col rounded-md bg-muted overflow-hidden">
-            <div className="relative h-48 w-full">
+          <div className="flex flex-col rounded-xl bg-muted overflow-hidden shadow-lg shadow-black/20">
+            <div className="relative aspect-square w-full">
               <Image
                 src="/images/cubent-feature-2.png"
                 alt="Cubent AI Analysis"
                 fill
-                className="object-cover"
+                className="object-cover rounded-t-xl"
               />
             </div>
             <div className="p-6">
@@ -62,13 +62,13 @@ export const Features = ({ dictionary }: FeaturesProps) => (
           </div>
 
           {/* Feature 3: Code Intelligence */}
-          <div className="flex flex-col rounded-md bg-muted overflow-hidden">
-            <div className="relative h-48 w-full">
+          <div className="flex flex-col rounded-xl bg-muted overflow-hidden shadow-lg shadow-black/20">
+            <div className="relative aspect-square w-full">
               <Image
                 src="/images/cubent-feature-3.png"
                 alt="Cubent Code Intelligence"
                 fill
-                className="object-cover"
+                className="object-cover rounded-t-xl"
               />
             </div>
             <div className="p-6">
@@ -82,13 +82,13 @@ export const Features = ({ dictionary }: FeaturesProps) => (
           </div>
 
           {/* Feature 4: Autocomplete */}
-          <div className="flex flex-col rounded-md bg-muted overflow-hidden">
-            <div className="relative h-48 w-full">
+          <div className="flex flex-col rounded-xl bg-muted overflow-hidden shadow-lg shadow-black/20">
+            <div className="relative aspect-square w-full">
               <Image
                 src="/images/cubent-feature-4.png"
                 alt="Cubent Smart Autocomplete"
                 fill
-                className="object-cover"
+                className="object-cover rounded-t-xl"
               />
             </div>
             <div className="p-6">
