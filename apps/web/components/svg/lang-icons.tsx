@@ -2,9 +2,10 @@ import React from "react";
 
 export interface LangIconProps {
   className?: string;
+  active?: boolean;
 }
 
-export const CurlIcon: React.FC<LangIconProps> = ({ className }) => (
+export const CurlIcon: React.FC<LangIconProps> = ({ className, active }) => (
   <svg
     className={className}
     viewBox="0 0 24 24"
@@ -35,7 +36,7 @@ export const CurlIcon: React.FC<LangIconProps> = ({ className }) => (
   </svg>
 );
 
-export const ElixirIcon: React.FC<LangIconProps> = ({ className }) => (
+export const ElixirIcon: React.FC<LangIconProps> = ({ className, active }) => (
   <svg
     className={className}
     viewBox="0 0 24 24"
@@ -54,7 +55,7 @@ export const ElixirIcon: React.FC<LangIconProps> = ({ className }) => (
   </svg>
 );
 
-export const GoIcon: React.FC<LangIconProps> = ({ className }) => (
+export const GoIcon: React.FC<LangIconProps> = ({ className, active }) => (
   <svg
     className={className}
     viewBox="0 0 24 24"
@@ -79,7 +80,7 @@ export const GoIcon: React.FC<LangIconProps> = ({ className }) => (
   </svg>
 );
 
-export const JSIcon: React.FC<LangIconProps> = ({ className }) => (
+export const JSIcon: React.FC<LangIconProps> = ({ className, active }) => (
   <svg
     className={className}
     viewBox="0 0 24 24"
@@ -106,7 +107,7 @@ export const JSIcon: React.FC<LangIconProps> = ({ className }) => (
   </svg>
 );
 
-export const JavaIcon: React.FC<LangIconProps> = ({ className }) => (
+export const JavaIcon: React.FC<LangIconProps> = ({ className, active }) => (
   <svg
     className={className}
     viewBox="0 0 24 24"
@@ -132,7 +133,7 @@ export const JavaIcon: React.FC<LangIconProps> = ({ className }) => (
   </svg>
 );
 
-export const NodeIcon: React.FC<LangIconProps> = ({ className }) => (
+export const NodeIcon: React.FC<LangIconProps> = ({ className, active }) => (
   <svg
     className={className}
     viewBox="0 0 24 24"
@@ -164,7 +165,7 @@ export const NodeIcon: React.FC<LangIconProps> = ({ className }) => (
   </svg>
 );
 
-export const PHPIcon: React.FC<LangIconProps> = ({ className }) => (
+export const PHPIcon: React.FC<LangIconProps> = ({ className, active }) => (
   <svg
     className={className}
     viewBox="0 0 24 24"
@@ -198,7 +199,7 @@ export const PHPIcon: React.FC<LangIconProps> = ({ className }) => (
   </svg>
 );
 
-export const PythonIcon: React.FC<LangIconProps> = ({ className }) => (
+export const PythonIcon: React.FC<LangIconProps> = ({ className, active }) => (
   <svg
     className={className}
     viewBox="0 0 24 24"
@@ -215,7 +216,7 @@ export const PythonIcon: React.FC<LangIconProps> = ({ className }) => (
   </svg>
 );
 
-export const RustIcon: React.FC<LangIconProps> = ({ className }) => (
+export const RustIcon: React.FC<LangIconProps> = ({ className, active }) => (
   <svg
     className={className}
     viewBox="0 0 24 24"
@@ -241,7 +242,7 @@ export const RustIcon: React.FC<LangIconProps> = ({ className }) => (
   </svg>
 );
 
-export const TSIcon: React.FC<LangIconProps> = ({ className }) => (
+export const TSIcon: React.FC<LangIconProps> = ({ className, active }) => (
   <svg
     className={className}
     viewBox="0 0 24 24"

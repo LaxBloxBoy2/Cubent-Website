@@ -2,15 +2,20 @@
 
 import React from "react";
 import { cn } from "@/lib/utils";
+import { Highlight, type PrismTheme } from "prism-react-renderer";
 
 interface CodeEditorProps {
-  children: React.ReactNode;
+  codeBlock: string;
+  language: string;
+  theme?: PrismTheme;
   className?: string;
 }
 
-export const CodeEditor: React.FC<CodeEditorProps> = ({ 
-  children, 
-  className 
+export const CodeEditor: React.FC<CodeEditorProps> = ({
+  codeBlock,
+  language,
+  theme,
+  className
 }) => {
   return (
     <div
@@ -30,10 +35,37 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
           Terminal
         </div>
       </div>
-      
+
       {/* Code content */}
       <div className="p-4 font-mono text-sm">
-        {children}
+        <Highlight theme={theme} code={codeBlock} language={language}>
+          {({ tokens, getLineProps, getTokenProps }) => {
+            const lineCount = tokens.length;
+            const gutterPadLength = Math.max(String(lineCount).length, 2);
+            return (
+              <pre
+                key={codeBlock} // Use codeBlock as a key to trigger animations on change
+                className="leading-6"
+              >
+                {tokens.map((line, i) => {
+                  const lineNumber = i + 1;
+                  const paddedLineGutter = String(lineNumber).padStart(gutterPadLength, " ");
+                  return (
+                    // biome-ignore lint/suspicious/noArrayIndexKey: I got nothing better right now
+                    <div key={`${line}-${i}`} {...getLineProps({ line })}>
+                      <span className="text-white/40 select-none mr-4">
+                        {paddedLineGutter}
+                      </span>
+                      {line.map((token, key) => (
+                        <span key={key} {...getTokenProps({ token })} />
+                      ))}
+                    </div>
+                  );
+                })}
+              </pre>
+            );
+          }}
+        </Highlight>
       </div>
     </div>
   );

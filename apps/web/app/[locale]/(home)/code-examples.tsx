@@ -592,14 +592,14 @@ export const CodeExamples: React.FC<Props> = ({ className }) => {
         className="relative"
       >
         <div className="absolute bottom-32 left-[-50px]">
-          <MeteorLines className="ml-2 fade-in-0" delay={3} number={1} />
-          <MeteorLines className="ml-10 fade-in-40" delay={0} number={1} />
-          <MeteorLines className="ml-16 fade-in-100" delay={5} number={1} />
+          <MeteorLines className="ml-2 fade-in-0" number={1} />
+          <MeteorLines className="ml-10 fade-in-40" number={1} />
+          <MeteorLines className="ml-16 fade-in-100" number={1} />
         </div>
         <div className="absolute bottom-32 right-[200px]">
-          <MeteorLines className="ml-2 fade-in-0" delay={4} number={1} />
-          <MeteorLines className="ml-10 fade-in-40" delay={0} number={1} />
-          <MeteorLines className="ml-16 fade-in-100" delay={2} number={1} />
+          <MeteorLines className="ml-2 fade-in-0" number={1} />
+          <MeteorLines className="ml-10 fade-in-40" number={1} />
+          <MeteorLines className="ml-16 fade-in-100" number={1} />
         </div>
         <div className="mt-10">
           <div className="flex gap-6 pb-14">

@@ -5,19 +5,23 @@ import { Copy, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface CopyCodeSnippetButtonProps {
-  code: string;
+  code?: string;
+  textToCopy?: string;
   className?: string;
 }
 
 export const CopyCodeSnippetButton: React.FC<CopyCodeSnippetButtonProps> = ({
   code,
+  textToCopy,
   className,
 }) => {
   const [copied, setCopied] = useState(false);
 
+  const textToUse = textToCopy || code || "";
+
   const handleCopy = async () => {
     try {
-      await navigator.clipboard.writeText(code);
+      await navigator.clipboard.writeText(textToUse);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
