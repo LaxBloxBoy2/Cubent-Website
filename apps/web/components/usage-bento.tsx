@@ -7,21 +7,39 @@ export function UsageBento() {
     <div className="w-full overflow-hidden relative border-[.75px] h-[576px] rounded-[32px] usage-bento-bg-gradient border-[#ffffff]/10">
       <UsageSparkles className="absolute top-0" />
       <div className="relative ">
-        <AnimatedList className="w-full">
-          <BillingItem icon={<ExchangeIcon />} text="Unkey created API key" latency="3 s" />
-          <BillingItem
-            icon={<LocationIcon />}
-            text="User verified key and logged usage"
-            latency="1 s"
-          />
-          <BillingItem
-            icon={<OptionsIcon />}
-            text="Andreas enabled automatic billing"
-            latency="8 ms"
-          />
-          <BillingItem icon={<BillingIcon />} text="Unkey sent invoice to customer" latency="1 s" />
-          <BillingItem icon={<PaymentsIcon />} text="Andreas collected payments" latency="2 s" />
-        </AnimatedList>
+        <AnimatedList
+          className="w-full"
+          items={[
+            {
+              id: 1,
+              content: <BillingItem icon={<ExchangeIcon />} text="Unkey created API key" latency="3 s" />
+            },
+            {
+              id: 2,
+              content: <BillingItem
+                icon={<LocationIcon />}
+                text="User verified key and logged usage"
+                latency="1 s"
+              />
+            },
+            {
+              id: 3,
+              content: <BillingItem
+                icon={<OptionsIcon />}
+                text="Andreas enabled automatic billing"
+                latency="8 ms"
+              />
+            },
+            {
+              id: 4,
+              content: <BillingItem icon={<BillingIcon />} text="Unkey sent invoice to customer" latency="1 s" />
+            },
+            {
+              id: 5,
+              content: <BillingItem icon={<PaymentsIcon />} text="Andreas collected payments" latency="2 s" />
+            }
+          ]}
+        />
       </div>
       <UsageText />
     </div>
