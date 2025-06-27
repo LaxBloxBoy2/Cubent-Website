@@ -1,5 +1,6 @@
 import type { Dictionary } from '@repo/internationalization';
 import { User } from 'lucide-react';
+import Image from 'next/image';
 
 type FeaturesProps = {
   dictionary: Dictionary;
@@ -19,49 +20,83 @@ export const Features = ({ dictionary }: FeaturesProps) => (
             </p>
           </div>
         </div>
-        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-          <div className="flex aspect-square h-full flex-col justify-between rounded-md bg-muted p-6 lg:col-span-2 lg:aspect-auto">
-            <User className="h-8 w-8 stroke-1" />
-            <div className="flex flex-col">
-              <h3 className="text-xl tracking-tight">
-                {dictionary.web.home.features.items[0].title}
-              </h3>
-              <p className="max-w-xs text-base text-muted-foreground">
-                {dictionary.web.home.features.items[0].description}
-              </p>
+        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
+          {/* Feature 1: Context Intelligence */}
+          <div className="flex flex-col rounded-md bg-muted overflow-hidden">
+            <div className="relative h-48 w-full">
+              <Image
+                src="/images/cubent-feature-1.png"
+                alt="Cubent Context Intelligence"
+                fill
+                className="object-cover"
+              />
             </div>
-          </div>
-          <div className="flex aspect-square flex-col justify-between rounded-md bg-muted p-6">
-            <User className="h-8 w-8 stroke-1" />
-            <div className="flex flex-col">
-              <h3 className="text-xl tracking-tight">
-                {dictionary.web.home.features.items[1].title}
+            <div className="p-6">
+              <h3 className="text-xl tracking-tight mb-2">
+                @ Context Intelligence
               </h3>
-              <p className="max-w-xs text-base text-muted-foreground">
-                {dictionary.web.home.features.items[1].description}
+              <p className="text-base text-muted-foreground">
+                Access files, Git history, problems, terminal, and folders with intelligent context awareness. Supports 200+ programming languages including JS, TS, HTML, C++, and Python.
               </p>
             </div>
           </div>
 
-          <div className="flex aspect-square flex-col justify-between rounded-md bg-muted p-6">
-            <User className="h-8 w-8 stroke-1" />
-            <div className="flex flex-col">
-              <h3 className="text-xl tracking-tight">
-                {dictionary.web.home.features.items[2].title}
+          {/* Feature 2: AI Analysis */}
+          <div className="flex flex-col rounded-md bg-muted overflow-hidden">
+            <div className="relative h-48 w-full">
+              <Image
+                src="/images/cubent-feature-2.png"
+                alt="Cubent AI Analysis"
+                fill
+                className="object-cover"
+              />
+            </div>
+            <div className="p-6">
+              <h3 className="text-xl tracking-tight mb-2">
+                AI Screenshot Analysis
               </h3>
-              <p className="max-w-xs text-base text-muted-foreground">
-                {dictionary.web.home.features.items[2].description}
+              <p className="text-base text-muted-foreground">
+                Take screenshots of your website and get instant AI analysis. Cubent can review your UI, identify issues, and provide actionable feedback on your web applications.
               </p>
             </div>
           </div>
-          <div className="flex aspect-square h-full flex-col justify-between rounded-md bg-muted p-6 lg:col-span-2 lg:aspect-auto">
-            <User className="h-8 w-8 stroke-1" />
-            <div className="flex flex-col">
-              <h3 className="text-xl tracking-tight">
-                {dictionary.web.home.features.items[3].title}
+
+          {/* Feature 3: Code Intelligence */}
+          <div className="flex flex-col rounded-md bg-muted overflow-hidden">
+            <div className="relative h-48 w-full">
+              <Image
+                src="/images/cubent-feature-3.png"
+                alt="Cubent Code Intelligence"
+                fill
+                className="object-cover"
+              />
+            </div>
+            <div className="p-6">
+              <h3 className="text-xl tracking-tight mb-2">
+                Smart Code Editing
               </h3>
-              <p className="max-w-xs text-base text-muted-foreground">
-                {dictionary.web.home.features.items[3].description}
+              <p className="text-base text-muted-foreground">
+                Read files, make intelligent edits, and review changes with accept/reject controls. Cubent understands your codebase and suggests precise modifications with diff tracking.
+              </p>
+            </div>
+          </div>
+
+          {/* Feature 4: Autocomplete */}
+          <div className="flex flex-col rounded-md bg-muted overflow-hidden">
+            <div className="relative h-48 w-full">
+              <Image
+                src="/images/cubent-feature-4.png"
+                alt="Cubent Smart Autocomplete"
+                fill
+                className="object-cover"
+              />
+            </div>
+            <div className="p-6">
+              <h3 className="text-xl tracking-tight mb-2">
+                Smart Autocomplete
+              </h3>
+              <p className="text-base text-muted-foreground">
+                Get intelligent code completions with context-aware suggestions. Accept or reject autocomplete recommendations with full control over your coding workflow.
               </p>
             </div>
           </div>
