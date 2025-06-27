@@ -38,14 +38,17 @@ const Home = async ({ params }: HomeProps) => {
           Beta feature now available
         </div>
       )}
-      <Hero dictionary={dictionary} />
-      <Mockup />
-      <Cases dictionary={dictionary} />
-      <Features dictionary={dictionary} />
-      <Stats dictionary={dictionary} />
-      <Testimonials dictionary={dictionary} />
-      <FAQ dictionary={dictionary} />
-      <CTA dictionary={dictionary} />
+      <div className="relative w-full overflow-hidden bg-black">
+        <div className="container relative flex flex-col mx-auto space-y-16 md:space-y-32">
+          <Hero dictionary={dictionary} />
+          <Cases dictionary={dictionary} />
+          <Features dictionary={dictionary} />
+          <Stats dictionary={dictionary} />
+          <Testimonials dictionary={dictionary} />
+          <FAQ dictionary={dictionary} />
+          <CTA dictionary={dictionary} />
+        </div>
+      </div>
     </>
   );
 };
