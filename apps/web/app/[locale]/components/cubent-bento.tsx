@@ -33,7 +33,7 @@ export function CodeEditingBento() {
           {/* Terminal */}
           <div className="bg-black/30 rounded-lg p-3 border border-white/10">
             <div className="flex items-center text-sm text-white/80">
-              <span className="text-green-400">></span>
+              <span className="text-green-400">{'>'}</span>
               <span className="ml-2">Terminal</span>
             </div>
           </div>
