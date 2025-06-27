@@ -1,26 +1,8 @@
-import { AnalyticsBento } from "@/components/analytics/analytics-bento";
-import { AuditLogsBento } from "@/components/audit-logs-bento";
-import { PrimaryButton, SecondaryButton } from "@/components/button";
-import { CTA } from "@/components/cta";
-import { FeatureGrid } from "@/components/feature/feature-grid";
-import { HashedKeysBento } from "@/components/hashed-keys-bento";
 import { Hero } from "@/components/hero/hero";
-import { ImageWithBlur } from "@/components/image-with-blur";
-import { IpWhitelistingBento } from "@/components/ip-whitelisting-bento";
-import { LatencyBento } from "@/components/latency-bento";
-import { OpenSource } from "@/components/open-source";
-import { RateLimitsBento } from "@/components/rate-limits-bento";
-import { Section, SectionTitle } from "@/components/section";
-import { FeatureGridChip } from "@/components/svg/feature-grid-chip";
+import { Section } from "@/components/section";
 import { TopLeftShiningLight, TopRightShiningLight } from "@/components/svg/hero";
-import { OssLight } from "@/components/svg/oss-light";
-import { UsageBento } from "@/components/usage-bento";
-import { ChevronRight, LogIn } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 import mainboard from "../../../images/mainboard.svg";
-import { DesktopLogoCloud, MobileLogoCloud } from "./logo-cloud-content";
-import { CodeExamples } from "./code-examples";
 
 import { showBetaFeature } from '@repo/feature-flags';
 import { getDictionary } from '@repo/internationalization';
@@ -65,99 +47,9 @@ const Home = async ({ params }: HomeProps) => {
             priority
           />
         </div>
-        <div className="container relative flex flex-col mx-auto space-y-16 md:space-y-32">
+        <div className="container relative flex flex-col mx-auto">
           <Section>
             <Hero />
-          </Section>
-          <Section className="mt-16 md:mt-32">
-            <DesktopLogoCloud />
-            <MobileLogoCloud />
-          </Section>
-          <Section className="mt-16 md:mt-18">
-            <CodeExamples />
-          </Section>
-          <Section className="mt-16 md:mt-18">
-            <OpenSource />
-          </Section>
-
-          <Section className="mt-16 md:mt-20">
-            <SectionTitle
-              className="mt-8 md:mt-16 lg:mt-32"
-              title="Everything you need for your API"
-              text="Build, monetize, analyze, and protect your APIs; our platform makes it easy, providing everything you need."
-              align="center"
-            />
-            <AnalyticsBento />
-            <div className="mt-6 grid md:grid-cols-[1fr_1fr] lg:grid-cols-[1fr_2fr] gap-6 z-50">
-              <LatencyBento />
-              <UsageBento />
-            </div>
-          </Section>
-          <div className="relative w-full -z-10 ">
-            <OssLight className="absolute scale-[2] left-[-70px] sm:left-[70px] md:left-[150px] lg:left-[200px] xl:left-[420px] top-[-250px]" />
-          </div>
-
-          <Section className="mt-16 md:mt-32">
-            <SectionTitle
-              title="Secure and scalable from day one"
-              text="Start secure. Our platform includes essential security features such as one-way hashed keys, audit logs, and rate limiting, enabling rapid API iteration and scaling."
-              align="center"
-            >
-              <div className="flex mt-10 mb-10 space-x-6">
-                <Link href="https://app.unkey.com" className="group">
-                  <PrimaryButton shiny IconLeft={LogIn} label="Get Started" className="h-10" />
-                </Link>
-                <Link href="/docs">
-                  <SecondaryButton label="Visit the Docs" IconRight={ChevronRight} />
-                </Link>
-              </div>
-            </SectionTitle>
-            <div className="grid xl:grid-cols-[2fr_3fr] gap-6">
-              <HashedKeysBento />
-              <AuditLogsBento />
-            </div>
-
-            <div className="relative grid md:grid-cols-[1fr_1fr] xl:grid-cols-[3fr_2fr] gap-6 z-50">
-              <div
-                aria-hidden
-                className="hidden lg:block pointer-events-none absolute top-[calc(100%-51px)] right-[226px] lg:right-[500px] aspect-[1400/541] w-[1400px]"
-              >
-                <ImageWithBlur
-                  src="/images/landing/leveled-up-api-auth-chip-min.svg"
-                  alt="Visual decoration auth chip"
-                  fill
-                />
-              </div>
-
-              <IpWhitelistingBento />
-              <RateLimitsBento />
-            </div>
-          </Section>
-          <Section className="mt-16 md:mt-32">
-            <div className="relative">
-              <SectionTitle
-                className="mt-8 md:mt-16 lg:mt-32 xl:mt-48"
-                title="Leveled-up API development"
-                text="You gain enhanced security, low latency, and better control, enabling seamless API integration and unparalleled data protection."
-              >
-                <div className="flex mt-10 mb-10 space-x-6">
-                  <Link href="https://app.unkey.com" className="group">
-                    <PrimaryButton shiny IconLeft={LogIn} label="Get Started" className="h-10" />
-                  </Link>
-
-                  <Link href="/docs">
-                    <SecondaryButton label="Visit the Docs" IconRight={ChevronRight} />
-                  </Link>
-                </div>
-              </SectionTitle>
-            </div>
-            <FeatureGrid className="relative z-50 mt-20" />
-            <div className="relative -z-10">
-              <FeatureGridChip className="absolute top-[50px] left-[400px]" />
-            </div>
-          </Section>
-          <Section className="mt-16 md:mt-32">
-            <CTA />
           </Section>
         </div>
       </div>

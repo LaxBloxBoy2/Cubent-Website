@@ -46,7 +46,7 @@ export function SectionTitle({
       {text && (
         <p
           className={cn(
-            "text-sm md:text-base text-white/70 leading-7 py-6 text-center max-w-sm md:max-w-md lg:max-w-xl xl:max-w-4xl text-balance",
+            "text-sm md:text-base text-white/70 leading-7 py-6 text-center max-w-sm md:max-w-md lg:max-xl xl:max-w-4xl text-balance",
             {
               "xl:text-left xl:max-w-xl": align === "left",
             },

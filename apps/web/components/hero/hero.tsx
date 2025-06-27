@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { HeroMainSection } from "./hero-main-section";
 
-import mainboard from "@/images/mainboard.svg";
+import mainboard from "../../../images/mainboard.svg";
 import { SubHeroMainboard } from "./hero-sub-mainboard";
 export const Hero: React.FC = () => {
   const containerVariants = {
@@ -20,7 +20,7 @@ export const Hero: React.FC = () => {
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.6 },
+      transition: { duration: 0.6, ease: "easeOut" },
     },
   };
 
