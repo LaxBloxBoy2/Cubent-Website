@@ -23,7 +23,7 @@ export const Features = ({ dictionary }: FeaturesProps) => (
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
           {/* Feature 1: Context Intelligence */}
           <div className="flex flex-col rounded-xl bg-muted overflow-hidden shadow-lg shadow-black/20">
-            <div className="relative aspect-square w-full">
+            <div className="relative h-48 w-full">
               <Image
                 src="/images/cubent-feature-1.png"
                 alt="Cubent Context Intelligence"
@@ -43,7 +43,7 @@ export const Features = ({ dictionary }: FeaturesProps) => (
 
           {/* Feature 2: AI Analysis */}
           <div className="flex flex-col rounded-xl bg-muted overflow-hidden shadow-lg shadow-black/20">
-            <div className="relative aspect-square w-full">
+            <div className="relative h-48 w-full">
               <Image
                 src="/images/cubent-feature-2.png"
                 alt="Cubent AI Analysis"
@@ -63,7 +63,7 @@ export const Features = ({ dictionary }: FeaturesProps) => (
 
           {/* Feature 3: Code Intelligence */}
           <div className="flex flex-col rounded-xl bg-muted overflow-hidden shadow-lg shadow-black/20">
-            <div className="relative aspect-square w-full">
+            <div className="relative h-48 w-full">
               <Image
                 src="/images/cubent-feature-3.png"
                 alt="Cubent Code Intelligence"
@@ -83,7 +83,7 @@ export const Features = ({ dictionary }: FeaturesProps) => (
 
           {/* Feature 4: Autocomplete */}
           <div className="flex flex-col rounded-xl bg-muted overflow-hidden shadow-lg shadow-black/20">
-            <div className="relative aspect-square w-full">
+            <div className="relative h-48 w-full">
               <Image
                 src="/images/cubent-feature-4.png"
                 alt="Cubent Smart Autocomplete"
