@@ -26,6 +26,7 @@
     "@sentry/nextjs": "^9.22.0",
     "@t3-oss/env-nextjs": "^0.13.4",
     "date-fns": "^4.1.0",
+    "framer-motion": "^12.19.2",
     "fumadocs-core": "^15.4.0",
     "import-in-the-middle": "^1.13.2",
     "lucide-react": "^0.511.0",
