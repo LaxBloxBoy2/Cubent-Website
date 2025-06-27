@@ -205,12 +205,12 @@ export function AutocompleteBento() {
         {/* Code Preview */}
         <div className="bg-black/40 rounded-lg p-3 border border-white/10 mb-4 font-mono text-xs">
           <div className="text-white/60">@Override</div>
-          <div className="text-white/80">protected void paintComponent(Graphics g) {</div>
+          <div className="text-white/80">protected void paintComponent(Graphics g) {'{'}</div>
           <div className="text-white/80 ml-4">super.paintComponent(g);</div>
           <div className="text-white/80 ml-4">setBackground(Color.black);</div>
           <div className="text-green-400 ml-4">double angleVariation = rand.nextDouble() * 20 + 10;</div>
           <div className="text-green-400 ml-4">double shrink = rand.nextDouble() * 0.2 + 0.7;</div>
-          <div className="text-white/60">}</div>
+          <div className="text-white/60">{'}'}</div>
         </div>
 
         {/* Accept/Reject Autocomplete */}
