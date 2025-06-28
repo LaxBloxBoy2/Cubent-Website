@@ -1,13 +1,15 @@
-import { Hero } from "@/components/hero/hero";
-import { Section } from "@/components/section";
-import { TopLeftShiningLight, TopRightShiningLight } from "@/components/svg/hero";
-import Image from "next/image";
-import mainboard from "../../../images/mainboard.svg";
-
 import { showBetaFeature } from '@repo/feature-flags';
 import { getDictionary } from '@repo/internationalization';
 import { createMetadata } from '@repo/seo/metadata';
 import type { Metadata } from 'next';
+import { Cases } from './components/cases';
+import { CTA } from './components/cta';
+import { FAQ } from './components/faq';
+import { Features } from './components/features';
+import { Hero } from './components/hero';
+import { Mockup } from './components/mockup';
+import { Stats } from './components/stats';
+import { Testimonials } from './components/testimonials';
 
 type HomeProps = {
   params: Promise<{
@@ -36,23 +38,14 @@ const Home = async ({ params }: HomeProps) => {
           Beta feature now available
         </div>
       )}
-      <TopRightShiningLight />
-      <TopLeftShiningLight />
-      <div className="relative w-full pt-6 overflow-hidden">
-        <div className="container relative mx-auto">
-          <Image
-            src={mainboard}
-            alt="Animated SVG showing computer circuits lighting up"
-            className="absolute inset-x-0 flex  xl:hidden -z-10 scale-[2]"
-            priority
-          />
-        </div>
-        <div className="container relative flex flex-col mx-auto">
-          <Section>
-            <Hero />
-          </Section>
-        </div>
-      </div>
+      <Hero dictionary={dictionary} />
+      <Mockup />
+      <Cases dictionary={dictionary} />
+      <Features dictionary={dictionary} />
+      <Stats dictionary={dictionary} />
+      <Testimonials dictionary={dictionary} />
+      <FAQ dictionary={dictionary} />
+      <CTA dictionary={dictionary} />
     </>
   );
 };
