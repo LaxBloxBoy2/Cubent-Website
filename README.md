@@ -1,5 +1,6 @@
 # 🤖 Cubent Coder
 
+<!-- Main project documentation for the Cubent ecosystem website -->
 **AI-Powered Autonomous Coding Agent for Visual Studio Code**
 
 🚀 VS Code Extension Integration Ready!
