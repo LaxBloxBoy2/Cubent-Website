@@ -86,9 +86,9 @@ export const POST = async (request: Request) => {
     const { randomBytes } = await import('crypto');
     const authToken = `cubent_ext_${randomBytes(32).toString('hex')}`;
 
-    // Set expiration time (10 minutes from now)
-    // Note: Clerk session expiration is handled by Clerk, but we enforce our own expiration
-    const expiresAt = new Date(Date.now() + 10 * 60 * 1000);
+    // Set expiration time (30 days from now to match JWT token lifetime)
+    // Changed from 10 minutes to 30 days to prevent premature token expiration
+    const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
 
     // Clean up any existing pending logins for this device
     await database.pendingLogin.deleteMany({

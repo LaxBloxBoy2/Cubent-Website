@@ -25,9 +25,10 @@ export const cleanupExpiredTokens = async (): Promise<number> => {
 };
 
 /**
- * Clean up tokens older than a specific age (default: 1 hour)
+ * Clean up tokens older than a specific age (default: 30 days)
+ * Changed from 1 hour to 30 days to match JWT token lifetime
  */
-export const cleanupOldTokens = async (maxAgeMinutes = 60): Promise<number> => {
+export const cleanupOldTokens = async (maxAgeMinutes = 30 * 24 * 60): Promise<number> => {
   try {
     const cutoffTime = new Date(Date.now() - maxAgeMinutes * 60 * 1000);
     

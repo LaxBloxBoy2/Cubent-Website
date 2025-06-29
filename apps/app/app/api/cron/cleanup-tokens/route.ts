@@ -22,9 +22,10 @@ export const GET = async (request: NextRequest) => {
 
     // Clean up expired tokens (past expiration time)
     const expiredCount = await cleanupExpiredTokens();
-    
-    // Clean up old tokens (older than 2 hours, regardless of expiration)
-    const oldCount = await cleanupOldTokens(120);
+
+    // Clean up old tokens (older than 30 days, regardless of expiration)
+    // Changed from 2 hours to 30 days to match JWT token lifetime
+    const oldCount = await cleanupOldTokens(30 * 24 * 60); // 30 days in minutes
 
     const totalCleaned = expiredCount + oldCount;
 

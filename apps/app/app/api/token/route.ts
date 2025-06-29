@@ -114,8 +114,9 @@ export const GET = async (request: NextRequest) => {
     await database.pendingLogin.update({
       where: { id: pendingLogin.id },
       data: {
-        // Set expiration to 5 minutes from now to allow extension auth
-        expiresAt: new Date(Date.now() + 5 * 60 * 1000)
+        // Set expiration to 30 days from now to match JWT token lifetime
+        // Changed from 5 minutes to 30 days to prevent premature token expiration
+        expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
       },
     });
 
