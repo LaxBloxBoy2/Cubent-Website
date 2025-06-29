@@ -13,55 +13,55 @@ type HeroProps = {
 // Hero component for the homepage
 export const Hero = async ({ dictionary }: HeroProps) => (
   <div className="w-full relative overflow-hidden">
-    {/* EXACT dashed grid lines from HTML example */}
+    {/* Evenly spaced dashed grid lines that frame content without conflicting */}
     <div className="absolute inset-0 pointer-events-none z-10">
-      {/* Left vertical dashed line - 92px from left edge */}
+      {/* Left vertical dashed line */}
       <div
         className="absolute top-0 bottom-0 w-px"
         style={{
-          left: '92px',
+          left: '10%',
           background: 'repeating-linear-gradient(to bottom, #3e3e3e 0 5px, transparent 5px 11px)'
         }}
       />
 
-      {/* Right vertical dashed line - 92px from right edge */}
+      {/* Right vertical dashed line */}
       <div
         className="absolute top-0 bottom-0 w-px"
         style={{
-          right: '92px',
+          right: '10%',
           background: 'repeating-linear-gradient(to bottom, #3e3e3e 0 5px, transparent 5px 11px)'
         }}
       />
 
-      {/* Top horizontal dashed line - 128px from top */}
+      {/* Top horizontal dashed line - above content */}
       <div
         className="absolute h-px"
         style={{
-          top: '128px',
-          left: '92px',
-          right: '92px',
+          top: '20px',
+          left: '10%',
+          right: '10%',
           background: 'repeating-linear-gradient(to right, #3e3e3e 0 5px, transparent 5px 11px)'
         }}
       />
 
-      {/* Bottom horizontal dashed line - 128px from bottom */}
+      {/* Middle horizontal line - between announcement and headline */}
       <div
         className="absolute h-px"
         style={{
-          bottom: '128px',
-          left: '92px',
-          right: '92px',
+          top: '25%',
+          left: '10%',
+          right: '10%',
           background: 'repeating-linear-gradient(to right, #3e3e3e 0 5px, transparent 5px 11px)'
         }}
       />
 
-      {/* Additional bottom horizontal line to close the grid */}
+      {/* Bottom horizontal line - below buttons */}
       <div
         className="absolute h-px"
         style={{
-          bottom: '64px',
-          left: '92px',
-          right: '92px',
+          bottom: '20px',
+          left: '10%',
+          right: '10%',
           background: 'repeating-linear-gradient(to right, #3e3e3e 0 5px, transparent 5px 11px)'
         }}
       />
