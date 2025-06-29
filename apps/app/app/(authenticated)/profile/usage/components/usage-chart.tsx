@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo } from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, Area, AreaChart } from 'recharts';
 
 interface UsageMetric {
   date: Date;
@@ -75,7 +75,7 @@ export function UsageChart({ data }: UsageChartProps) {
     <div className="w-full">
       <div className="h-80 w-full">
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart
+          <LineChart
             data={chartData}
             margin={{
               top: 20,
@@ -84,34 +84,64 @@ export function UsageChart({ data }: UsageChartProps) {
               bottom: 60,
             }}
           >
-            <CartesianGrid strokeDasharray="3 3" className="opacity-30" />
+            <defs>
+              <linearGradient id="cubentUnitsGradient" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3}/>
+                <stop offset="95%" stopColor="#3b82f6" stopOpacity={0.05}/>
+              </linearGradient>
+              <linearGradient id="requestsGradient" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="#10b981" stopOpacity={0.3}/>
+                <stop offset="95%" stopColor="#10b981" stopOpacity={0.05}/>
+              </linearGradient>
+            </defs>
+            <CartesianGrid
+              strokeDasharray="1 1"
+              className="opacity-30"
+              stroke="#374151"
+              horizontal={true}
+              vertical={true}
+            />
             <XAxis
               dataKey="date"
-              tick={{ fontSize: 12 }}
+              tick={{ fontSize: 11, fill: '#9CA3AF' }}
               angle={-45}
               textAnchor="end"
               height={60}
-              interval={Math.floor(chartData.length / 8)} // Show every ~4th label to avoid crowding
+              interval={Math.floor(chartData.length / 8)}
+              axisLine={{ stroke: '#374151', strokeWidth: 1 }}
+              tickLine={{ stroke: '#374151', strokeWidth: 1 }}
             />
             <YAxis
-              tick={{ fontSize: 12 }}
-              label={{ value: 'Usage', angle: -90, position: 'insideLeft' }}
+              tick={{ fontSize: 11, fill: '#9CA3AF' }}
+              label={{ value: 'Usage', angle: -90, position: 'insideLeft', style: { textAnchor: 'middle', fill: '#9CA3AF' } }}
+              axisLine={{ stroke: '#374151', strokeWidth: 1 }}
+              tickLine={{ stroke: '#374151', strokeWidth: 1 }}
             />
             <Tooltip content={<CustomTooltip />} />
             <Legend />
-            <Bar
+
+            {/* Line for Cubent Units with area fill */}
+            <Line
+              type="monotone"
               dataKey="cubentUnits"
               name="Cubent Units"
-              fill="#3b82f6"
-              radius={[2, 2, 0, 0]}
+              stroke="#3b82f6"
+              strokeWidth={3}
+              dot={{ fill: '#3b82f6', strokeWidth: 2, r: 4 }}
+              activeDot={{ r: 6, stroke: '#3b82f6', strokeWidth: 3, fill: '#ffffff' }}
             />
-            <Bar
+
+            {/* Line for Messages */}
+            <Line
+              type="monotone"
               dataKey="requests"
               name="Messages"
-              fill="#10b981"
-              radius={[2, 2, 0, 0]}
+              stroke="#10b981"
+              strokeWidth={3}
+              dot={{ fill: '#10b981', strokeWidth: 2, r: 4 }}
+              activeDot={{ r: 6, stroke: '#10b981', strokeWidth: 3, fill: '#ffffff' }}
             />
-          </BarChart>
+          </LineChart>
         </ResponsiveContainer>
       </div>
     </div>
