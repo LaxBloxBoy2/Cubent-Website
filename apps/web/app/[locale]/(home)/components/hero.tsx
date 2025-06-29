@@ -12,7 +12,50 @@ type HeroProps = {
 
 // Hero component for the homepage
 export const Hero = async ({ dictionary }: HeroProps) => (
-  <div className="w-full">
+  <div className="w-full relative overflow-hidden">
+    {/* EXACT dashed grid lines from HTML example */}
+    <div className="absolute inset-0 pointer-events-none z-10">
+      {/* Left vertical dashed line - 92px from left edge */}
+      <div
+        className="absolute top-0 bottom-0 w-px"
+        style={{
+          left: '92px',
+          background: 'repeating-linear-gradient(to bottom, #3e3e3e 0 5px, transparent 5px 11px)'
+        }}
+      />
+
+      {/* Right vertical dashed line - 92px from right edge */}
+      <div
+        className="absolute top-0 bottom-0 w-px"
+        style={{
+          right: '92px',
+          background: 'repeating-linear-gradient(to bottom, #3e3e3e 0 5px, transparent 5px 11px)'
+        }}
+      />
+
+      {/* Top horizontal dashed line - 128px from top */}
+      <div
+        className="absolute h-px"
+        style={{
+          top: '128px',
+          left: '92px',
+          right: '92px',
+          background: 'repeating-linear-gradient(to right, #3e3e3e 0 5px, transparent 5px 11px)'
+        }}
+      />
+
+      {/* Bottom horizontal dashed line - 128px from bottom */}
+      <div
+        className="absolute h-px"
+        style={{
+          bottom: '128px',
+          left: '92px',
+          right: '92px',
+          background: 'repeating-linear-gradient(to right, #3e3e3e 0 5px, transparent 5px 11px)'
+        }}
+      />
+    </div>
+
     <div className="container mx-auto px-4 sm:px-6 lg:px-8">
       <div className="flex flex-col items-center justify-center gap-8 pt-6 pb-8 lg:pt-12 lg:pb-12">
         <div>
