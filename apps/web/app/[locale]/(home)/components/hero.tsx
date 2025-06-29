@@ -54,6 +54,17 @@ export const Hero = async ({ dictionary }: HeroProps) => (
           background: 'repeating-linear-gradient(to right, #3e3e3e 0 5px, transparent 5px 11px)'
         }}
       />
+
+      {/* Additional bottom horizontal line to close the grid */}
+      <div
+        className="absolute h-px"
+        style={{
+          bottom: '64px',
+          left: '92px',
+          right: '92px',
+          background: 'repeating-linear-gradient(to right, #3e3e3e 0 5px, transparent 5px 11px)'
+        }}
+      />
     </div>
 
     <div className="container mx-auto px-4 sm:px-6 lg:px-8">
