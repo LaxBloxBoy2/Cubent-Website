@@ -65,8 +65,10 @@ export const AuthProvider = ({
     identityPreview: 'hidden',
     identityPreviewText: 'hidden',
     identityPreviewEditButton: 'hidden',
-    // Card styling with solid white background - ROUNDED modal box with EVEN LESS padding
-    card: '!bg-white !shadow-none !border-0 !rounded-3xl p-4 mx-auto',
+    // Card styling with solid white background - FORCE ROUNDED modal box
+    card: '!bg-white !shadow-none !border-0 !rounded-3xl p-4 mx-auto !overflow-hidden',
+    main: '!bg-white !rounded-3xl !overflow-hidden',
+    modalContent: '!bg-white !border-0 !shadow-none !rounded-3xl !overflow-hidden',
     rootBox: 'relative !bg-white !rounded-3xl shadow-2xl min-w-[400px] mx-auto !border-0',
     main: '!bg-white !border-0 !shadow-none',
     modalContent: '!bg-white !border-0 !shadow-none',

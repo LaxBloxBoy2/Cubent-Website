@@ -226,3 +226,22 @@ button:has([data-testid*="google"]) {
 .cl-footer {
   margin-top: 8px !important;
 }
+
+/* FORCE ROUNDING ON THE ACTUAL MODAL CONTENT BOX */
+.cl-modalContent,
+.cl-card,
+.cl-main,
+div[data-testid="sign-in-card"],
+div[class*="cl-card"],
+div[class*="cl-main"],
+div[class*="cl-modalContent"] {
+  border-radius: 24px !important;
+  overflow: hidden !important;
+}
+
+/* Target the specific modal container */
+.cl-signIn-start .cl-card,
+.cl-signUp-start .cl-card {
+  border-radius: 24px !important;
+  overflow: hidden !important;
+}
