@@ -54,8 +54,7 @@ export const AuthProvider = ({
     organizationSwitcherTriggerIcon: 'text-muted-foreground',
     organizationPreview__organizationSwitcherTrigger: 'gap-2',
     organizationPreviewAvatarContainer: 'shrink-0',
-    // Form elements with orange accents and larger sizing
-    formFieldInput: 'border-gray-300 focus:border-orange-500 focus:ring-orange-500/20 bg-white py-3 px-4 text-base',
+    // Form elements with orange accents and larger sizing - REMOVED DUPLICATE (moved to bottom with grey background)
     // Header elements - completely hidden
     header: 'hidden',
     headerTitle: 'hidden',
