@@ -55,14 +55,14 @@ export const AuthProvider = ({
     organizationPreviewAvatarContainer: 'shrink-0',
     // Form elements with orange accents
     formButtonPrimary: 'bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white shadow-lg transition-all duration-200',
-    formFieldInput: 'border-gray-600 focus:border-orange-500 focus:ring-orange-500/20 bg-background/50 backdrop-blur-sm',
-    card: 'bg-transparent shadow-none border-none',
-    rootBox: 'bg-transparent',
+    formFieldInput: 'border-gray-300 focus:border-orange-500 focus:ring-orange-500/20 bg-white',
+    card: 'bg-white shadow-2xl border border-gray-200 rounded-2xl',
+    rootBox: 'bg-white rounded-2xl shadow-2xl',
     // Header styling
-    headerTitle: 'text-foreground font-semibold text-xl',
-    headerSubtitle: 'text-muted-foreground text-sm',
+    headerTitle: 'text-gray-900 font-semibold text-xl',
+    headerSubtitle: 'text-gray-600 text-sm',
     // Footer links with orange hover
-    footerActionLink: 'text-orange-400 hover:text-orange-300 transition-colors',
+    footerActionLink: 'text-orange-500 hover:text-orange-600 transition-colors',
   };
 
   const layout: Theme['layout'] = {

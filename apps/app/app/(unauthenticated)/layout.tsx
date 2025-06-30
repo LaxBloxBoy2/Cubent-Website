@@ -98,15 +98,12 @@ const AuthLayout = ({ children }: AuthLayoutProps) => (
       <ModeToggle />
     </div>
 
-    {/* Centered authentication modal */}
+    {/* Centered authentication content */}
     <div className="relative z-20 flex min-h-dvh items-center justify-center p-4">
       <div className="w-full max-w-md">
-        {/* Modal container with pure white background */}
-        <div className="relative rounded-2xl shadow-2xl shadow-black/50 p-8 bg-white" style={{backgroundColor: '#ffffff !important'}}>
-          {/* Content */}
-          <div className="relative z-10 space-y-6">
-            {children}
-          </div>
+        {/* Let Clerk handle its own styling */}
+        <div className="space-y-6">
+          {children}
         </div>
       </div>
     </div>
