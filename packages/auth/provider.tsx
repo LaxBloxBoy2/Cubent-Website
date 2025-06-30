@@ -66,13 +66,15 @@ export const AuthProvider = ({
     identityPreview: 'hidden',
     identityPreviewText: 'hidden',
     identityPreviewEditButton: 'hidden',
-    // Card styling with solid white background and no internal shadows
-    card: '!bg-white !shadow-none !border-0 rounded-3xl p-8 mx-auto',
-    rootBox: 'relative !bg-white rounded-3xl shadow-2xl min-w-[400px] mx-auto !border-0',
+    // Card styling with solid white background and no internal shadows - more rounded
+    card: '!bg-white !shadow-none !border-0 rounded-[24px] p-8 mx-auto',
+    rootBox: 'relative !bg-white rounded-[24px] shadow-2xl min-w-[400px] mx-auto !border-0',
     main: '!bg-white !border-0 !shadow-none',
     modalContent: '!bg-white !border-0 !shadow-none',
-    // Force Continue button to be orange
-    formButtonPrimary: '!bg-gradient-to-r !from-orange-500 !to-orange-600 hover:!from-orange-600 hover:!to-orange-700 !text-white !shadow-lg !transition-all !duration-200 !py-3 !px-6 !text-base !w-full !rounded-lg !border-0',
+    // Style the form button (Continue button) - reduced height
+    formButtonPrimary: '!bg-gradient-to-r !from-orange-500 !to-orange-600 hover:!from-orange-600 hover:!to-orange-700 !text-white !shadow-md !transition-all !duration-200 !py-2 !px-6 !text-base !font-medium !w-full !rounded-xl !border-0',
+    // Style Google button
+    socialButtonsBlockButton: '!bg-slate-50 !border !border-slate-200 hover:!bg-slate-100 !text-gray-700 !shadow-sm hover:!shadow-md !transition-all !duration-200 !py-3 !px-6 !rounded-xl',
   };
 
   const layout: Theme['layout'] = {

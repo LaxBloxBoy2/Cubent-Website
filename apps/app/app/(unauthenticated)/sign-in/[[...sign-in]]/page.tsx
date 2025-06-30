@@ -32,15 +32,29 @@ const SignInPage = async ({ searchParams }: SignInPageProps) => {
 
   return (
     <>
-      <div className="flex flex-col space-y-3 text-center">
-        <div className="space-y-2">
-          <h1 className="font-semibold text-2xl tracking-tight text-white">
-            {title}
+      <div className="flex flex-col space-y-4 text-center">
+        <div className="space-y-3">
+          {/* Logo and brand */}
+          <div className="inline-flex items-center gap-3 mb-2">
+            <div className="w-10 h-10 bg-gradient-to-br from-orange-400 to-orange-600 rounded-2xl flex items-center justify-center shadow-lg">
+              <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+            </div>
+            <h2 className="text-2xl font-bold bg-gradient-to-r from-white to-gray-200 bg-clip-text text-transparent">
+              Cubent
+            </h2>
+          </div>
+
+          {/* Welcome message */}
+          <h1 className="font-bold text-3xl tracking-tight text-white">
+            ✨ Welcome back!
           </h1>
-          <p className="text-muted-foreground text-sm leading-relaxed">{description}</p>
+          <p className="text-gray-300 text-lg font-medium">Ready to dive back in?</p>
+          <p className="text-muted-foreground text-sm leading-relaxed">Sign in to continue your journey</p>
         </div>
         {/* Orange accent line */}
-        <div className="mx-auto w-16 h-px bg-gradient-to-r from-transparent via-orange-500 to-transparent opacity-60" />
+        <div className="mx-auto w-20 h-px bg-gradient-to-r from-transparent via-orange-500 to-transparent opacity-80" />
       </div>
       <SignIn fallbackRedirectUrl={fallbackRedirectUrl} />
       {/* Privacy and Terms text */}
