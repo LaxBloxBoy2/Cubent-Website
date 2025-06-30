@@ -77,4 +77,88 @@ button[data-localization-key*="formButtonPrimary"]:hover,
 button[type="submit"]:hover {
   background: linear-gradient(to right, #ea580c, #dc2626) !important;
   background-color: #ea580c !important;
+  transform: translateY(-1px) !important;
+}
+
+/* Style Google button with background - MORE SPECIFIC SELECTORS */
+.cl-socialButtonsBlockButton,
+button[data-localization-key*="socialButtonsBlockButton"],
+button[data-localization-key*="Continue with Google"],
+.cl-socialButtons button,
+.cl-socialButtonsProviderIcon__google {
+  background-color: #f8fafc !important;
+  border: 1px solid #e2e8f0 !important;
+  color: #374151 !important;
+  padding: 12px 24px !important;
+  border-radius: 8px !important;
+  font-weight: 500 !important;
+  transition: all 0.2s !important;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+}
+
+.cl-socialButtonsBlockButton:hover,
+button[data-localization-key*="socialButtonsBlockButton"]:hover,
+button[data-localization-key*="Continue with Google"]:hover,
+.cl-socialButtons button:hover {
+  background-color: #f1f5f9 !important;
+  border-color: #cbd5e1 !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+}
+
+/* Style email input field with grey background - MORE SPECIFIC SELECTORS */
+.cl-formFieldInput,
+input[type="email"],
+input[name="identifier"],
+input[placeholder*="email"],
+input[placeholder*="Enter your email"],
+.cl-field input,
+.cl-formField input,
+.cl-formFieldInput__identifier {
+  background-color: #f8fafc !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 8px !important;
+  padding: 12px 16px !important;
+  font-size: 16px !important;
+  transition: all 0.2s !important;
+  color: #374151 !important;
+}
+
+.cl-formFieldInput:focus,
+input[type="email"]:focus,
+input[name="identifier"]:focus,
+input[placeholder*="email"]:focus,
+input[placeholder*="Enter your email"]:focus,
+.cl-field input:focus,
+.cl-formField input:focus,
+.cl-formFieldInput__identifier:focus {
+  background-color: #ffffff !important;
+  border-color: #f97316 !important;
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1) !important;
+  outline: none !important;
+}
+
+/* AGGRESSIVE SELECTORS - Force grey backgrounds on ALL possible elements */
+[data-testid*="email"] input,
+[data-testid*="identifier"] input,
+div[class*="formField"] input,
+div[class*="field"] input,
+input[autocomplete="email"],
+input[type="text"][name*="email"],
+input[type="text"][name*="identifier"] {
+  background-color: #f8fafc !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 8px !important;
+}
+
+/* Force Google button styling */
+button[class*="social"],
+button[class*="provider"],
+div[class*="social"] button,
+div[class*="provider"] button,
+button:has(svg[class*="google"]),
+button:has([data-testid*="google"]) {
+  background-color: #f8fafc !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 8px !important;
 }
