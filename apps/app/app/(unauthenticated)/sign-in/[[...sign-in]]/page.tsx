@@ -37,7 +37,7 @@ const SignInPage = async ({ searchParams }: SignInPageProps) => {
           <h1 className="font-semibold text-2xl tracking-tight text-white">
             {title}
           </h1>
-          <p className="text-muted-foreground text-sm leading-relaxed">{description}</p>
+          <p className="text-white text-sm leading-relaxed">{description}</p>
         </div>
         {/* Orange accent line */}
         <div className="mx-auto w-16 h-px bg-gradient-to-r from-transparent via-orange-500 to-transparent opacity-60" />
