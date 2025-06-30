@@ -2,14 +2,15 @@ import { showBetaFeature } from '@repo/feature-flags';
 import { getDictionary } from '@repo/internationalization';
 import { createMetadata } from '@repo/seo/metadata';
 import type { Metadata } from 'next';
-import { Cases } from './components/cases';
+import { Community } from './components/community';
 import { CTA } from './components/cta';
 import { FAQ } from './components/faq';
-import { Features } from './components/features';
+
 import { Hero } from './components/hero';
 import { Mockup } from './components/mockup';
 import { Stats } from './components/stats';
 import { Testimonials } from './components/testimonials';
+import { TrustedBy } from './components/trusted-by';
 
 type HomeProps = {
   params: Promise<{
@@ -39,9 +40,9 @@ const Home = async ({ params }: HomeProps) => {
         </div>
       )}
       <Hero dictionary={dictionary} />
+      <TrustedBy dictionary={dictionary} />
       <Mockup />
-      <Cases dictionary={dictionary} />
-      <Features dictionary={dictionary} />
+      <Community dictionary={dictionary} />
       <Stats dictionary={dictionary} />
       <Testimonials dictionary={dictionary} />
       <FAQ dictionary={dictionary} />

@@ -31,11 +31,6 @@ export const Header = ({ dictionary }: HeaderProps) => {
 
   const navigationItems = [
     {
-      title: dictionary.web.header.home,
-      href: '/',
-      description: '',
-    },
-    {
       title: 'Features',
       description: 'Discover what makes Cubent Coder powerful',
       items: [
@@ -72,9 +67,20 @@ export const Header = ({ dictionary }: HeaderProps) => {
 
   const [isOpen, setOpen] = useState(false);
   return (
-    <header className="sticky top-0 left-0 z-40 w-full border-b bg-background">
-      <div className="relative w-full max-w-none flex min-h-20 flex-row items-center justify-between" style={{paddingInline: 'clamp(1rem, 2.5%, 2rem)'}}>
-        <div className="flex items-center gap-2">
+    <header className="sticky top-0 left-0 z-40 w-full bg-background/20 backdrop-blur-md supports-[backdrop-filter]:bg-background/10">
+      {/* Early Access Banner */}
+      <div className="w-full bg-gray-800/60 border-b border-gray-600/20 text-gray-200 py-2.5 px-4 text-center text-sm backdrop-blur-sm">
+        <span className="font-medium">Early Access:</span> We released the Byak plan -
+        <Button variant="link" className="text-gray-200 hover:text-white underline p-0 ml-1 h-auto font-medium text-sm" asChild>
+          <Link href="https://app.cubent.dev/sign-in">
+            Start your free trial
+          </Link>
+        </Button>
+      </div>
+
+      <div className="border-b">
+        <div className="relative w-full max-w-none flex min-h-20 flex-row items-center justify-between" style={{paddingInline: 'clamp(1rem, 2.5%, 2rem)'}}>
+        <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
           <Image
             src={Logo}
             alt="Cubent Logo"
@@ -83,7 +89,7 @@ export const Header = ({ dictionary }: HeaderProps) => {
             className="dark:invert"
           />
           <p className="whitespace-nowrap font-semibold">Cubent</p>
-        </div>
+        </Link>
         <div className="hidden flex-row items-center justify-center gap-3 lg:flex absolute left-1/2 transform -translate-x-1/2 top-1/2 -translate-y-1/2">
           <NavigationMenu className="flex items-center justify-center">
             <NavigationMenuList className="flex flex-row justify-center gap-3">
@@ -214,6 +220,7 @@ export const Header = ({ dictionary }: HeaderProps) => {
             </div>
           )}
         </div>
+      </div>
       </div>
     </header>
   );

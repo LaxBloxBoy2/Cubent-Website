@@ -84,28 +84,18 @@ export function UsageChart({ data }: UsageChartProps) {
               bottom: 60,
             }}
           >
-            <CartesianGrid
-              strokeDasharray="3 3"
-              className="opacity-30"
-              stroke="#374151"
-              horizontal={true}
-              vertical={false}
-            />
+            <CartesianGrid strokeDasharray="3 3" className="opacity-30" />
             <XAxis
               dataKey="date"
-              tick={{ fontSize: 12, fill: '#9CA3AF' }}
+              tick={{ fontSize: 12 }}
               angle={-45}
               textAnchor="end"
               height={60}
               interval={Math.floor(chartData.length / 8)} // Show every ~4th label to avoid crowding
-              axisLine={{ stroke: '#374151', strokeWidth: 1 }}
-              tickLine={{ stroke: '#374151', strokeWidth: 1 }}
             />
             <YAxis
-              tick={{ fontSize: 12, fill: '#9CA3AF' }}
-              label={{ value: 'Usage', angle: -90, position: 'insideLeft', style: { textAnchor: 'middle', fill: '#9CA3AF' } }}
-              axisLine={{ stroke: '#374151', strokeWidth: 1 }}
-              tickLine={{ stroke: '#374151', strokeWidth: 1 }}
+              tick={{ fontSize: 12 }}
+              label={{ value: 'Usage', angle: -90, position: 'insideLeft' }}
             />
             <Tooltip content={<CustomTooltip />} />
             <Legend />
@@ -113,13 +103,13 @@ export function UsageChart({ data }: UsageChartProps) {
               dataKey="cubentUnits"
               name="Cubent Units"
               fill="#3b82f6"
-              radius={[4, 4, 0, 0]}
+              radius={[2, 2, 0, 0]}
             />
             <Bar
               dataKey="requests"
               name="Messages"
               fill="#10b981"
-              radius={[4, 4, 0, 0]}
+              radius={[2, 2, 0, 0]}
             />
           </BarChart>
         </ResponsiveContainer>
