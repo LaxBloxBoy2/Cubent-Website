@@ -46,9 +46,11 @@ export const SignUp = ({
         // Additional elements to hide
         footerActionLinkPages: 'hidden',
         footerActionLinkPagesText: 'hidden',
-        // Clean styling without complex selectors
-        rootBox: 'relative bg-white rounded-2xl shadow-2xl min-w-[400px] mx-auto',
-        card: 'bg-white shadow-2xl border border-gray-200 rounded-2xl p-8 mx-auto',
+        // Clean styling with solid white background
+        rootBox: 'relative !bg-white rounded-2xl shadow-2xl min-w-[400px] mx-auto',
+        card: '!bg-white shadow-2xl border border-gray-200 rounded-2xl p-8 mx-auto',
+        main: '!bg-white',
+        modalContent: '!bg-white',
       },
     }}
   />

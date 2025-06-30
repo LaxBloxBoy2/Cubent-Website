@@ -78,9 +78,11 @@ export const AuthProvider = ({
     // Clerk branding and links
     footerActionLinkPages: 'hidden',
     footerActionLinkPagesText: 'hidden',
-    // Card styling with better centering
-    card: 'bg-white shadow-2xl border border-gray-200 rounded-2xl p-8 mx-auto',
-    rootBox: 'bg-white rounded-2xl shadow-2xl min-w-[400px] mx-auto',
+    // Card styling with solid white background
+    card: '!bg-white shadow-2xl border border-gray-200 rounded-2xl p-8 mx-auto',
+    rootBox: '!bg-white rounded-2xl shadow-2xl min-w-[400px] mx-auto',
+    main: '!bg-white',
+    modalContent: '!bg-white',
   };
 
   const layout: Theme['layout'] = {

@@ -35,3 +35,22 @@
   height: 0 !important;
   overflow: hidden !important;
 }
+
+/* Ensure modal background is fully opaque white */
+.cl-rootBox,
+.cl-card,
+.cl-main,
+.cl-modalContent {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+}
+
+/* Fix any transparent or semi-transparent backgrounds */
+.cl-rootBox * {
+  background-color: transparent;
+}
+
+.cl-rootBox,
+.cl-card {
+  background-color: #ffffff !important;
+}
