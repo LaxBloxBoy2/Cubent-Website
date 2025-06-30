@@ -57,8 +57,6 @@ export const AuthProvider = ({
     // Form elements with orange accents and larger sizing
     formButtonPrimary: 'bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white shadow-lg transition-all duration-200 py-3 px-6 text-base',
     formFieldInput: 'border-gray-300 focus:border-orange-500 focus:ring-orange-500/20 bg-white py-3 px-4 text-base',
-    card: 'bg-white shadow-2xl border border-gray-200 rounded-2xl p-8',
-    rootBox: 'bg-white rounded-2xl shadow-2xl min-w-[400px]',
     // Header elements - completely hidden
     header: 'hidden',
     headerTitle: 'hidden',
