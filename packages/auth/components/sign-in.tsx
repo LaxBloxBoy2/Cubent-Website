@@ -40,8 +40,6 @@ export const SignIn = ({
         card: '!bg-white !shadow-none !border-0 !rounded-3xl p-4 mx-auto !overflow-hidden',
         main: '!bg-white !rounded-3xl !overflow-hidden',
         modalContent: '!bg-white !border-0 !shadow-none !rounded-3xl !overflow-hidden',
-        main: '!bg-white !border-0 !shadow-none',
-        modalContent: '!bg-white !border-0 !shadow-none',
         // Style the form button (Continue button) - reduced height, NO ROUNDING
         formButtonPrimary: '!bg-gradient-to-r !from-orange-500 !to-orange-600 hover:!from-orange-600 hover:!to-orange-700 !text-white !shadow-md !transition-all !duration-200 !py-1.5 !px-6 !text-base !font-medium !w-full !rounded-none !border-0',
         // Style Google button with background - FORCE ICON DISPLAY
