@@ -36,8 +36,9 @@ export const AuthProvider = ({
     colorWarning: '#f59e0b', // amber-500
     colorDanger: '#ef4444', // red-500
     colorNeutral: '#6b7280', // gray-500
+    colorText: '#1f2937', // darker gray-800 for main text
     colorTextOnPrimaryBackground: '#ffffff',
-    colorTextSecondary: '#6b7280', // gray-500 for better readability
+    colorTextSecondary: '#374151', // darker gray-700 for secondary text like "Continue with Google"
     colorInputBackground: '#ffffff', // white background for inputs
     colorInputText: '#111827', // dark text for inputs
     borderRadius: '0.75rem', // rounded-xl
