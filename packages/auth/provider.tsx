@@ -23,12 +23,12 @@ export const AuthProvider = ({
   const baseTheme = isDark ? dark : undefined;
 
   const variables: Theme['variables'] = {
-    fontFamily: 'var(--font-sans)',
-    fontFamilyButtons: 'var(--font-sans)',
+    fontFamily: 'system-ui, -apple-system, sans-serif',
+    fontFamilyButtons: 'system-ui, -apple-system, sans-serif',
     fontWeight: {
-      bold: 'var(--font-weight-bold)',
-      normal: 'var(--font-weight-normal)',
-      medium: 'var(--font-weight-medium)',
+      bold: 700,
+      normal: 400,
+      medium: 500,
     },
     // Orange color theming
     colorPrimary: '#f97316', // orange-500
@@ -37,9 +37,9 @@ export const AuthProvider = ({
     colorDanger: '#ef4444', // red-500
     colorNeutral: '#6b7280', // gray-500
     colorTextOnPrimaryBackground: '#ffffff',
-    colorTextSecondary: '#9ca3af', // gray-400
-    colorInputBackground: 'rgba(0, 0, 0, 0.1)',
-    colorInputText: 'var(--foreground)',
+    colorTextSecondary: '#6b7280', // gray-500 for better readability
+    colorInputBackground: '#ffffff', // white background for inputs
+    colorInputText: '#111827', // dark text for inputs
     borderRadius: '0.75rem', // rounded-xl
     spacingUnit: '1rem',
   };
