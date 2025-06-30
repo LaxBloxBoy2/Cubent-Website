@@ -46,9 +46,9 @@ export const SignIn = ({
         // Additional elements to hide
         footerActionLinkPages: 'hidden',
         footerActionLinkPagesText: 'hidden',
-        // Use display none for stubborn elements
-        rootBox: 'relative [&_.cl-footer]:!hidden [&_.cl-footerAction]:!hidden [&_.cl-footerActionLink]:!hidden [&_.cl-footerPages]:!hidden [&_.cl-header]:!hidden',
-        card: 'bg-white shadow-2xl border border-gray-200 rounded-2xl p-8 mx-auto [&_.cl-footer]:!hidden [&_.cl-footerAction]:!hidden [&_.cl-footerActionLink]:!hidden [&_.cl-footerPages]:!hidden [&_.cl-header]:!hidden',
+        // Clean styling without complex selectors
+        rootBox: 'relative bg-white rounded-2xl shadow-2xl min-w-[400px] mx-auto',
+        card: 'bg-white shadow-2xl border border-gray-200 rounded-2xl p-8 mx-auto',
       },
     }}
   />

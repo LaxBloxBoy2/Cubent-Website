@@ -98,51 +98,7 @@ const AuthLayout = ({ children }: AuthLayoutProps) => (
       <ModeToggle />
     </div>
 
-    {/* Global CSS to hide Clerk internal elements */}
-    <style jsx global>{`
-      /* Hide all Clerk footer and header elements */
-      .cl-footer,
-      .cl-footerAction,
-      .cl-footerActionLink,
-      .cl-footerActionText,
-      .cl-footerPages,
-      .cl-footerPagesLink,
-      .cl-header,
-      .cl-headerTitle,
-      .cl-headerSubtitle,
-      .cl-alternativeMethodsBlockButton,
-      .cl-identityPreview,
-      .cl-footerActionLinkText,
-      .cl-footerActionLinkPages,
-      .cl-footerActionLinkPagesText,
-      /* Additional selectors for stubborn elements */
-      [data-localization-key="signIn.alternativeMethodsBlockButton"],
-      [data-localization-key="footerActionLink__signUp"],
-      [data-localization-key="footerPages__privacy"],
-      [data-localization-key="footerPages__terms"],
-      [data-localization-key="footerActionText"],
-      /* Hide any element containing "Sign up", "Privacy", "Terms", "Secured by" */
-      .cl-internal-b3fm6y,
-      .cl-internal-1w8pvrx,
-      .cl-internal-1mxqlm0,
-      .cl-internal-b3fm6y > *,
-      .cl-internal-1w8pvrx > *,
-      .cl-internal-1mxqlm0 > * {
-        display: none !important;
-        visibility: hidden !important;
-        opacity: 0 !important;
-        height: 0 !important;
-        overflow: hidden !important;
-      }
-
-      /* Hide any text containing these phrases */
-      .cl-rootBox *:has-text("Sign up"),
-      .cl-rootBox *:has-text("Privacy"),
-      .cl-rootBox *:has-text("Terms"),
-      .cl-rootBox *:has-text("Secured by") {
-        display: none !important;
-      }
-    `}</style>
+    {/* Global CSS to hide Clerk internal elements - moved to global CSS file */}
 
     {/* Centered authentication content */}
     <div className="relative z-20 flex min-h-dvh items-center justify-center p-4">
