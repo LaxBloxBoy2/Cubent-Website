@@ -67,11 +67,13 @@ export const AuthProvider = ({
     identityPreview: 'hidden',
     identityPreviewText: 'hidden',
     identityPreviewEditButton: 'hidden',
-    // Card styling with solid white background
-    card: '!bg-white shadow-2xl border border-gray-200 rounded-2xl p-8 mx-auto',
-    rootBox: '!bg-white rounded-2xl shadow-2xl min-w-[400px] mx-auto',
-    main: '!bg-white',
-    modalContent: '!bg-white',
+    // Card styling with solid white background and no internal shadows
+    card: '!bg-white !shadow-none !border-0 rounded-3xl p-8 mx-auto',
+    rootBox: 'relative !bg-white rounded-3xl shadow-2xl min-w-[400px] mx-auto !border-0',
+    main: '!bg-white !border-0 !shadow-none',
+    modalContent: '!bg-white !border-0 !shadow-none',
+    // Force Continue button to be orange
+    formButtonPrimary: '!bg-gradient-to-r !from-orange-500 !to-orange-600 hover:!from-orange-600 hover:!to-orange-700 !text-white !shadow-lg !transition-all !duration-200 !py-3 !px-6 !text-base !w-full !rounded-lg !border-0',
   };
 
   const layout: Theme['layout'] = {

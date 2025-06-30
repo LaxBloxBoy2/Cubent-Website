@@ -24,13 +24,23 @@
   overflow: hidden !important;
 }
 
-/* Ensure modal background is fully opaque white */
+/* Ensure modal background is fully opaque white and remove all borders/shadows */
 .cl-rootBox,
 .cl-card,
 .cl-main,
 .cl-modalContent {
   background-color: #ffffff !important;
   background: #ffffff !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Remove internal borders and shadows from all child elements */
+.cl-rootBox *,
+.cl-card *,
+.cl-main * {
+  border: none !important;
+  box-shadow: none !important;
 }
 
 /* Fix any transparent or semi-transparent backgrounds */
@@ -41,4 +51,29 @@
 .cl-rootBox,
 .cl-card {
   background-color: #ffffff !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Force Continue button to be orange */
+.cl-formButtonPrimary,
+button[data-localization-key*="formButtonPrimary"],
+button[type="submit"] {
+  background: linear-gradient(to right, #f97316, #ea580c) !important;
+  background-color: #f97316 !important;
+  color: white !important;
+  border: none !important;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+  transition: all 0.2s !important;
+  padding: 12px 24px !important;
+  font-size: 16px !important;
+  width: 100% !important;
+  border-radius: 8px !important;
+}
+
+.cl-formButtonPrimary:hover,
+button[data-localization-key*="formButtonPrimary"]:hover,
+button[type="submit"]:hover {
+  background: linear-gradient(to right, #ea580c, #dc2626) !important;
+  background-color: #ea580c !important;
 }
