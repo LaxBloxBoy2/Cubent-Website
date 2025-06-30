@@ -42,10 +42,14 @@ export const SignIn = ({
         modalContent: '!bg-white !border-0 !shadow-none',
         // Style the form button (Continue button) - reduced height, NO ROUNDING
         formButtonPrimary: '!bg-gradient-to-r !from-orange-500 !to-orange-600 hover:!from-orange-600 hover:!to-orange-700 !text-white !shadow-md !transition-all !duration-200 !py-1.5 !px-6 !text-base !font-medium !w-full !rounded-none !border-0',
-        // Style Google button with background
-        socialButtonsBlockButton: '!bg-slate-50 !border !border-slate-200 hover:!bg-slate-100 !text-gray-700 !shadow-sm hover:!shadow-md !transition-all !duration-200 !py-3 !px-6 !rounded-lg',
-        // Style email input with grey background
-        formFieldInput: '!bg-slate-50 !border !border-slate-200 focus:!bg-white focus:!border-orange-500 focus:!ring-2 focus:!ring-orange-500/20 !rounded-lg !py-3 !px-4 !text-base !transition-all !duration-200',
+        // Style Google button with background - FORCE ICON DISPLAY
+        // Style Google button - REDUCED PADDING, FORCE ICON
+        socialButtonsBlockButton: '!bg-slate-50 !border !border-slate-200 hover:!bg-slate-100 !text-gray-700 !shadow-sm hover:!shadow-md !transition-all !duration-200 !py-2 !px-4 !rounded-lg !flex !items-center !justify-center !gap-2 !min-h-[40px]',
+        // Force provider icon to show - TRANSPARENT BACKGROUND
+        socialButtonsProviderIcon: '!inline-flex !w-[18px] !h-[18px] !opacity-100 !visible !bg-transparent !flex-shrink-0',
+        socialButtonsProviderIcon__google: '!inline-flex !w-[18px] !h-[18px] !opacity-100 !visible !bg-transparent !flex-shrink-0',
+        // Style email input - REDUCED PADDING
+        formFieldInput: '!bg-slate-50 !border !border-slate-200 focus:!bg-white focus:!border-orange-500 focus:!ring-2 focus:!ring-orange-500/20 !rounded-lg !py-2 !px-3 !text-base !transition-all !duration-200',
       },
     }}
   />

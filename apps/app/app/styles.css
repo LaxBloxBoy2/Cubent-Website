@@ -80,16 +80,15 @@ button[type="submit"]:hover {
   transform: translateY(-1px) !important;
 }
 
-/* Style Google button with background - MORE SPECIFIC SELECTORS */
+/* Style Google button with background - REMOVE BACKGROUND OVERRIDE ON ICON */
 .cl-socialButtonsBlockButton,
 button[data-localization-key*="socialButtonsBlockButton"],
 button[data-localization-key*="Continue with Google"],
-.cl-socialButtons button,
-.cl-socialButtonsProviderIcon__google {
+.cl-socialButtons button {
   background-color: #f8fafc !important;
   border: 1px solid #e2e8f0 !important;
   color: #374151 !important;
-  padding: 12px 24px !important;
+  padding: 8px 16px !important;
   border-radius: 8px !important;
   font-weight: 500 !important;
   transition: all 0.2s !important;
@@ -98,18 +97,21 @@ button[data-localization-key*="Continue with Google"],
   align-items: center !important;
   justify-content: center !important;
   gap: 8px !important;
+  min-height: 40px !important;
 }
 
-/* Ensure Google icon is visible */
+/* Ensure Google icon is visible - DON'T OVERRIDE BACKGROUND */
 .cl-socialButtonsProviderIcon,
 .cl-socialButtonsProviderIcon__google,
 .cl-socialButtonsBlockButton svg,
 .cl-socialButtons button svg {
-  display: inline-block !important;
-  width: 20px !important;
-  height: 20px !important;
+  display: inline-flex !important;
+  width: 18px !important;
+  height: 18px !important;
   opacity: 1 !important;
   visibility: visible !important;
+  background: transparent !important;
+  flex-shrink: 0 !important;
 }
 
 .cl-socialButtonsBlockButton:hover,
@@ -179,25 +181,28 @@ button:has([data-testid*="google"]) {
   border-radius: 8px !important;
 }
 
-/* Reduce spacing between elements - make them closer together */
+/* AGGRESSIVE spacing reduction - make everything MUCH closer */
 .cl-main,
 .cl-card,
 .cl-rootBox {
-  gap: 12px !important;
+  gap: 6px !important;
 }
 
 .cl-formFieldRow,
 .cl-field,
 .cl-formField {
-  margin-bottom: 8px !important;
+  margin-bottom: 4px !important;
+  margin-top: 0 !important;
 }
 
 .cl-socialButtonsBlockButton {
-  margin-bottom: 12px !important;
+  margin-bottom: 6px !important;
+  margin-top: 0 !important;
 }
 
 .cl-dividerRow {
-  margin: 8px 0 !important;
+  margin: 4px 0 !important;
+  padding: 0 !important;
 }
 
 /* Reduce internal spacing */
@@ -206,7 +211,18 @@ button:has([data-testid*="google"]) {
   margin: 0 !important;
 }
 
-/* Make "or" divider closer */
+/* Make "or" divider much closer */
 .cl-dividerText {
-  margin: 4px 0 !important;
+  margin: 2px 0 !important;
+  padding: 0 !important;
+  line-height: 1 !important;
+}
+
+/* Remove extra spacing from form elements */
+.cl-formFieldLabel {
+  margin-bottom: 2px !important;
+}
+
+.cl-footer {
+  margin-top: 8px !important;
 }
