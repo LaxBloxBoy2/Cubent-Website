@@ -55,7 +55,6 @@ export const AuthProvider = ({
     organizationPreview__organizationSwitcherTrigger: 'gap-2',
     organizationPreviewAvatarContainer: 'shrink-0',
     // Form elements with orange accents and larger sizing
-    formButtonPrimary: 'bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white shadow-lg transition-all duration-200 py-3 px-6 text-base',
     formFieldInput: 'border-gray-300 focus:border-orange-500 focus:ring-orange-500/20 bg-white py-3 px-4 text-base',
     // Header elements - completely hidden
     header: 'hidden',
