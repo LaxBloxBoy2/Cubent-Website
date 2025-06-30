@@ -59,13 +59,20 @@ export const AuthProvider = ({
     formFieldInput: 'border-gray-300 focus:border-orange-500 focus:ring-orange-500/20 bg-white py-3 px-4 text-base',
     card: 'bg-white shadow-2xl border border-gray-200 rounded-2xl p-8',
     rootBox: 'bg-white rounded-2xl shadow-2xl min-w-[400px]',
-    // Header styling with larger text (hidden but keeping for consistency)
-    headerTitle: 'text-gray-900 font-semibold text-2xl',
-    headerSubtitle: 'text-gray-600 text-base',
-    // Footer elements (hidden but keeping for consistency)
+    // Header elements - completely hidden
+    header: 'hidden',
+    headerTitle: 'hidden',
+    headerSubtitle: 'hidden',
+    // Footer elements - completely hidden
     footer: 'hidden',
     footerAction: 'hidden',
     footerActionLink: 'hidden',
+    footerActionText: 'hidden',
+    footerPages: 'hidden',
+    footerPagesLink: 'hidden',
+    // Card styling with better centering
+    card: 'bg-white shadow-2xl border border-gray-200 rounded-2xl p-8 mx-auto',
+    rootBox: 'bg-white rounded-2xl shadow-2xl min-w-[400px] mx-auto',
   };
 
   const layout: Theme['layout'] = {
