@@ -17,16 +17,27 @@ export const SignIn = ({
   signUpForceRedirectUrl,
   afterSignInUrl,
   afterSignUpUrl
-}: SignInProps) => (
-  <ClerkSignIn
-    fallbackRedirectUrl={fallbackRedirectUrl || afterSignInUrl}
-    forceRedirectUrl={forceRedirectUrl}
-    signUpFallbackRedirectUrl={signUpFallbackRedirectUrl || afterSignUpUrl}
-    signUpForceRedirectUrl={signUpForceRedirectUrl}
-    appearance={{
-      elements: {
-        header: 'hidden',
-      },
-    }}
-  />
-);
+}: SignInProps) => {
+  console.log('SignIn component rendering with props:', {
+    fallbackRedirectUrl,
+    forceRedirectUrl,
+    signUpFallbackRedirectUrl,
+    signUpForceRedirectUrl,
+    afterSignInUrl,
+    afterSignUpUrl
+  });
+
+  return (
+    <ClerkSignIn
+      fallbackRedirectUrl={fallbackRedirectUrl || afterSignInUrl}
+      forceRedirectUrl={forceRedirectUrl}
+      signUpFallbackRedirectUrl={signUpFallbackRedirectUrl || afterSignUpUrl}
+      signUpForceRedirectUrl={signUpForceRedirectUrl}
+      appearance={{
+        elements: {
+          header: 'hidden',
+        },
+      }}
+    />
+  );
+};
