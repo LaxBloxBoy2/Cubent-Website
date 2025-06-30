@@ -31,7 +31,7 @@ export const AnimatedTitle = () => {
             : 'opacity-0 transform -translate-y-2'
         }`}
         style={{
-          background: 'linear-gradient(135deg, #87ceeb 0%, #ffffff 100%)',
+          background: 'linear-gradient(135deg, #ea580c 0%, #f97316 50%, #fb923c 100%)',
           WebkitBackgroundClip: 'text',
           WebkitTextFillColor: 'transparent',
           backgroundClip: 'text',

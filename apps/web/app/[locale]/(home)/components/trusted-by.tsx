@@ -123,13 +123,13 @@ export const TrustedBy = ({ dictionary }: TrustedByProps) => (
         </div>
 
         {/* Stats section */}
-        <div className="w-full max-w-2xl">
-          <div className="grid grid-cols-3 gap-0 text-center border border-dashed border-gray-400/50 rounded-lg overflow-hidden">
+        <div className="w-full max-w-2xl -mt-8">
+          <div className="grid grid-cols-3 gap-0 text-center rounded-lg overflow-hidden">
             <div className="flex flex-col gap-1 py-4 px-3">
-              <div className="text-2xl font-bold tracking-tight" style={{ color: '#888888' }}>25K+</div>
-              <div className="text-xs" style={{ color: '#999999' }}>Active Developers</div>
+              <div className="text-2xl font-bold tracking-tight" style={{ color: '#888888' }}>2.5k</div>
+              <div className="text-xs" style={{ color: '#999999' }}>developers</div>
             </div>
-            <div className="flex flex-col gap-1 py-4 px-3 border-l border-r border-dashed border-gray-400/50">
+            <div className="flex flex-col gap-1 py-4 px-3">
               <div className="text-2xl font-bold tracking-tight" style={{ color: '#888888' }}>2.5M+</div>
               <div className="text-xs" style={{ color: '#999999' }}>Lines of Code</div>
             </div>
