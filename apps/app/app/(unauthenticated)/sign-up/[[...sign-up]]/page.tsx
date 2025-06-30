@@ -20,6 +20,28 @@ const SignUpPage = () => (
       <div className="mx-auto w-16 h-px bg-gradient-to-r from-transparent via-orange-500 to-transparent opacity-60" />
     </div>
     <SignUp />
+    {/* Privacy and Terms text */}
+    <div className="text-center text-xs text-muted-foreground mt-4">
+      By creating an account, you agree to our{' '}
+      <a
+        href="/legal/terms"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-orange-500 hover:text-orange-600 underline transition-colors"
+      >
+        Terms of Service
+      </a>{' '}
+      and{' '}
+      <a
+        href="/legal/privacy"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-orange-500 hover:text-orange-600 underline transition-colors"
+      >
+        Privacy Policy
+      </a>
+      .
+    </div>
   </>
 );
 

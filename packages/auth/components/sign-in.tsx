@@ -26,6 +26,9 @@ export const SignIn = ({
     appearance={{
       elements: {
         header: 'hidden',
+        footer: 'hidden',
+        footerAction: 'hidden',
+        footerActionLink: 'hidden',
       },
     }}
   />

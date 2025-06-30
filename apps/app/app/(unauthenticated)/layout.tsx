@@ -100,7 +100,7 @@ const AuthLayout = ({ children }: AuthLayoutProps) => (
 
     {/* Centered authentication content */}
     <div className="relative z-20 flex min-h-dvh items-center justify-center p-4">
-      <div className="w-full max-w-md">
+      <div className="w-full max-w-lg">
         {/* Let Clerk handle its own styling */}
         <div className="space-y-6">
           {children}

@@ -26,6 +26,9 @@ export const SignUp = ({
     appearance={{
       elements: {
         header: 'hidden',
+        footer: 'hidden',
+        footerAction: 'hidden',
+        footerActionLink: 'hidden',
       },
     }}
   />

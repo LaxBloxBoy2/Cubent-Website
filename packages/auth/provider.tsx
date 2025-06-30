@@ -42,28 +42,30 @@ export const AuthProvider = ({
     colorInputBackground: '#ffffff', // white background for inputs
     colorInputText: '#111827', // dark text for inputs
     borderRadius: '0.75rem', // rounded-xl
-    spacingUnit: '1rem',
+    spacingUnit: '1.25rem', // Increased spacing for larger form
   };
 
   const elements: Theme['elements'] = {
     dividerLine: 'bg-border',
-    socialButtonsIconButton: 'bg-card hover:bg-orange-500/10 border-orange-500/20 transition-colors',
+    socialButtonsIconButton: 'bg-card hover:bg-orange-500/10 border-orange-500/20 transition-colors py-3 px-4',
     navbarButton: 'text-foreground',
     organizationSwitcherTrigger__open: 'bg-background',
     organizationPreviewMainIdentifier: 'text-foreground',
     organizationSwitcherTriggerIcon: 'text-muted-foreground',
     organizationPreview__organizationSwitcherTrigger: 'gap-2',
     organizationPreviewAvatarContainer: 'shrink-0',
-    // Form elements with orange accents
-    formButtonPrimary: 'bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white shadow-lg transition-all duration-200',
-    formFieldInput: 'border-gray-300 focus:border-orange-500 focus:ring-orange-500/20 bg-white',
-    card: 'bg-white shadow-2xl border border-gray-200 rounded-2xl',
-    rootBox: 'bg-white rounded-2xl shadow-2xl',
-    // Header styling
-    headerTitle: 'text-gray-900 font-semibold text-xl',
-    headerSubtitle: 'text-gray-600 text-sm',
-    // Footer links with orange hover
-    footerActionLink: 'text-orange-500 hover:text-orange-600 transition-colors',
+    // Form elements with orange accents and larger sizing
+    formButtonPrimary: 'bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white shadow-lg transition-all duration-200 py-3 px-6 text-base',
+    formFieldInput: 'border-gray-300 focus:border-orange-500 focus:ring-orange-500/20 bg-white py-3 px-4 text-base',
+    card: 'bg-white shadow-2xl border border-gray-200 rounded-2xl p-8',
+    rootBox: 'bg-white rounded-2xl shadow-2xl min-w-[400px]',
+    // Header styling with larger text (hidden but keeping for consistency)
+    headerTitle: 'text-gray-900 font-semibold text-2xl',
+    headerSubtitle: 'text-gray-600 text-base',
+    // Footer elements (hidden but keeping for consistency)
+    footer: 'hidden',
+    footerAction: 'hidden',
+    footerActionLink: 'hidden',
   };
 
   const layout: Theme['layout'] = {
