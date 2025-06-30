@@ -25,32 +25,23 @@ export const SignIn = ({
     signUpForceRedirectUrl={signUpForceRedirectUrl}
     appearance={{
       elements: {
-        // Completely hide all header elements
+        // Hide only header elements - keep footer for sign up link
         header: 'hidden',
         headerTitle: 'hidden',
         headerSubtitle: 'hidden',
-        // Completely hide all footer elements
-        footer: 'hidden',
-        footerAction: 'hidden',
-        footerActionLink: 'hidden',
-        footerActionText: 'hidden',
-        footerPages: 'hidden',
-        footerPagesLink: 'hidden',
-        footerActionLinkText: 'hidden',
         // Hide alternative methods and identity preview
         alternativeMethodsBlockButton: 'hidden',
         alternativeMethodsBlockButtonText: 'hidden',
         identityPreview: 'hidden',
         identityPreviewText: 'hidden',
         identityPreviewEditButton: 'hidden',
-        // Additional elements to hide
-        footerActionLinkPages: 'hidden',
-        footerActionLinkPagesText: 'hidden',
         // Clean styling with solid white background
         rootBox: 'relative !bg-white rounded-2xl shadow-2xl min-w-[400px] mx-auto',
         card: '!bg-white shadow-2xl border border-gray-200 rounded-2xl p-8 mx-auto',
         main: '!bg-white',
         modalContent: '!bg-white',
+        // Style the form button (Continue button)
+        formButtonPrimary: 'bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white shadow-lg transition-all duration-200 py-3 px-6 text-base w-full rounded-lg',
       },
     }}
   />

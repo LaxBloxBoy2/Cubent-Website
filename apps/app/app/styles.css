@@ -1,21 +1,12 @@
 @import "tailwindcss";
 @import "@repo/design-system/styles/globals.css";
 
-/* Hide Clerk internal elements for cleaner authentication UI */
-.cl-footer,
-.cl-footerAction,
-.cl-footerActionLink,
-.cl-footerActionText,
-.cl-footerPages,
-.cl-footerPagesLink,
+/* Hide only specific Clerk internal elements - keep buttons and sign up links */
 .cl-header,
 .cl-headerTitle,
 .cl-headerSubtitle,
-.cl-alternativeMethodsBlockButton,
 .cl-identityPreview,
-.cl-footerActionLinkText,
-.cl-footerActionLinkPages,
-.cl-footerActionLinkPagesText {
+.cl-alternativeMethodsBlockButton {
   display: none !important;
   visibility: hidden !important;
   opacity: 0 !important;
@@ -23,12 +14,9 @@
   overflow: hidden !important;
 }
 
-/* Hide elements with specific data attributes */
-[data-localization-key="signIn.alternativeMethodsBlockButton"],
-[data-localization-key="footerActionLink__signUp"],
+/* Hide only privacy/terms links, not the sign up link */
 [data-localization-key="footerPages__privacy"],
-[data-localization-key="footerPages__terms"],
-[data-localization-key="footerActionText"] {
+[data-localization-key="footerPages__terms"] {
   display: none !important;
   visibility: hidden !important;
   opacity: 0 !important;

@@ -61,23 +61,12 @@ export const AuthProvider = ({
     header: 'hidden',
     headerTitle: 'hidden',
     headerSubtitle: 'hidden',
-    // Footer elements - completely hidden
-    footer: 'hidden',
-    footerAction: 'hidden',
-    footerActionLink: 'hidden',
-    footerActionText: 'hidden',
-    footerPages: 'hidden',
-    footerPagesLink: 'hidden',
-    footerActionLinkText: 'hidden',
-    // Additional elements to hide
+    // Hide alternative methods and identity preview
     alternativeMethodsBlockButton: 'hidden',
     alternativeMethodsBlockButtonText: 'hidden',
     identityPreview: 'hidden',
     identityPreviewText: 'hidden',
     identityPreviewEditButton: 'hidden',
-    // Clerk branding and links
-    footerActionLinkPages: 'hidden',
-    footerActionLinkPagesText: 'hidden',
     // Card styling with solid white background
     card: '!bg-white shadow-2xl border border-gray-200 rounded-2xl p-8 mx-auto',
     rootBox: '!bg-white rounded-2xl shadow-2xl min-w-[400px] mx-auto',
