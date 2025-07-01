@@ -153,6 +153,117 @@ export const Mockup = () => {
       </div>
     </div>
 
+    {/* Database Explorer Section - Same background as community section */}
+    <div className="w-full py-16 lg:py-24 bg-[#0a0a0a] relative overflow-hidden border-t border-white/20">
+      {/* Grid background - exact same as community section */}
+      <div
+        className="absolute inset-0 opacity-20"
+        style={{
+          backgroundImage: `
+            linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)
+          `,
+          backgroundSize: '40px 40px'
+        }}
+      />
+      {/* Background gradient effects - same as community */}
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/11 to-transparent" />
+
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="max-w-7xl mx-auto relative">
+          {/* Vertical center dividing line */}
+          <div className="absolute left-1/2 top-0 bottom-0 w-px bg-white/20 transform -translate-x-1/2 hidden lg:block"></div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center group transition-all duration-500 grayscale hover:grayscale-0">
+            {/* Left side - Content only */}
+            <div className="space-y-8 pr-8 lg:pr-16">
+              {/* MCP Tools label */}
+              <div className="text-white/60 text-sm font-medium tracking-wider group-hover:text-orange-500 transition-colors duration-500">
+                — MCP Tools
+              </div>
+
+              {/* Main heading */}
+              <div className="space-y-4">
+                <h2 className="text-4xl lg:text-5xl font-regular tracking-tight text-white leading-tight">
+                  Integrate with the tools <span className="group-hover:text-orange-500 transition-colors duration-500">you already use</span>
+                </h2>
+                <p className="text-white/70 text-lg leading-relaxed max-w-md">
+                  Cubent brings together your essential apps with MCP from GitHub to Notion — into one powerful interface. Discover, connect, and explore your data like never before.
+                </p>
+              </div>
+            </div>
+
+            {/* Right side - Database interface image */}
+            <div className="hidden lg:block pl-8 lg:pl-16">
+              <div className="relative">
+                <img
+                  src="/images/cubent-database-interface.png"
+                  alt="Database interface showing table explorer and query editor"
+                  className="w-full h-auto rounded-lg shadow-2xl transition-all duration-500"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {/* Inverted MCP Tools Section - Image on left, content on right */}
+    <div className="w-full py-16 lg:py-24 bg-[#0a0a0a] relative overflow-hidden border-t border-white/20">
+      {/* Grid background - same as above */}
+      <div
+        className="absolute inset-0 opacity-20"
+        style={{
+          backgroundImage: `
+            linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)
+          `,
+          backgroundSize: '40px 40px'
+        }}
+      />
+      {/* Background gradient effects */}
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/11 to-transparent" />
+
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="max-w-7xl mx-auto relative">
+          {/* Vertical center dividing line */}
+          <div className="absolute left-1/2 top-0 bottom-0 w-px bg-white/20 transform -translate-x-1/2 hidden lg:block"></div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center group transition-all duration-500 grayscale hover:grayscale-0">
+            {/* Left side - Autocomplete interface image (inverted) */}
+            <div className="hidden lg:block pr-8 lg:pr-16">
+              <div className="relative">
+                <img
+                  src="/images/cubent-autocomplete-interface.png"
+                  alt="Code editor showing intelligent autocomplete suggestions"
+                  className="w-full h-auto rounded-lg shadow-2xl transition-all duration-500"
+                />
+              </div>
+            </div>
+
+            {/* Right side - Content (inverted) */}
+            <div className="space-y-8 pl-8 lg:pl-16">
+              {/* Autocomplete label */}
+              <div className="text-white/60 text-sm font-medium tracking-wider group-hover:text-orange-500 transition-colors duration-500">
+                — Autocomplete
+              </div>
+
+              {/* Main heading */}
+              <div className="space-y-4">
+                <h2 className="text-4xl lg:text-5xl font-regular tracking-tight text-white leading-tight">
+                  Code smarter<br />
+                  with <span className="group-hover:text-orange-500 transition-colors duration-500">context-aware autocomplete</span>
+                </h2>
+                <p className="text-white/70 text-lg leading-relaxed max-w-md">
+                  MCP Tools helps you write faster and cleaner code with intelligent suggestions that adapt to your workflow — just start typing, and let the magic happen.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     {/* Modal */}
     {selectedFeature && (
       <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
