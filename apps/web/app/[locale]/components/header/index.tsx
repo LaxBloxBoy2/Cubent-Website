@@ -1,7 +1,7 @@
 'use client';
 
 import { env } from '@/env';
-import { ModeToggle } from '@repo/design-system/components/mode-toggle';
+
 import { Button } from '@repo/design-system/components/ui/button';
 import {
   NavigationMenu,
@@ -151,9 +151,6 @@ export const Header = ({ dictionary }: HeaderProps) => {
           </NavigationMenu>
         </div>
         <div className="flex justify-end gap-2">
-          <div className="hidden md:inline">
-            <ModeToggle />
-          </div>
           <Button variant="outline" asChild className="hidden md:inline-flex h-10">
             <Link href="https://marketplace.visualstudio.com/items?itemName=cubent.cubent" className="flex flex-row items-center gap-2 px-4 py-2 whitespace-nowrap">
               <svg className="h-4 w-4 shrink-0" viewBox="0 0 88 88" fill="currentColor">

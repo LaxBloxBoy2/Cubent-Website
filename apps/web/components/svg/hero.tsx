@@ -6602,7 +6602,8 @@ export function SubHeroMainboardStuff({ className }: { className?: string }) {
           gradientUnits="userSpaceOnUse"
         >
           <stop stopColor="white" stopOpacity="0.15" />
-          <stop offset="1" stopColor="white" stopOpacity="0.05" />
+          <stop offset="0.6" stopColor="white" stopOpacity="0.1" />
+          <stop offset="1" stopColor="white" stopOpacity="0" />
         </linearGradient>
         <radialGradient
           id="paint14_angular_1_215"

@@ -9,12 +9,12 @@ import { useState } from 'react';
 const features = [
   {
     id: 1,
-    title: "Context-aware code intelligence system",
+    title: "Autonomous multi-step coding workflows",
     image: "/images/cubent-feature-1.png",
     alt: "Context Intelligence",
-    description: "Cubent understands your entire codebase context, making intelligent suggestions that align with your project's architecture and patterns.",
+    description: "Let Cubent chain terminal commands, edit files, run tests and open pull requests while you sip your coffee—true hands-free automation.",
     content: [
-      "At the heart of modern software development lies the challenge of maintaining context across vast codebases. Cubent revolutionizes this experience by providing deep, contextual understanding of your entire project ecosystem. Our advanced AI doesn't just read your code—it comprehends the intricate relationships between components, understands your architectural decisions, and learns from your coding patterns.",
+      "Skip the boilerplate. Cubent queues terminal commands, edits files, runs tests and even opens pull-requests in a single autonomous flow. Cubent revolutionizes this experience by providing deep, contextual understanding of your entire project ecosystem. Our advanced AI doesn't just read your code—it comprehends the intricate relationships between components, understands your architectural decisions, and learns from your coding patterns.",
 
       "Unlike traditional code assistants that work in isolation, Cubent maintains a comprehensive map of your project's structure, dependencies, and design patterns. This enables it to make suggestions that aren't just syntactically correct, but architecturally sound and consistent with your existing codebase. Whether you're working on a microservices architecture, a monolithic application, or a complex distributed system, Cubent adapts to your specific context.",
 
@@ -23,12 +23,12 @@ const features = [
   },
   {
     id: 2,
-    title: "Screenshot to code in seconds plus",
+    title: "Real-time project context panel",
     image: "/images/cubent-feature-2.png",
     alt: "AI Screenshot Analysis",
-    description: "Transform screenshots and designs into working code instantly. Cubent analyzes visual elements and generates pixel-perfect implementations.",
+    description: "A single overlay that pulses with your repo’s heartbeat—files, problems, Git, terminals and folders always a glance away.",
     content: [
-      "In today's fast-paced development environment, the ability to rapidly prototype and implement designs is crucial for staying competitive. Cubent's revolutionary screenshot-to-code technology bridges the gap between design and implementation, allowing developers to transform visual mockups into functional code in seconds rather than hours.",
+      "Never lose your place again. The context panel surfaces open files, failing tests, Git diffs, terminals and folders in one glanceable hub. Cubent's revolutionary screenshot-to-code technology bridges the gap between design and implementation, allowing developers to transform visual mockups into functional code in seconds rather than hours.",
 
       "Our advanced computer vision algorithms analyze every pixel of your designs, understanding not just what elements are present, but how they should behave and interact. The system recognizes common UI patterns, understands responsive design principles, and generates code that follows modern best practices. Whether you're working with Figma designs, hand-drawn sketches, or competitor screenshots, Cubent can interpret and implement them accurately.",
 
@@ -37,12 +37,12 @@ const features = [
   },
   {
     id: 3,
-    title: "Deep codebase understanding engine",
+    title: "Instant browser preview & testing",
     image: "/images/cubent-feature-3.png",
     alt: "Smart Code Editing",
-    description: "Experience intelligent code editing that understands your intent. Cubent provides contextual suggestions and automated improvements.",
+    description: "Spin up a live browser, snap screenshots and sanity-check UX—all without ever Alt-Tabbing out of your editor.",
     content: [
-      "Perfect code isn't just about functionality—it's about maintainability, performance, and elegance. Cubent's intelligent editing capabilities go far beyond traditional autocomplete, offering a sophisticated understanding of code quality, performance implications, and best practices. Every suggestion is crafted with the goal of not just making your code work, but making it exceptional.",
+      "Request a ‘preview’ in chat and Cubent spins up a local server, opens a browser preview and streams logs back to you. Cubent's intelligent editing capabilities go far beyond traditional autocomplete, offering a sophisticated understanding of code quality, performance implications, and best practices. Every suggestion is crafted with the goal of not just making your code work, but making it exceptional.",
 
       "The system continuously analyzes your code for potential improvements, from micro-optimizations that enhance performance to architectural suggestions that improve maintainability. Cubent understands the nuances of different programming languages, frameworks, and design patterns, allowing it to provide highly specific and relevant recommendations tailored to your technology stack and coding style.",
 
@@ -154,7 +154,7 @@ export const Mockup = () => {
     </div>
 
     {/* Database Explorer Section - Same background as community section */}
-    <div className="w-full py-16 lg:py-24 bg-[#0a0a0a] relative overflow-hidden border-t border-white/20">
+    <div className="w-full py-6 lg:py-8 bg-[#0a0a0a] relative overflow-hidden border-t border-white/20">
       {/* Grid background - exact same as community section */}
       <div
         className="absolute inset-0 opacity-20"
@@ -171,8 +171,13 @@ export const Mockup = () => {
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="max-w-7xl mx-auto relative">
-          {/* Vertical center dividing line */}
-          <div className="absolute left-1/2 top-0 bottom-0 w-px bg-white/20 transform -translate-x-1/2 hidden lg:block"></div>
+          {/* Vertical center dividing line - extended to connect sections */}
+          <div
+            className="absolute left-1/2 -top-24 -bottom-24 w-px transform -translate-x-1/2 hidden lg:block"
+            style={{
+              background: 'linear-gradient(to bottom, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0) 100%)'
+            }}
+          ></div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center group transition-all duration-500 grayscale hover:grayscale-0">
             {/* Left side - Content only */}
@@ -209,7 +214,7 @@ export const Mockup = () => {
     </div>
 
     {/* Inverted MCP Tools Section - Image on left, content on right */}
-    <div className="w-full py-16 lg:py-24 bg-[#0a0a0a] relative overflow-hidden border-t border-white/20">
+    <div className="w-full py-6 lg:py-8 bg-[#0a0a0a] relative overflow-hidden border-t border-white/20">
       {/* Grid background - same as above */}
       <div
         className="absolute inset-0 opacity-20"
@@ -226,8 +231,13 @@ export const Mockup = () => {
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="max-w-7xl mx-auto relative">
-          {/* Vertical center dividing line */}
-          <div className="absolute left-1/2 top-0 bottom-0 w-px bg-white/20 transform -translate-x-1/2 hidden lg:block"></div>
+          {/* Vertical center dividing line - extended to connect sections */}
+          <div
+            className="absolute left-1/2 -top-24 -bottom-24 w-px transform -translate-x-1/2 hidden lg:block"
+            style={{
+              background: 'linear-gradient(to bottom, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0) 100%)'
+            }}
+          ></div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center group transition-all duration-500 grayscale hover:grayscale-0">
             {/* Left side - Autocomplete interface image (inverted) */}

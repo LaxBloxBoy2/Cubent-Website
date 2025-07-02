@@ -4,10 +4,12 @@ import { createMetadata } from '@repo/seo/metadata';
 import type { Metadata } from 'next';
 import { Community } from './components/community';
 import { CTA } from './components/cta';
+import { Download } from './components/download';
 import { FAQ } from './components/faq';
 
 import { Hero } from './components/hero';
 import { Mockup } from './components/mockup';
+import { ModelProviders } from './components/model-providers';
 import { Stats } from './components/stats';
 import { Testimonials } from './components/testimonials';
 import { TrustedBy } from './components/trusted-by';
@@ -42,11 +44,9 @@ const Home = async ({ params }: HomeProps) => {
       <Hero dictionary={dictionary} />
       <TrustedBy dictionary={dictionary} />
       <Mockup />
+      <ModelProviders />
       <Community dictionary={dictionary} />
-      <Stats dictionary={dictionary} />
-      <Testimonials dictionary={dictionary} />
-      <FAQ dictionary={dictionary} />
-      <CTA dictionary={dictionary} />
+      <Download />
     </>
   );
 };

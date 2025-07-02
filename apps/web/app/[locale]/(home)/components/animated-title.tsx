@@ -22,7 +22,7 @@ export const AnimatedTitle = () => {
   }, []);
 
   return (
-    <h1 className="max-w-4xl text-center font-regular text-5xl tracking-tighter md:text-7xl relative z-10">
+    <h1 className="max-w-4xl text-center font-regular text-6xl tracking-tighter md:text-7xl relative z-10">
       AI that can{' '}
       <span
         className={`inline-block transition-all duration-500 ease-in-out ${

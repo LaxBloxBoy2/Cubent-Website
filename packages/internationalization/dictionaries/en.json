@@ -114,6 +114,30 @@
               "name": "Emily Zhang",
               "image": "https://github.com/pontusab.png"
             }
+          },
+          {
+            "title": "Feels like a co-pilot on steroids",
+            "description": "Cubent doesn't just autocomplete—it rewrites legacy modules, adds tests and opens PRs. It's like hiring an entire team overnight!",
+            "author": {
+              "name": "Liam O'Connor",
+              "image": "https://github.com/vercel.png"
+            }
+          },
+          {
+            "title": "Documentation hero",
+            "description": "Auto-generated docs are accurate and beautifully formatted. Our onboarding time for new engineers dropped by half.",
+            "author": {
+              "name": "Priya Kapoor",
+              "image": "https://github.com/brucesong.png"
+            }
+          },
+          {
+            "title": "Bug squashing machine",
+            "description": "Point Cubent at a failing test suite and watch it hunt down the root cause and push the fix—all before the coffee's brewed.",
+            "author": {
+              "name": "Diego Fernández",
+              "image": "https://github.com/calebporzio.png"
+            }
           }
         ]
       },

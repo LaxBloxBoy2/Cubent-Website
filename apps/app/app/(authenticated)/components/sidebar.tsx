@@ -1,7 +1,7 @@
 'use client';
 
-import { OrganizationSwitcher, UserButton } from '@repo/auth/client';
-import { ModeToggle } from '@repo/design-system/components/mode-toggle';
+import { UserButton } from '@repo/auth/client';
+
 import { Button } from '@repo/design-system/components/ui/button';
 
 
@@ -129,21 +129,7 @@ export const GlobalSidebar = ({ children }: GlobalSidebarProperties) => {
     <>
       <Sidebar variant="inset">
         <SidebarHeader>
-          <SidebarMenu>
-            <SidebarMenuItem>
-              <div
-                className={cn(
-                  'h-[36px] overflow-hidden transition-all [&>div]:w-full',
-                  sidebar.open ? '' : '-mx-1'
-                )}
-              >
-                <OrganizationSwitcher
-                  hidePersonal
-                  afterSelectOrganizationUrl="/profile"
-                />
-              </div>
-            </SidebarMenuItem>
-          </SidebarMenu>
+          {/* Organization selector removed */}
         </SidebarHeader>
         <Search />
         <SidebarContent>
@@ -206,11 +192,17 @@ export const GlobalSidebar = ({ children }: GlobalSidebarProperties) => {
                     rootBox: 'flex overflow-hidden w-full',
                     userButtonBox: 'flex-row-reverse',
                     userButtonOuterIdentifier: 'truncate pl-0',
+                    userButtonPopoverCard: 'bg-sidebar border-sidebar-border',
+                    userButtonPopoverMain: 'bg-sidebar text-sidebar-foreground',
+                    userButtonPopoverFooter: 'bg-sidebar border-sidebar-border text-sidebar-foreground',
+                    userButtonPopoverActionButton: 'text-sidebar-foreground hover:bg-sidebar-accent',
+                    userButtonPopoverActionButtonText: 'text-sidebar-foreground',
+                    userPreviewMainIdentifier: 'text-sidebar-foreground',
+                    userPreviewSecondaryIdentifier: 'text-sidebar-foreground/70',
                   },
                 }}
               />
               <div className="flex shrink-0 items-center gap-px">
-                <ModeToggle />
                 <Button
                   variant="ghost"
                   size="icon"
