@@ -34,6 +34,20 @@ const RequestTrackingPage = async () => {
           createdAt: true,
           metadata: true,
         }
+      },
+      extensionSessions: {
+        where: { isActive: true },
+        select: {
+          id: true,
+          isActive: true,
+        }
+      },
+      extensionSessions: {
+        where: { isActive: true },
+        select: {
+          id: true,
+          isActive: true,
+        }
       }
     }
   });
@@ -97,7 +111,7 @@ const RequestTrackingPage = async () => {
       timestamp: analytics.createdAt,
       provider: 'Unknown',
     })),
-    activeSessions: dbUser.extensionSessions?.length || 0,
+    activeSessions: 0,
   };
 
   return <RequestTrackingContent data={requestTrackingData} />;
