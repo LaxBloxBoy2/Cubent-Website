@@ -126,7 +126,7 @@ const CostTrackingPage = async () => {
       requests: analytics.requestsMade,
       cubentUnits: analytics.cubentUnitsUsed,
       timestamp: analytics.createdAt,
-      provider: analytics.metadata?.provider || 'Unknown',
+      provider: 'Unknown',
     })),
     monthlyProjection: avgDailyCost * 30, // Simple projection based on daily average
   };
