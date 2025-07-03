@@ -95,7 +95,7 @@ const RequestTrackingPage = async () => {
       requests: analytics.requestsMade,
       cubentUnits: analytics.cubentUnitsUsed,
       timestamp: analytics.createdAt,
-      provider: analytics.metadata?.provider || 'Unknown',
+      provider: 'Unknown',
     })),
     activeSessions: dbUser.extensionSessions?.length || 0,
   };

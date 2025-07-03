@@ -110,7 +110,7 @@ const TokenUsagePage = async () => {
       requests: analytics.requestsMade,
       cubentUnits: analytics.cubentUnitsUsed,
       timestamp: analytics.createdAt,
-      provider: analytics.metadata?.provider || 'Unknown',
+      provider: 'Unknown',
     })),
     tokensPerRequest: totalTokensSum > 0 && dbUser.usageMetrics.length > 0 
       ? Math.round(totalTokensSum / dbUser.usageMetrics.reduce((sum, m) => sum + m.requestsMade, 0))
