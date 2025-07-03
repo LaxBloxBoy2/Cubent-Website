@@ -1,10 +1,6 @@
 'use client';
 
-import { UserButton } from '@repo/auth/client';
-
-import { Button } from '@repo/design-system/components/ui/button';
-
-
+import { usePathname } from 'next/navigation';
 import {
   Sidebar,
   SidebarContent,
@@ -21,7 +17,6 @@ import {
   useSidebar,
 } from '@repo/design-system/components/ui/sidebar';
 import { cn } from '@repo/design-system/lib/utils';
-import { NotificationsTrigger } from '@repo/notifications/components/trigger';
 import {
   AnchorIcon,
   BookOpenIcon,
@@ -38,6 +33,11 @@ import {
   BellIcon,
   ShieldIcon,
   HelpCircleIcon,
+  BarChart3,
+  Activity,
+  Zap,
+  DollarSign,
+  Lock,
 } from 'lucide-react';
 import Link from 'next/link';
 import type { ReactNode } from 'react';
@@ -63,7 +63,6 @@ const data = {
       title: 'Profile',
       url: '/profile',
       icon: UserIcon,
-      isActive: true,
     },
     {
       title: 'Usage Analytics',
@@ -74,6 +73,32 @@ const data = {
       title: 'Conversations',
       url: '/conversations',
       icon: MessageSquareIcon,
+    },
+  ],
+  navUsageMetrics: [
+    {
+      title: 'Cubent Units',
+      url: '/usage/cubent-units',
+      icon: BarChart3,
+      locked: true,
+    },
+    {
+      title: 'Request Tracking',
+      url: '/usage/requests',
+      icon: Activity,
+      locked: false,
+    },
+    {
+      title: 'Token Usage',
+      url: '/usage/tokens',
+      icon: Zap,
+      locked: false,
+    },
+    {
+      title: 'Cost Tracking',
+      url: '/usage/cost',
+      icon: DollarSign,
+      locked: false,
     },
   ],
   navAccount: [
@@ -104,41 +129,31 @@ const data = {
       url: '/docs',
       icon: BookOpenIcon,
     },
-    {
-      title: 'Help Center',
-      url: '/help',
-      icon: HelpCircleIcon,
-    },
-    {
-      title: 'Support',
-      url: '#',
-      icon: LifeBuoyIcon,
-    },
-    {
-      title: 'Terms & Privacy',
-      url: '/terms',
-      icon: AnchorIcon,
-    },
   ],
 };
 
 export const GlobalSidebar = ({ children }: GlobalSidebarProperties) => {
   const sidebar = useSidebar();
+  const pathname = usePathname();
 
   return (
     <>
-      <Sidebar variant="inset">
+      <Sidebar variant="inset" className="h-full max-h-[calc(100vh-4rem)] mt-16">
         <SidebarHeader>
           {/* Organization selector removed */}
         </SidebarHeader>
-        <Search />
-        <SidebarContent>
+        {/* Search hidden */}
+        <SidebarContent className="flex-1 overflow-y-auto">
           <SidebarGroup>
             <SidebarGroupLabel>Dashboard</SidebarGroupLabel>
             <SidebarMenu>
               {data.navMain.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild tooltip={item.title}>
+                  <SidebarMenuButton
+                    asChild
+                    tooltip={item.title}
+                    isActive={pathname === item.url}
+                  >
                     <Link href={item.url}>
                       <item.icon />
                       <span>{item.title}</span>
@@ -150,11 +165,44 @@ export const GlobalSidebar = ({ children }: GlobalSidebarProperties) => {
           </SidebarGroup>
 
           <SidebarGroup>
+            <SidebarGroupLabel>Usage Metrics</SidebarGroupLabel>
+            <SidebarMenu>
+              {data.navUsageMetrics.map((item) => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton
+                    asChild
+                    tooltip={item.title}
+                    isActive={pathname === item.url}
+                    className={item.locked ? 'opacity-50 cursor-not-allowed' : ''}
+                  >
+                    {item.locked ? (
+                      <div className="flex items-center gap-2 w-full">
+                        <item.icon />
+                        <span>{item.title}</span>
+                        <Lock className="h-3 w-3 ml-auto" />
+                      </div>
+                    ) : (
+                      <Link href={item.url}>
+                        <item.icon />
+                        <span>{item.title}</span>
+                      </Link>
+                    )}
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroup>
+
+          <SidebarGroup>
             <SidebarGroupLabel>Account</SidebarGroupLabel>
             <SidebarMenu>
               {data.navAccount.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild tooltip={item.title}>
+                  <SidebarMenuButton
+                    asChild
+                    tooltip={item.title}
+                    isActive={pathname === item.url}
+                  >
                     <Link href={item.url}>
                       <item.icon />
                       <span>{item.title}</span>
@@ -170,7 +218,10 @@ export const GlobalSidebar = ({ children }: GlobalSidebarProperties) => {
               <SidebarMenu>
                 {data.navSecondary.map((item) => (
                   <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={pathname === item.url}
+                    >
                       <Link href={item.url}>
                         <item.icon />
                         <span>{item.title}</span>
@@ -183,42 +234,12 @@ export const GlobalSidebar = ({ children }: GlobalSidebarProperties) => {
           </SidebarGroup>
         </SidebarContent>
         <SidebarFooter>
-          <SidebarMenu>
-            <SidebarMenuItem className="flex items-center gap-2">
-              <UserButton
-                showName
-                appearance={{
-                  elements: {
-                    rootBox: 'flex overflow-hidden w-full',
-                    userButtonBox: 'flex-row-reverse',
-                    userButtonOuterIdentifier: 'truncate pl-0',
-                    userButtonPopoverCard: 'bg-sidebar border-sidebar-border',
-                    userButtonPopoverMain: 'bg-sidebar text-sidebar-foreground',
-                    userButtonPopoverFooter: 'bg-sidebar border-sidebar-border text-sidebar-foreground',
-                    userButtonPopoverActionButton: 'text-sidebar-foreground hover:bg-sidebar-accent',
-                    userButtonPopoverActionButtonText: 'text-sidebar-foreground',
-                    userPreviewMainIdentifier: 'text-sidebar-foreground',
-                    userPreviewSecondaryIdentifier: 'text-sidebar-foreground/70',
-                  },
-                }}
-              />
-              <div className="flex shrink-0 items-center gap-px">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="shrink-0"
-                  asChild
-                >
-                  <div className="h-4 w-4">
-                    <NotificationsTrigger />
-                  </div>
-                </Button>
-              </div>
-            </SidebarMenuItem>
-          </SidebarMenu>
+          {/* User profile moved to header */}
         </SidebarFooter>
       </Sidebar>
-      <SidebarInset>{children}</SidebarInset>
+      <SidebarInset className="flex-1">
+        {children}
+      </SidebarInset>
     </>
   );
 };

@@ -13,6 +13,7 @@ import {
 } from '@repo/design-system/components/ui/navigation-menu';
 import { Menu, MoveRight, X } from 'lucide-react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 
 import type { Dictionary } from '@repo/internationalization';
@@ -28,29 +29,17 @@ type HeaderProps = {
 
 export const Header = ({ dictionary }: HeaderProps) => {
   const { isAuthenticated, user, isLoading } = useAuthStatus();
+  const pathname = usePathname();
 
   const navigationItems = [
     {
-      title: 'Features',
-      description: 'Discover what makes Cubent Coder powerful',
-      items: [
-        {
-          title: 'Chat Mode',
-          href: '/features/chat',
-        },
-        {
-          title: 'Agent Mode',
-          href: '/features/agent',
-        },
-        {
-          title: 'Custom Modes',
-          href: '/features/custom',
-        },
-      ],
+      title: 'Pricing',
+      href: '/pricing',
+      description: '',
     },
     {
       title: dictionary.web.header.docs,
-      href: 'https://cubentdev.mintlify.app',
+      href: 'https://docs.cubent.dev/',
       description: '',
     },
     {
@@ -59,11 +48,27 @@ export const Header = ({ dictionary }: HeaderProps) => {
       description: '',
     },
     {
-      title: 'Support',
-      href: 'https://discord.gg/cubent',
-      description: '',
+      title: 'Company',
+      description: 'Learn more about Cubent',
+      items: [
+        {
+          title: 'About Us',
+          href: '/about',
+        },
+        {
+          title: 'Contact',
+          href: '/contact',
+        },
+      ],
     },
   ];
+
+  // Helper function to check if a navigation item is active
+  const isActiveItem = (href: string) => {
+    if (href === '/pricing') return pathname === '/pricing';
+    if (href === '/blog') return pathname.startsWith('/blog');
+    return false;
+  };
 
   const [isOpen, setOpen] = useState(false);
   return (
@@ -84,11 +89,11 @@ export const Header = ({ dictionary }: HeaderProps) => {
           <Image
             src={Logo}
             alt="Cubent Logo"
-            width={32}
-            height={32}
+            width={36}
+            height={36}
             className="dark:invert"
           />
-          <p className="whitespace-nowrap font-semibold">Cubent</p>
+          <p className="whitespace-nowrap font-semibold text-lg">Cubent</p>
         </Link>
         <div className="hidden flex-row items-center justify-center gap-3 lg:flex absolute left-1/2 transform -translate-x-1/2 top-1/2 -translate-y-1/2">
           <NavigationMenu className="flex items-center justify-center">
@@ -98,7 +103,11 @@ export const Header = ({ dictionary }: HeaderProps) => {
                   {item.href ? (
                     <>
                       <NavigationMenuLink asChild>
-                        <Button variant="ghost" asChild>
+                        <Button
+                          variant="ghost"
+                          asChild
+                          className={isActiveItem(item.href) ? 'bg-neutral-800/50 text-white' : ''}
+                        >
                           <Link
                             href={item.href}
                             target={item.href.startsWith('http') ? '_blank' : undefined}
@@ -111,25 +120,18 @@ export const Header = ({ dictionary }: HeaderProps) => {
                     </>
                   ) : (
                     <>
-                      <NavigationMenuTrigger className="font-medium text-sm">
+                      <NavigationMenuTrigger className="font-medium text-sm bg-transparent hover:bg-transparent data-[state=open]:bg-transparent">
                         {item.title}
                       </NavigationMenuTrigger>
                       <NavigationMenuContent className="!w-[450px] p-4">
-                        <div className="flex grid-cols-2 flex-col gap-4 lg:grid">
-                          <div className="flex h-full flex-col justify-between">
-                            <div className="flex flex-col">
-                              <p className="text-base">{item.title}</p>
-                              <p className="text-muted-foreground text-sm">
-                                {item.description}
-                              </p>
-                            </div>
-                            <Button size="sm" className="mt-10" asChild>
-                              <Link href="https://marketplace.visualstudio.com/items?itemName=cubent.cubent">
-                                Download Extension
-                              </Link>
-                            </Button>
+                        <div className="flex flex-col gap-4">
+                          <div className="flex flex-col">
+                            <p className="text-base">{item.title}</p>
+                            <p className="text-muted-foreground text-sm">
+                              {item.description}
+                            </p>
                           </div>
-                          <div className="flex h-full flex-col justify-end text-sm">
+                          <div className="flex flex-col text-sm">
                             {item.items?.map((subItem, idx) => (
                               <NavigationMenuLink
                                 href={subItem.href}
@@ -151,25 +153,22 @@ export const Header = ({ dictionary }: HeaderProps) => {
           </NavigationMenu>
         </div>
         <div className="flex justify-end gap-2">
-          <Button variant="outline" asChild className="hidden md:inline-flex h-10">
-            <Link href="https://marketplace.visualstudio.com/items?itemName=cubent.cubent" className="flex flex-row items-center gap-2 px-4 py-2 whitespace-nowrap">
-              <svg className="h-4 w-4 shrink-0" viewBox="0 0 88 88" fill="currentColor">
-                <path d="M0 12.402l35.687-4.86.016 34.423L0 45.194zm35.67 33.529l.028 34.453L.028 75.48.026 45.7zm4.326-39.025L87.314 0v41.527l-47.318 4.425zm47.329 39.349v41.527L40.028 81.441l.016-34.486z"/>
-              </svg>
-              <span className="shrink-0 text-sm">Download</span>
-            </Link>
-          </Button>
           {isLoading ? (
             <div className="h-10 w-10 animate-pulse bg-gray-200 rounded-full"></div>
           ) : isAuthenticated && user ? (
             <UserProfile user={user} />
           ) : (
-            <Button asChild>
+            <Button variant="ghost" asChild className="text-white hover:text-white hover:bg-white/10 h-10 flex items-center">
               <Link href="https://app.cubent.dev/sign-in">
                 Sign In
               </Link>
             </Button>
           )}
+          <Button asChild className="hidden md:inline-flex h-10 bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 text-white border-0">
+            <Link href="https://marketplace.visualstudio.com/items?itemName=cubent.cubent" className="flex flex-row items-center gap-2 px-4 py-2 whitespace-nowrap">
+              <span className="shrink-0 text-sm">Download Cubent</span>
+            </Link>
+          </Button>
         </div>
         <div className="flex w-12 shrink items-end justify-end lg:hidden">
           <Button variant="ghost" onClick={() => setOpen(!isOpen)}>
@@ -183,7 +182,9 @@ export const Header = ({ dictionary }: HeaderProps) => {
                     {item.href ? (
                       <Link
                         href={item.href}
-                        className="flex items-center justify-between"
+                        className={`flex items-center justify-between ${
+                          isActiveItem(item.href) ? 'bg-neutral-800/50 text-white rounded px-2 py-1' : ''
+                        }`}
                         target={
                           item.href.startsWith('http') ? '_blank' : undefined
                         }

@@ -10,6 +10,21 @@ const usageUpdateSchema = z.object({
   date: z.string().datetime().optional(),
 });
 
+// Enhanced schema for comprehensive usage tracking
+const comprehensiveUsageSchema = z.object({
+  modelId: z.string(),
+  provider: z.string(),
+  configName: z.string().optional(),
+  cubentUnits: z.number().min(0),
+  tokensUsed: z.number().min(0),
+  inputTokens: z.number().min(0).optional(),
+  outputTokens: z.number().min(0).optional(),
+  costAccrued: z.number().min(0),
+  requestsMade: z.number().min(1).default(1),
+  timestamp: z.number().optional(),
+  metadata: z.record(z.any()).optional(),
+});
+
 export async function POST(request: NextRequest) {
   try {
     // Check for Bearer token in Authorization header (for extension)
@@ -67,9 +82,136 @@ export async function POST(request: NextRequest) {
 
     const body = await request.json();
 
-    // Handle both old format and new Cubent Units format
-    if (body.modelId && body.cubentUnits !== undefined) {
-      // New Cubent Units tracking format
+    // Handle comprehensive usage tracking format (includes tokens, cost, and Cubent Units)
+    if (body.modelId && body.cubentUnits !== undefined && (body.tokensUsed !== undefined || body.costAccrued !== undefined)) {
+      // Comprehensive usage tracking format
+      const {
+        modelId,
+        provider,
+        configName,
+        cubentUnits,
+        tokensUsed = 0,
+        inputTokens = 0,
+        outputTokens = 0,
+        costAccrued = 0,
+        requestsMade = 1,
+        timestamp,
+        metadata
+      } = comprehensiveUsageSchema.parse(body);
+
+      console.log('Comprehensive usage tracking:', {
+        userId,
+        modelId,
+        provider,
+        cubentUnits,
+        tokensUsed,
+        costAccrued,
+        requestsMade
+      });
+
+      const dbUser = await database.user.findUnique({
+        where: { clerkId: userId },
+      });
+
+      if (!dbUser) {
+        return NextResponse.json(
+          { error: 'User not found' },
+          { status: 404 }
+        );
+      }
+
+      // Update user's total Cubent Units used
+      await database.user.update({
+        where: { id: dbUser.id },
+        data: {
+          cubentUnitsUsed: {
+            increment: cubentUnits
+          },
+          lastActiveAt: new Date(),
+        },
+      });
+
+      // Create comprehensive usage analytics record
+      await database.usageAnalytics.create({
+        data: {
+          userId: dbUser.id,
+          modelId,
+          cubentUnitsUsed: cubentUnits,
+          tokensUsed: tokensUsed,
+          costAccrued: costAccrued,
+          requestsMade: requestsMade,
+          metadata: {
+            provider,
+            configName,
+            timestamp: timestamp || Date.now(),
+            inputTokens,
+            outputTokens,
+            ...metadata
+          }
+        },
+      });
+
+      // Update daily usage metrics
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      const existingMetrics = await database.usageMetrics.findFirst({
+        where: {
+          userId: dbUser.id,
+          date: {
+            gte: today,
+            lt: new Date(today.getTime() + 24 * 60 * 60 * 1000)
+          }
+        }
+      });
+
+      if (existingMetrics) {
+        await database.usageMetrics.update({
+          where: { id: existingMetrics.id },
+          data: {
+            cubentUnitsUsed: {
+              increment: cubentUnits
+            },
+            tokensUsed: {
+              increment: tokensUsed
+            },
+            costAccrued: {
+              increment: costAccrued
+            },
+            requestsMade: {
+              increment: requestsMade
+            }
+          },
+        });
+      } else {
+        await database.usageMetrics.create({
+          data: {
+            userId: dbUser.id,
+            cubentUnitsUsed: cubentUnits,
+            tokensUsed: tokensUsed,
+            costAccrued: costAccrued,
+            requestsMade: requestsMade,
+            date: today,
+          },
+        });
+      }
+
+      return NextResponse.json({
+        success: true,
+        message: 'Comprehensive usage tracked successfully',
+        data: {
+          cubentUnitsUsed: cubentUnits,
+          tokensUsed: tokensUsed,
+          costAccrued: costAccrued,
+          requestsMade: requestsMade,
+          totalCubentUnits: dbUser.cubentUnitsUsed + cubentUnits
+        }
+      });
+    }
+
+    // Handle legacy Cubent Units only format (backward compatibility)
+    else if (body.modelId && body.cubentUnits !== undefined) {
+      // Legacy Cubent Units tracking format
       const { modelId, provider, configName, cubentUnits, messageCount, timestamp } = body;
 
       const dbUser = await database.user.findUnique({
@@ -94,7 +236,7 @@ export async function POST(request: NextRequest) {
         },
       });
 
-      // Create usage analytics record
+      // Create usage analytics record (legacy format)
       await database.usageAnalytics.create({
         data: {
           userId: dbUser.id,
@@ -109,7 +251,7 @@ export async function POST(request: NextRequest) {
         },
       });
 
-      // Update daily usage metrics
+      // Update daily usage metrics (legacy format)
       const today = new Date();
       today.setHours(0, 0, 0, 0);
 
