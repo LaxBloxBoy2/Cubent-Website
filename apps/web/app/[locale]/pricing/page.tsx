@@ -381,7 +381,7 @@ const Pricing = () => (
                 </Link>
               </Button>
               <Button size="lg" variant="outline" asChild>
-                <Link href={env.NEXT_PUBLIC_DOCS_URL}>
+                <Link href={env.NEXT_PUBLIC_DOCS_URL || "https://docs.cubent.dev"}>
                   View Documentation
                 </Link>
               </Button>
