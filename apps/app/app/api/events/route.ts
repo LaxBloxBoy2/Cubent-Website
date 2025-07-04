@@ -39,14 +39,35 @@ export async function POST(request: NextRequest) {
       const token = authHeader.substring(7);
 
       try {
-        // First, try to validate as Clerk JWT (like the working endpoints)
-        const { clerkClient } = await import('@repo/auth/server');
-        const client = await clerkClient();
-        const session = await client.sessions.getSession(token);
-        userId = session.userId;
-        console.log('Events endpoint - Clerk JWT validation successful:', { userId });
+        // Check if token looks like a Clerk session ID (starts with sess_)
+        if (token.startsWith('sess_')) {
+          console.log('Events endpoint - Detected Clerk session ID format');
+          // For session IDs, we need to use a different approach
+          // Try to find the session in our PendingLogin table (like other working endpoints)
+          const pendingLogin = await database.pendingLogin.findFirst({
+            where: {
+              token,
+              expiresAt: { gt: new Date() },
+            },
+          });
+
+          if (pendingLogin) {
+            userId = pendingLogin.userId;
+            console.log('Events endpoint - PendingLogin validation successful:', { userId });
+          } else {
+            console.log('Events endpoint - Session ID not found in PendingLogin table');
+          }
+        } else {
+          console.log('Events endpoint - Attempting Clerk JWT validation');
+          // Try to validate as Clerk JWT
+          const { clerkClient } = await import('@repo/auth/server');
+          const client = await clerkClient();
+          const session = await client.sessions.getSession(token);
+          userId = session.userId;
+          console.log('Events endpoint - Clerk JWT validation successful:', { userId });
+        }
       } catch (clerkError) {
-        console.log('Events endpoint - Clerk JWT failed, trying API keys:', clerkError);
+        console.log('Events endpoint - Clerk authentication failed, trying API keys:', clerkError);
         console.log('Events endpoint - Token format:', token.substring(0, 20) + '...');
 
         // Fallback: Try API key authentication
