@@ -47,6 +47,7 @@ export async function POST(request: NextRequest) {
         console.log('Events endpoint - Clerk JWT validation successful:', { userId });
       } catch (clerkError) {
         console.log('Events endpoint - Clerk JWT failed, trying API keys:', clerkError);
+        console.log('Events endpoint - Token format:', token.substring(0, 20) + '...');
 
         // Fallback: Try API key authentication
         try {
@@ -91,8 +92,9 @@ export async function POST(request: NextRequest) {
     }
 
     if (!userId) {
+      console.log('Events endpoint - Authentication failed: No valid Clerk JWT or API key found');
       return NextResponse.json(
-        { error: 'Unauthorized - Invalid or missing API key' },
+        { error: 'Unauthorized - Invalid session token or API key' },
         { status: 401 }
       );
     }
