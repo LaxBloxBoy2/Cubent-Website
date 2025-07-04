@@ -132,7 +132,6 @@ export async function POST(request: NextRequest) {
             eventType: 'LLM_COMPLETION',
             timestamp: properties.timestamp || Date.now(),
             modelDetails: {
-              apiProvider: properties.apiProvider,
               diffStrategy: properties.diffStrategy,
               isSubtask: properties.isSubtask
             }
