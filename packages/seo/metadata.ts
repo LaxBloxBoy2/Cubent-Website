@@ -7,7 +7,7 @@ type MetadataGenerator = Omit<Metadata, 'description' | 'title'> & {
   image?: string;
 };
 
-const applicationName = 'Cubent Coder';
+const applicationName = 'Cubent';
 const author: Metadata['authors'] = {
   name: 'Cubent',
   url: 'https://cubent.dev/',
