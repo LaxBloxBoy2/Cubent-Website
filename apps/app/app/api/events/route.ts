@@ -51,8 +51,21 @@ export async function POST(request: NextRequest) {
           });
 
           if (pendingLogin) {
-            userId = pendingLogin.userId;
-            console.log('Events endpoint - PendingLogin validation successful:', { userId });
+            // Get the database user ID from the Clerk user ID
+            const dbUser = await database.user.findUnique({
+              where: { clerkId: pendingLogin.userId },
+              select: { id: true }
+            });
+
+            if (dbUser) {
+              userId = dbUser.id;
+              console.log('Events endpoint - PendingLogin validation successful:', {
+                clerkUserId: pendingLogin.userId,
+                dbUserId: userId
+              });
+            } else {
+              console.log('Events endpoint - Database user not found for Clerk ID:', pendingLogin.userId);
+            }
           } else {
             console.log('Events endpoint - Extension token not found in PendingLogin table');
           }
