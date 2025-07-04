@@ -38,39 +38,54 @@ export async function POST(request: NextRequest) {
     if (authHeader?.startsWith('Bearer ')) {
       const token = authHeader.substring(7);
 
-      // First, try to find user by new API key system (ApiKey table with hashed keys)
-      const hashedToken = await hashApiKey(token);
-      const apiKey = await database.apiKey.findFirst({
-        where: {
-          keyHash: hashedToken,
-          isActive: true,
-          OR: [
-            { expiresAt: null },
-            { expiresAt: { gt: new Date() } }
-          ]
-        },
-        include: { user: true }
-      });
+      try {
+        // First, try to validate as Clerk JWT (like the working endpoints)
+        const { clerkClient } = await import('@repo/auth/server');
+        const client = await clerkClient();
+        const session = await client.sessions.getSession(token);
+        userId = session.userId;
+        console.log('Events endpoint - Clerk JWT validation successful:', { userId });
+      } catch (clerkError) {
+        console.log('Events endpoint - Clerk JWT failed, trying API keys:', clerkError);
 
-      if (apiKey) {
-        userId = apiKey.userId;
+        // Fallback: Try API key authentication
+        try {
+          const hashedToken = await hashApiKey(token);
+          const apiKey = await database.apiKey.findFirst({
+            where: {
+              keyHash: hashedToken,
+              isActive: true,
+              OR: [
+                { expiresAt: null },
+                { expiresAt: { gt: new Date() } }
+              ]
+            },
+            include: { user: true }
+          });
 
-        // Update usage count and last used timestamp
-        await database.apiKey.update({
-          where: { id: apiKey.id },
-          data: {
-            lastUsedAt: new Date(),
-            usageCount: { increment: 1 }
+          if (apiKey) {
+            userId = apiKey.userId;
+
+            // Update usage count and last used timestamp
+            await database.apiKey.update({
+              where: { id: apiKey.id },
+              data: {
+                lastUsedAt: new Date(),
+                usageCount: { increment: 1 }
+              }
+            });
+          } else {
+            // Final fallback: legacy system (User.extensionApiKey - plain text)
+            const user = await database.user.findFirst({
+              where: { extensionApiKey: token }
+            });
+
+            if (user) {
+              userId = user.id;
+            }
           }
-        });
-      } else {
-        // Fallback to legacy system (User.extensionApiKey - plain text)
-        const user = await database.user.findFirst({
-          where: { extensionApiKey: token }
-        });
-
-        if (user) {
-          userId = user.id;
+        } catch (apiKeyError) {
+          console.error('Events endpoint - API key authentication failed:', apiKeyError);
         }
       }
     }
