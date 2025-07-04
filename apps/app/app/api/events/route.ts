@@ -39,11 +39,10 @@ export async function POST(request: NextRequest) {
       const token = authHeader.substring(7);
 
       try {
-        // Check if token looks like a Clerk session ID (starts with sess_)
-        if (token.startsWith('sess_')) {
-          console.log('Events endpoint - Detected Clerk session ID format');
-          // For session IDs, we need to use a different approach
-          // Try to find the session in our PendingLogin table (like other working endpoints)
+        // Check if token is a custom extension token (cubent_ext_) or session ID (sess_)
+        if (token.startsWith('cubent_ext_') || token.startsWith('sess_')) {
+          console.log('Events endpoint - Detected extension token format, checking PendingLogin table');
+          // For extension tokens, check the PendingLogin table (like other working endpoints)
           const pendingLogin = await database.pendingLogin.findFirst({
             where: {
               token,
@@ -55,7 +54,7 @@ export async function POST(request: NextRequest) {
             userId = pendingLogin.userId;
             console.log('Events endpoint - PendingLogin validation successful:', { userId });
           } else {
-            console.log('Events endpoint - Session ID not found in PendingLogin table');
+            console.log('Events endpoint - Extension token not found in PendingLogin table');
           }
         } else {
           console.log('Events endpoint - Attempting Clerk JWT validation');
