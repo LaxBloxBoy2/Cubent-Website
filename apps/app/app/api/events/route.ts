@@ -122,8 +122,8 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const validatedEvent = telemetryEventSchema.parse(body);
 
-    // Handle LLM_COMPLETION events specifically
-    if (validatedEvent.type === 'LLM_COMPLETION') {
+    // Handle LLM_COMPLETION events specifically (handle both formats)
+    if (validatedEvent.type === 'LLM_COMPLETION' || validatedEvent.type === 'LLM Completion') {
       console.log('Processing LLM_COMPLETION event for userId:', userId);
       const { properties } = validatedEvent;
       const totalTokens = properties.inputTokens + properties.outputTokens;
