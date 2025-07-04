@@ -145,7 +145,7 @@ export const GlobalSidebar = ({ children }: GlobalSidebarProperties) => {
         {/* Search hidden */}
         <SidebarContent className="flex-1 overflow-y-auto">
           <SidebarGroup>
-            <SidebarGroupLabel>Dashboard</SidebarGroupLabel>
+            <SidebarGroupLabel className="text-orange-300">Dashboard</SidebarGroupLabel>
             <SidebarMenu>
               {data.navMain.map((item) => (
                 <SidebarMenuItem key={item.title}>
@@ -165,7 +165,7 @@ export const GlobalSidebar = ({ children }: GlobalSidebarProperties) => {
           </SidebarGroup>
 
           <SidebarGroup>
-            <SidebarGroupLabel>Usage Metrics</SidebarGroupLabel>
+            <SidebarGroupLabel className="text-orange-300">Usage Metrics</SidebarGroupLabel>
             <SidebarMenu>
               {data.navUsageMetrics.map((item) => (
                 <SidebarMenuItem key={item.title}>
@@ -194,7 +194,7 @@ export const GlobalSidebar = ({ children }: GlobalSidebarProperties) => {
           </SidebarGroup>
 
           <SidebarGroup>
-            <SidebarGroupLabel>Account</SidebarGroupLabel>
+            <SidebarGroupLabel className="text-orange-300">Account</SidebarGroupLabel>
             <SidebarMenu>
               {data.navAccount.map((item) => (
                 <SidebarMenuItem key={item.title}>

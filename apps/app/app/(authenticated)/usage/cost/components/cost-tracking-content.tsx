@@ -73,7 +73,7 @@ export const CostTrackingContent = ({ data }: CostTrackingContentProps) => {
   };
 
   return (
-    <div className="space-y-6 p-6 bg-[#0a0a0a] min-h-screen">
+    <div className="space-y-6 p-6 bg-[#1f1f1f] min-h-screen">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>

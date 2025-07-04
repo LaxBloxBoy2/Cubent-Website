@@ -62,7 +62,7 @@ const ProfilePage = async () => {
   );
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <div className="container mx-auto p-6 space-y-6 bg-[#1f1f1f] min-h-screen">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold">{title}</h1>

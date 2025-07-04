@@ -19,8 +19,8 @@
     },
     "home": {
       "meta": {
-        "title": "AI-Powered Coding Agent for VS Code",
-        "description": "Meet Cubent Coder - the autonomous AI coding assistant that lives in your editor. Generate code, debug issues, write documentation, and automate tasks with natural language commands."
+        "title": "Cubent Coder - AI Coding Assistant",
+        "description": "Meet Cubent Coder, the autonomous AI coding assistant for VS Code. Generate code, debug issues, write docs, and automate tasks with natural language commands."
       },
       "hero": {
         "announcement": "Cubent.Dev 0.21 Released"
