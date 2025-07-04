@@ -119,18 +119,23 @@ export async function POST(request: NextRequest) {
           userId,
           modelId: properties.modelId || 'unknown',
           tokensUsed: totalTokens,
+          inputTokens: properties.inputTokens,
+          outputTokens: properties.outputTokens,
+          cacheReadTokens: properties.cacheReadTokens || 0,
+          cacheWriteTokens: properties.cacheWriteTokens || 0,
           cubentUnitsUsed: 0, // LLM completion events don't track Cubent units directly
           requestsMade: 1,
           costAccrued: calculatedCost || 0,
           sessionId: properties.sessionId,
           metadata: {
-            inputTokens: properties.inputTokens,
-            outputTokens: properties.outputTokens,
-            cacheReadTokens: properties.cacheReadTokens,
-            cacheWriteTokens: properties.cacheWriteTokens,
             provider: properties.provider,
             eventType: 'LLM_COMPLETION',
-            timestamp: properties.timestamp || Date.now()
+            timestamp: properties.timestamp || Date.now(),
+            modelDetails: {
+              apiProvider: properties.apiProvider,
+              diffStrategy: properties.diffStrategy,
+              isSubtask: properties.isSubtask
+            }
           }
         }
       });
@@ -156,6 +161,10 @@ export async function POST(request: NextRequest) {
           where: { id: existingMetrics.id },
           data: {
             tokensUsed: { increment: totalTokens },
+            inputTokens: { increment: properties.inputTokens },
+            outputTokens: { increment: properties.outputTokens },
+            cacheReadTokens: { increment: properties.cacheReadTokens || 0 },
+            cacheWriteTokens: { increment: properties.cacheWriteTokens || 0 },
             requestsMade: { increment: 1 },
             costAccrued: { increment: calculatedCost || 0 }
           }
@@ -166,6 +175,10 @@ export async function POST(request: NextRequest) {
           data: {
             userId,
             tokensUsed: totalTokens,
+            inputTokens: properties.inputTokens,
+            outputTokens: properties.outputTokens,
+            cacheReadTokens: properties.cacheReadTokens || 0,
+            cacheWriteTokens: properties.cacheWriteTokens || 0,
             requestsMade: 1,
             costAccrued: calculatedCost || 0,
             date: today

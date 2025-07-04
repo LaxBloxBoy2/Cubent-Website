@@ -85,6 +85,10 @@ model UsageMetrics {
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   tokensUsed      Int   @default(0)
+  inputTokens     Int   @default(0)
+  outputTokens    Int   @default(0)
+  cacheReadTokens Int   @default(0)
+  cacheWriteTokens Int  @default(0)
   cubentUnitsUsed Float @default(0)
   requestsMade    Int   @default(0)
   costAccrued     Float @default(0)
@@ -102,6 +106,10 @@ model UsageAnalytics {
 
   modelId         String
   tokensUsed      Int     @default(0)
+  inputTokens     Int     @default(0)
+  outputTokens    Int     @default(0)
+  cacheReadTokens Int     @default(0)
+  cacheWriteTokens Int    @default(0)
   cubentUnitsUsed Float   @default(0)
   requestsMade    Int     @default(0)
   costAccrued     Float   @default(0)
