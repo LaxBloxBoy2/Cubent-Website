@@ -124,8 +124,10 @@ export async function POST(request: NextRequest) {
 
     // Handle LLM_COMPLETION events specifically
     if (validatedEvent.type === 'LLM_COMPLETION') {
+      console.log('Processing LLM_COMPLETION event for userId:', userId);
       const { properties } = validatedEvent;
       const totalTokens = properties.inputTokens + properties.outputTokens;
+      console.log('Token calculation:', { inputTokens: properties.inputTokens, outputTokens: properties.outputTokens, totalTokens });
       
       // Calculate cost if not provided (basic estimation)
       let calculatedCost = properties.cost;
@@ -136,7 +138,9 @@ export async function POST(request: NextRequest) {
       }
 
       // Store in UsageAnalytics for detailed tracking
-      await database.usageAnalytics.create({
+      console.log('Creating UsageAnalytics record...');
+      try {
+        await database.usageAnalytics.create({
         data: {
           userId,
           modelId: properties.modelId || 'unknown',
@@ -155,9 +159,15 @@ export async function POST(request: NextRequest) {
             timestamp: properties.timestamp || Date.now()
           }
         }
-      });
+        });
+        console.log('UsageAnalytics record created successfully');
+      } catch (analyticsError) {
+        console.error('Failed to create UsageAnalytics record:', analyticsError);
+        throw analyticsError;
+      }
 
       // Update daily UsageMetrics
+      console.log('Updating UsageMetrics...');
       const today = new Date();
       today.setHours(0, 0, 0, 0);
 
@@ -172,35 +182,44 @@ export async function POST(request: NextRequest) {
         }
       });
 
-      if (existingMetrics) {
-        // Update existing record
-        await database.usageMetrics.update({
-          where: { id: existingMetrics.id },
-          data: {
-            tokensUsed: { increment: totalTokens },
-            inputTokens: { increment: properties.inputTokens },
-            outputTokens: { increment: properties.outputTokens },
-            cacheReadTokens: { increment: properties.cacheReadTokens || 0 },
-            cacheWriteTokens: { increment: properties.cacheWriteTokens || 0 },
-            requestsMade: { increment: 1 },
-            costAccrued: { increment: calculatedCost || 0 }
-          }
-        });
-      } else {
-        // Create new record
-        await database.usageMetrics.create({
-          data: {
-            userId,
-            tokensUsed: totalTokens,
-            inputTokens: properties.inputTokens,
-            outputTokens: properties.outputTokens,
-            cacheReadTokens: properties.cacheReadTokens || 0,
-            cacheWriteTokens: properties.cacheWriteTokens || 0,
-            requestsMade: 1,
-            costAccrued: calculatedCost || 0,
-            date: today
-          }
-        });
+      try {
+        if (existingMetrics) {
+          console.log('Updating existing UsageMetrics record:', existingMetrics.id);
+          // Update existing record
+          await database.usageMetrics.update({
+            where: { id: existingMetrics.id },
+            data: {
+              tokensUsed: { increment: totalTokens },
+              inputTokens: { increment: properties.inputTokens },
+              outputTokens: { increment: properties.outputTokens },
+              cacheReadTokens: { increment: properties.cacheReadTokens || 0 },
+              cacheWriteTokens: { increment: properties.cacheWriteTokens || 0 },
+              requestsMade: { increment: 1 },
+              costAccrued: { increment: calculatedCost || 0 }
+            }
+          });
+          console.log('UsageMetrics record updated successfully');
+        } else {
+          console.log('Creating new UsageMetrics record for date:', today);
+          // Create new record
+          await database.usageMetrics.create({
+            data: {
+              userId,
+              tokensUsed: totalTokens,
+              inputTokens: properties.inputTokens,
+              outputTokens: properties.outputTokens,
+              cacheReadTokens: properties.cacheReadTokens || 0,
+              cacheWriteTokens: properties.cacheWriteTokens || 0,
+              requestsMade: 1,
+              costAccrued: calculatedCost || 0,
+              date: today
+            }
+          });
+          console.log('UsageMetrics record created successfully');
+        }
+      } catch (metricsError) {
+        console.error('Failed to update UsageMetrics:', metricsError);
+        throw metricsError;
       }
 
       return NextResponse.json({
