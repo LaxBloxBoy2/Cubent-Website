@@ -2,201 +2,210 @@ import { database } from '@repo/database';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 
-// Schema for telemetry events
-const telemetryEventSchema = z.object({
-  type: z.string(),
+// Schema for LLM_COMPLETION telemetry events
+const llmCompletionEventSchema = z.object({
+  type: z.literal('LLM_COMPLETION'),
   properties: z.object({
-    // Common properties
-    appName: z.string().optional(),
-    appVersion: z.string().optional(),
-    vscodeVersion: z.string().optional(),
-    platform: z.string().optional(),
-    editorName: z.string().optional(),
-    language: z.string().optional(),
-    mode: z.string().optional(),
-    taskId: z.string().optional(),
-    apiProvider: z.string().optional(),
-    modelId: z.string().optional(),
-    diffStrategy: z.string().optional(),
-    isSubtask: z.boolean().optional(),
-    
-    // LLM Completion specific properties
-    inputTokens: z.number().optional(),
-    outputTokens: z.number().optional(),
+    inputTokens: z.number(),
+    outputTokens: z.number(), 
     cacheReadTokens: z.number().optional(),
     cacheWriteTokens: z.number().optional(),
     cost: z.number().optional(),
-  }).passthrough(), // Allow additional properties
+    // Additional telemetry properties
+    modelId: z.string().optional(),
+    provider: z.string().optional(),
+    sessionId: z.string().optional(),
+    timestamp: z.number().optional(),
+  })
 });
 
-/**
- * Telemetry events endpoint
- * Handles LLM_COMPLETION and other telemetry events from the extension
- */
+// Schema for other telemetry events (for future extensibility)
+const telemetryEventSchema = z.union([
+  llmCompletionEventSchema,
+  // Add other event types here as needed
+  z.object({
+    type: z.string(),
+    properties: z.record(z.any())
+  })
+]);
+
 export async function POST(request: NextRequest) {
   try {
     // Check for Bearer token in Authorization header
     const authHeader = request.headers.get('authorization');
     let userId: string | null = null;
 
-    if (authHeader && authHeader.startsWith('Bearer ')) {
+    if (authHeader?.startsWith('Bearer ')) {
       const token = authHeader.substring(7);
-      
-      try {
-        // Verify the token and get user ID
-        const tokenRecord = await database.extensionToken.findUnique({
-          where: { token },
-          include: { user: true }
+
+      // First, try to find user by new API key system (ApiKey table with hashed keys)
+      const hashedToken = await hashApiKey(token);
+      const apiKey = await database.apiKey.findFirst({
+        where: {
+          keyHash: hashedToken,
+          isActive: true,
+          OR: [
+            { expiresAt: null },
+            { expiresAt: { gt: new Date() } }
+          ]
+        },
+        include: { user: true }
+      });
+
+      if (apiKey) {
+        userId = apiKey.userId;
+
+        // Update usage count and last used timestamp
+        await database.apiKey.update({
+          where: { id: apiKey.id },
+          data: {
+            lastUsedAt: new Date(),
+            usageCount: { increment: 1 }
+          }
+        });
+      } else {
+        // Fallback to legacy system (User.extensionApiKey - plain text)
+        const user = await database.user.findFirst({
+          where: { extensionApiKey: token }
         });
 
-        if (tokenRecord && tokenRecord.user) {
-          userId = tokenRecord.user.clerkId;
+        if (user) {
+          userId = user.id;
         }
-      } catch (error) {
-        console.error('Token verification failed:', error);
       }
     }
 
     if (!userId) {
       return NextResponse.json(
-        { error: 'Unauthorized - valid Bearer token required' },
+        { error: 'Unauthorized - Invalid or missing API key' },
         { status: 401 }
       );
     }
 
     const body = await request.json();
-    const event = telemetryEventSchema.parse(body);
-
-    console.log('Telemetry event received:', {
-      userId,
-      type: event.type,
-      properties: event.properties
-    });
-
-    // Find the user in the database
-    const dbUser = await database.user.findUnique({
-      where: { clerkId: userId },
-    });
-
-    if (!dbUser) {
-      return NextResponse.json(
-        { error: 'User not found' },
-        { status: 404 }
-      );
-    }
+    const validatedEvent = telemetryEventSchema.parse(body);
 
     // Handle LLM_COMPLETION events specifically
-    if (event.type === 'LLM Completion') {
-      const {
-        inputTokens = 0,
-        outputTokens = 0,
-        cacheReadTokens = 0,
-        cacheWriteTokens = 0,
-        cost = 0,
-        modelId,
-        apiProvider,
-        taskId
-      } = event.properties;
+    if (validatedEvent.type === 'LLM_COMPLETION') {
+      const { properties } = validatedEvent;
+      const totalTokens = properties.inputTokens + properties.outputTokens;
+      
+      // Calculate cost if not provided (basic estimation)
+      let calculatedCost = properties.cost;
+      if (!calculatedCost && properties.modelId) {
+        // Basic cost calculation - you can enhance this based on your pricing model
+        const costPerToken = 0.00001; // $0.00001 per token as default
+        calculatedCost = totalTokens * costPerToken;
+      }
 
-      const totalTokens = inputTokens + outputTokens + (cacheReadTokens || 0) + (cacheWriteTokens || 0);
-
-      // Create comprehensive usage analytics record
+      // Store in UsageAnalytics for detailed tracking
       await database.usageAnalytics.create({
         data: {
-          userId: dbUser.id,
-          modelId: modelId || 'unknown',
-          cubentUnitsUsed: 0, // LLM completion events don't track Cubent units directly
+          userId,
+          modelId: properties.modelId || 'unknown',
           tokensUsed: totalTokens,
-          costAccrued: cost,
+          cubentUnitsUsed: 0, // LLM completion events don't track Cubent units directly
           requestsMade: 1,
+          costAccrued: calculatedCost || 0,
+          sessionId: properties.sessionId,
           metadata: {
-            provider: apiProvider || 'unknown',
-            timestamp: Date.now(),
-            inputTokens,
-            outputTokens,
-            cacheReadTokens,
-            cacheWriteTokens,
+            inputTokens: properties.inputTokens,
+            outputTokens: properties.outputTokens,
+            cacheReadTokens: properties.cacheReadTokens,
+            cacheWriteTokens: properties.cacheWriteTokens,
+            provider: properties.provider,
             eventType: 'LLM_COMPLETION',
-            taskId,
-            ...event.properties
+            timestamp: properties.timestamp || Date.now()
           }
-        },
+        }
       });
 
-      // Update user's total usage counters
-      await database.user.update({
-        where: { id: dbUser.id },
-        data: {
-          lastActiveAt: new Date(),
-        },
-      });
-
-      // Update daily usage metrics
+      // Update daily UsageMetrics
       const today = new Date();
       today.setHours(0, 0, 0, 0);
 
+      // Find existing usage metrics for today
       const existingMetrics = await database.usageMetrics.findFirst({
         where: {
-          userId: dbUser.id,
+          userId,
           date: {
             gte: today,
-            lt: new Date(today.getTime() + 24 * 60 * 60 * 1000)
+            lt: new Date(today.getTime() + 24 * 60 * 60 * 1000) // Next day
           }
         }
       });
 
       if (existingMetrics) {
+        // Update existing record
         await database.usageMetrics.update({
           where: { id: existingMetrics.id },
           data: {
-            tokensUsed: {
-              increment: totalTokens
-            },
-            requestsMade: {
-              increment: 1
-            }
-          },
+            tokensUsed: { increment: totalTokens },
+            requestsMade: { increment: 1 },
+            costAccrued: { increment: calculatedCost || 0 }
+          }
         });
       } else {
+        // Create new record
         await database.usageMetrics.create({
           data: {
-            userId: dbUser.id,
+            userId,
             tokensUsed: totalTokens,
             requestsMade: 1,
-            date: today,
-          },
+            costAccrued: calculatedCost || 0,
+            date: today
+          }
         });
       }
 
-      console.log('LLM Completion telemetry processed:', {
-        userId,
-        modelId,
-        totalTokens,
-        cost,
-        inputTokens,
-        outputTokens
+      return NextResponse.json({
+        success: true,
+        message: 'LLM completion event tracked successfully',
+        data: {
+          tokensProcessed: totalTokens,
+          inputTokens: properties.inputTokens,
+          outputTokens: properties.outputTokens,
+          cost: calculatedCost
+        }
       });
     }
 
-    // Store the raw telemetry event for analytics
-    // You can create a telemetry_events table if you want to store all events
-    // For now, we'll just log successful processing
-
+    // Handle other event types (for future extensibility)
+    console.log('Received telemetry event:', validatedEvent.type, validatedEvent.properties);
+    
     return NextResponse.json({
       success: true,
-      message: 'Telemetry event processed successfully',
-      eventType: event.type
+      message: 'Telemetry event received',
+      eventType: validatedEvent.type
     });
 
   } catch (error) {
     console.error('Telemetry event processing error:', error);
     
+    if (error instanceof z.ZodError) {
+      return NextResponse.json(
+        { 
+          error: 'Invalid event data',
+          details: error.errors
+        },
+        { status: 400 }
+      );
+    }
+
     return NextResponse.json(
-      { 
-        error: 'Failed to process telemetry event',
-        details: error instanceof Error ? error.message : 'Unknown error'
-      },
+      { error: 'Internal server error' },
       { status: 500 }
     );
   }
+}
+
+/**
+ * Hash API key for secure storage
+ */
+async function hashApiKey(key: string): Promise<string> {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(key);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 }
