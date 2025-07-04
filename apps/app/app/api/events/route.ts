@@ -130,11 +130,7 @@ export async function POST(request: NextRequest) {
           metadata: {
             provider: properties.provider,
             eventType: 'LLM_COMPLETION',
-            timestamp: properties.timestamp || Date.now(),
-            modelDetails: {
-              diffStrategy: properties.diffStrategy,
-              isSubtask: properties.isSubtask
-            }
+            timestamp: properties.timestamp || Date.now()
           }
         }
       });
