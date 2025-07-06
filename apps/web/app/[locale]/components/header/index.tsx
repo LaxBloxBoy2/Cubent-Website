@@ -262,7 +262,7 @@ export const Header = ({ dictionary }: HeaderProps) => {
                         ))}
                       </div>
                     ))}
-                    {('items' in item && item.items) && item.items.map((subItem) => (
+                    {('items' in item && item.items) && (item as any).items.map((subItem: any) => (
                       <Link
                         key={subItem.title}
                         href={subItem.href}
