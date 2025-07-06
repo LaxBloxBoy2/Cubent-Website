@@ -20,6 +20,8 @@ const TokenUsagePage = async () => {
         select: {
           date: true,
           tokensUsed: true,
+          inputTokens: true,
+          outputTokens: true,
           requestsMade: true,
           cubentUnitsUsed: true,
         }
