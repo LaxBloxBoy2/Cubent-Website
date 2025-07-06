@@ -26,6 +26,8 @@ interface DashboardData {
   totalRequests: number;
   totalCubentUnits: number;
   totalTokens: number;
+  totalInputTokens?: number;
+  totalOutputTokens?: number;
   totalCost: number;
   avgResponseTime: number;
   chartData: Array<{
