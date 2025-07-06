@@ -33,6 +33,11 @@ export const Header = ({ dictionary }: HeaderProps) => {
 
   const navigationItems = [
     {
+      title: 'Enterprise',
+      href: '/enterprise',
+      description: '',
+    },
+    {
       title: 'Pricing',
       href: '/pricing',
       description: '',
@@ -50,24 +55,52 @@ export const Header = ({ dictionary }: HeaderProps) => {
     {
       title: 'Company',
       description: 'Learn more about Cubent',
-      items: [
+      sections: [
         {
-          title: 'About Us',
-          href: '/about',
+          title: 'Company',
+          items: [
+            {
+              title: 'About Us',
+              href: '/about',
+              description: 'Learn about our mission and team'
+            },
+            {
+              title: 'Careers',
+              href: '/careers',
+              description: 'Join our growing team'
+            },
+          ]
         },
         {
-          title: 'Contact',
-          href: '/contact',
-        },
+          title: 'Support',
+          items: [
+            {
+              title: 'Contact',
+              href: '/contact',
+              description: 'Get in touch with our team'
+            },
+            {
+              title: 'Help Center',
+              href: '/help',
+              description: 'Find answers to common questions'
+            },
+          ]
+        }
       ],
     },
   ];
 
   // Helper function to check if a navigation item is active
   const isActiveItem = (href: string) => {
+    if (href === '/enterprise') return pathname === '/enterprise';
     if (href === '/pricing') return pathname === '/pricing';
     if (href === '/blog') return pathname.startsWith('/blog');
     return false;
+  };
+
+  // Helper function to check if Company dropdown should be highlighted
+  const isCompanyActive = () => {
+    return pathname === '/about' || pathname === '/contact';
   };
 
   const [isOpen, setOpen] = useState(false);
@@ -106,7 +139,7 @@ export const Header = ({ dictionary }: HeaderProps) => {
                         <Button
                           variant="ghost"
                           asChild
-                          className={isActiveItem(item.href) ? 'bg-neutral-800/50 text-white' : ''}
+                          className={isActiveItem(item.href) ? 'bg-neutral-800/50 text-orange-400 hover:bg-neutral-700/50 hover:text-orange-300' : ''}
                         >
                           <Link
                             href={item.href}
@@ -120,27 +153,39 @@ export const Header = ({ dictionary }: HeaderProps) => {
                     </>
                   ) : (
                     <>
-                      <NavigationMenuTrigger className="font-medium text-sm bg-transparent hover:bg-transparent data-[state=open]:bg-transparent">
+                      <NavigationMenuTrigger className={`font-medium text-sm bg-transparent hover:bg-transparent data-[state=open]:bg-transparent ${isCompanyActive() ? 'text-orange-400' : ''}`}>
                         {item.title}
                       </NavigationMenuTrigger>
-                      <NavigationMenuContent className="!w-[450px] p-4">
-                        <div className="flex flex-col gap-4">
+                      <NavigationMenuContent className="!w-[500px] p-6">
+                        <div className="flex flex-col gap-6">
                           <div className="flex flex-col">
-                            <p className="text-base">{item.title}</p>
+                            <p className="text-base font-medium">{item.title}</p>
                             <p className="text-muted-foreground text-sm">
                               {item.description}
                             </p>
                           </div>
-                          <div className="flex flex-col text-sm">
-                            {item.items?.map((subItem, idx) => (
-                              <NavigationMenuLink
-                                href={subItem.href}
-                                key={idx}
-                                className="flex flex-row items-center justify-between rounded px-4 py-2 hover:bg-muted"
-                              >
-                                <span>{subItem.title}</span>
-                                <MoveRight className="h-4 w-4 text-muted-foreground" />
-                              </NavigationMenuLink>
+                          <div className="grid grid-cols-2 gap-6">
+                            {item.sections?.map((section, sectionIdx) => (
+                              <div key={sectionIdx} className="flex flex-col gap-3">
+                                <h4 className="text-sm font-medium text-foreground border-b border-border pb-2">
+                                  {section.title}
+                                </h4>
+                                <div className="flex flex-col gap-1">
+                                  {section.items?.map((subItem, idx) => (
+                                    <NavigationMenuLink
+                                      href={subItem.href}
+                                      key={idx}
+                                      className="flex flex-col gap-1 rounded-lg p-3 hover:bg-muted/50 transition-colors"
+                                    >
+                                      <div className="flex items-center justify-between">
+                                        <span className="text-sm font-medium">{subItem.title}</span>
+                                        <MoveRight className="h-3 w-3 text-muted-foreground" />
+                                      </div>
+                                      <span className="text-xs text-muted-foreground">{subItem.description}</span>
+                                    </NavigationMenuLink>
+                                  ))}
+                                </div>
+                              </div>
                             ))}
                           </div>
                         </div>
@@ -183,7 +228,7 @@ export const Header = ({ dictionary }: HeaderProps) => {
                       <Link
                         href={item.href}
                         className={`flex items-center justify-between ${
-                          isActiveItem(item.href) ? 'bg-neutral-800/50 text-white rounded px-2 py-1' : ''
+                          isActiveItem(item.href) ? 'bg-neutral-800/50 text-orange-400 rounded px-2 py-1' : ''
                         }`}
                         target={
                           item.href.startsWith('http') ? '_blank' : undefined
@@ -198,8 +243,25 @@ export const Header = ({ dictionary }: HeaderProps) => {
                         <MoveRight className="h-4 w-4 stroke-1 text-muted-foreground" />
                       </Link>
                     ) : (
-                      <p className="text-lg">{item.title}</p>
+                      <p className={`text-lg ${isCompanyActive() ? 'text-orange-400' : ''}`}>{item.title}</p>
                     )}
+                    {item.sections?.map((section) => (
+                      <div key={section.title} className="ml-4 flex flex-col gap-2">
+                        <p className="text-sm font-medium text-muted-foreground">{section.title}</p>
+                        {section.items?.map((subItem) => (
+                          <Link
+                            key={subItem.title}
+                            href={subItem.href}
+                            className="flex items-center justify-between ml-2"
+                          >
+                            <span className="text-muted-foreground text-sm">
+                              {subItem.title}
+                            </span>
+                            <MoveRight className="h-3 w-3 stroke-1" />
+                          </Link>
+                        ))}
+                      </div>
+                    ))}
                     {item.items?.map((subItem) => (
                       <Link
                         key={subItem.title}

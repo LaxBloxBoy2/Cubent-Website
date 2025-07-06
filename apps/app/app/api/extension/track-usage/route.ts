@@ -180,6 +180,12 @@ export async function POST(request: NextRequest) {
           tokensUsed: {
             increment: tokensUsed
           },
+          inputTokens: {
+            increment: inputTokens
+          },
+          outputTokens: {
+            increment: outputTokens
+          },
           costAccrued: {
             increment: costAccrued
           },
@@ -194,6 +200,8 @@ export async function POST(request: NextRequest) {
           userId: dbUser.id,
           cubentUnitsUsed: cubentUnits,
           tokensUsed: tokensUsed,
+          inputTokens: inputTokens,
+          outputTokens: outputTokens,
           costAccrued: costAccrued,
           requestsMade: requestsMade,
           date: today,

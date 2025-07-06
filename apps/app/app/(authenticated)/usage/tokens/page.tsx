@@ -47,7 +47,11 @@ const TokenUsagePage = async () => {
   // Calculate total tokens
   const totalTokens = await database.usageMetrics.aggregate({
     where: { userId: dbUser.id },
-    _sum: { tokensUsed: true }
+    _sum: {
+      tokensUsed: true,
+      inputTokens: true,
+      outputTokens: true
+    }
   });
 
   // Calculate tokens by model
@@ -65,11 +69,14 @@ const TokenUsagePage = async () => {
     ? last7Days.reduce((sum, day) => sum + day.tokensUsed, 0) / last7Days.length 
     : 0;
 
-  // Estimate input/output tokens (since we don't track them separately yet)
-  // Using typical ratios: ~85% input, ~15% output for most use cases
+  // Use real input/output tokens from the database
   const totalTokensSum = totalTokens._sum.tokensUsed || 0;
-  const estimatedInputTokens = Math.round(totalTokensSum * 0.85);
-  const estimatedOutputTokens = Math.round(totalTokensSum * 0.15);
+  const actualInputTokens = totalTokens._sum.inputTokens || 0;
+  const actualOutputTokens = totalTokens._sum.outputTokens || 0;
+
+  // Fallback to estimates only if real data is not available
+  const inputTokens = actualInputTokens > 0 ? actualInputTokens : Math.round(totalTokensSum * 0.85);
+  const outputTokens = actualOutputTokens > 0 ? actualOutputTokens : Math.round(totalTokensSum * 0.15);
 
   // Calculate peak usage day
   const peakDay = dbUser.usageMetrics.reduce((peak, day) => 
@@ -81,16 +88,16 @@ const TokenUsagePage = async () => {
   const chartData = dbUser.usageMetrics.map((metric) => ({
     date: metric.date.toISOString().split('T')[0],
     tokens: metric.tokensUsed,
-    // Estimate input/output split for chart
-    inputTokens: Math.round(metric.tokensUsed * 0.85),
-    outputTokens: Math.round(metric.tokensUsed * 0.15),
+    // Use real input/output tokens, fallback to estimates if not available
+    inputTokens: metric.inputTokens > 0 ? metric.inputTokens : Math.round(metric.tokensUsed * 0.85),
+    outputTokens: metric.outputTokens > 0 ? metric.outputTokens : Math.round(metric.tokensUsed * 0.15),
     requests: metric.requestsMade,
   })).reverse();
 
   const tokenUsageData = {
     totalTokens: totalTokensSum,
-    estimatedInputTokens,
-    estimatedOutputTokens,
+    estimatedInputTokens: inputTokens,
+    estimatedOutputTokens: outputTokens,
     avgDailyTokens: Math.round(avgDailyTokens),
     peakDay: {
       date: peakDay.date,

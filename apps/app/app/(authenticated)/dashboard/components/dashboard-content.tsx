@@ -106,12 +106,12 @@ export function DashboardContent({ data }: DashboardContentProps) {
       <div className="grid gap-4 grid-cols-3">
         <div className="bg-[#1a1a1a] border border-[#333] rounded-lg p-6">
           <div className="text-sm font-medium text-gray-400 mb-2">Total tokens in</div>
-          <div className="text-3xl font-bold text-white">{data.totalTokens.toLocaleString()}</div>
+          <div className="text-3xl font-bold text-white">{(data.totalInputTokens || data.totalTokens).toLocaleString()}</div>
         </div>
 
         <div className="bg-[#1a1a1a] border border-[#333] rounded-lg p-6">
           <div className="text-sm font-medium text-gray-400 mb-2">Total tokens out</div>
-          <div className="text-3xl font-bold text-white">{Math.floor(data.totalTokens * 0.015).toLocaleString()}</div>
+          <div className="text-3xl font-bold text-white">{(data.totalOutputTokens || Math.floor(data.totalTokens * 0.15)).toLocaleString()}</div>
         </div>
 
         <div className="bg-[#1a1a1a] border border-[#333] rounded-lg p-6">

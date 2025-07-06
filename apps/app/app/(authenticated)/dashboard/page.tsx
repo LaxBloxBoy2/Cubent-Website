@@ -45,11 +45,13 @@ const Dashboard = async () => {
   const totalUsage = dbUser.usageMetrics.reduce(
     (acc, metric) => ({
       tokensUsed: acc.tokensUsed + metric.tokensUsed,
+      inputTokens: acc.inputTokens + metric.inputTokens,
+      outputTokens: acc.outputTokens + metric.outputTokens,
       requestsMade: acc.requestsMade + metric.requestsMade,
       costAccrued: acc.costAccrued + metric.costAccrued,
       cubentUnitsUsed: acc.cubentUnitsUsed + metric.cubentUnitsUsed,
     }),
-    { tokensUsed: 0, requestsMade: 0, costAccrued: 0, cubentUnitsUsed: 0 }
+    { tokensUsed: 0, inputTokens: 0, outputTokens: 0, requestsMade: 0, costAccrued: 0, cubentUnitsUsed: 0 }
   );
 
   // Get recent analytics for API calls breakdown
@@ -89,6 +91,8 @@ const Dashboard = async () => {
     totalRequests: totalUsage.requestsMade,
     totalCubentUnits: totalUsage.cubentUnitsUsed,
     totalTokens: totalUsage.tokensUsed,
+    totalInputTokens: totalUsage.inputTokens,
+    totalOutputTokens: totalUsage.outputTokens,
     totalCost: totalUsage.costAccrued,
     avgResponseTime,
     chartData,
