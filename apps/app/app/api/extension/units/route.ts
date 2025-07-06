@@ -25,13 +25,12 @@ export async function GET(request: NextRequest) {
         console.log('Units API - Clerk JWT failed, trying PendingLogin:', clerkError);
 
         // Fallback: Check PendingLogin table
-        const pendingLogin = await database.pendingLogin.findUnique({
+        const pendingLogin = await database.pendingLogin.findFirst({
           where: { token },
-          include: { user: true }
         });
 
-        if (pendingLogin?.user) {
-          userId = pendingLogin.user.clerkId;
+        if (pendingLogin?.userId) {
+          userId = pendingLogin.userId;
           console.log('Units API - PendingLogin validation successful:', { userId });
         }
       }
