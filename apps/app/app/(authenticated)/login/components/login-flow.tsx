@@ -102,7 +102,7 @@ export const LoginFlow = ({ deviceId, state, user }: LoginFlowProps) => {
       <Card className="w-full max-w-md bg-[#1a1a1a] border-[#333]">
         <CardHeader>
           <CardTitle className="text-orange-500">Authorize VS Code Extension</CardTitle>
-          <CardDescription className="text-gray-400">
+          <CardDescription className="text-white">
             Welcome, <span className="text-orange-400">{user.name || user.email}</span>! Please review and accept our terms to continue.
           </CardDescription>
         </CardHeader>
