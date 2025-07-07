@@ -21,7 +21,7 @@ type LoginFlowProps = {
 };
 
 export const LoginFlow = ({ deviceId, state, user }: LoginFlowProps) => {
-  const [termsAccepted, setTermsAccepted] = useState(user.termsAccepted);
+  const [termsAccepted, setTermsAccepted] = useState(false); // Always start unselected
   const [isLoading, setIsLoading] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
 
@@ -72,40 +72,63 @@ export const LoginFlow = ({ deviceId, state, user }: LoginFlowProps) => {
 
   if (isComplete) {
     return (
-      <div className="flex min-h-screen items-center justify-center p-4 bg-[#1f1f1f]">
-        <Card className="w-full max-w-md bg-[#1a1a1a] border-[#333]">
-          <CardHeader className="text-center">
-            <CardTitle className="text-green-600">Login Successful!</CardTitle>
-            <CardDescription className="text-gray-400">
-              Your VS Code extension has been authorized successfully.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="text-center">
-            <div className="mb-4">
-              <div className="mx-auto h-16 w-16 rounded-full bg-green-100 flex items-center justify-center">
-                <svg className="h-8 w-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
+      <div className="relative min-h-screen w-full overflow-hidden" style={{background: 'linear-gradient(to bottom right, #000000, #1a1a1a, #0a0a0a)'}}>
+        {/* Orange ambient glow effects */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-orange-500/5 rounded-full blur-3xl" />
+          <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-orange-600/8 rounded-full blur-3xl" />
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-orange-400/3 rounded-full blur-2xl" />
+        </div>
+
+        <div className="flex min-h-screen items-center justify-center p-4 relative z-10">
+          <Card className="w-full max-w-md bg-[#1a1a1a] border-[#333]">
+            <CardHeader className="text-center">
+              <CardTitle className="text-green-600">Login Successful!</CardTitle>
+              <CardDescription className="text-gray-400">
+                Your VS Code extension has been authorized successfully.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="text-center space-y-4">
+              <div className="mb-4">
+                <div className="mx-auto h-16 w-16 rounded-full bg-green-100 flex items-center justify-center">
+                  <svg className="h-8 w-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
               </div>
-            </div>
-            <p className="text-sm text-gray-400">
-              You can now return to VS Code. The extension should automatically detect the authorization.
-            </p>
-          </CardContent>
-        </Card>
+              <p className="text-sm text-gray-400">
+                You can now return to VS Code. The extension should automatically detect the authorization.
+              </p>
+              <Button
+                onClick={() => window.location.href = 'https://app.cubent.dev/dashboard'}
+                className="w-full bg-orange-500 hover:bg-orange-600 text-white border-orange-500"
+              >
+                Back to Dashboard
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center p-4 bg-[#1f1f1f]">
-      <Card className="w-full max-w-md bg-[#1a1a1a] border-[#333]">
-        <CardHeader>
-          <CardTitle className="text-orange-500">Authorize VS Code Extension</CardTitle>
-          <CardDescription className="text-white">
-            Welcome, <span className="text-orange-400">{user.name || user.email}</span>! Please review and accept our terms to continue.
-          </CardDescription>
-        </CardHeader>
+    <div className="relative min-h-screen w-full overflow-hidden" style={{background: 'linear-gradient(to bottom right, #000000, #1a1a1a, #0a0a0a)'}}>
+      {/* Orange ambient glow effects */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-orange-500/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-orange-600/8 rounded-full blur-3xl" />
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-orange-400/3 rounded-full blur-2xl" />
+      </div>
+
+      <div className="flex min-h-screen items-center justify-center p-4 relative z-10">
+        <Card className="w-full max-w-md bg-[#1a1a1a] border-[#333]">
+          <CardHeader>
+            <CardTitle className="text-white">Authorize VS Code Extension</CardTitle>
+            <CardDescription className="text-white">
+              Welcome, <span className="text-orange-400">{user.name || user.email}</span>! Please review and accept our terms to continue.
+            </CardDescription>
+          </CardHeader>
         <CardContent className="space-y-6">
           <div className="space-y-4">
             <h3 className="font-semibold text-white">Terms of Use</h3>
@@ -131,7 +154,7 @@ export const LoginFlow = ({ deviceId, state, user }: LoginFlowProps) => {
               id="terms"
               checked={termsAccepted}
               onCheckedChange={(checked) => setTermsAccepted(checked as boolean)}
-              className="border-[#333] data-[state=checked]:bg-orange-500 data-[state=checked]:border-orange-500"
+              className="border-[#333] bg-[#1a1a1a] data-[state=checked]:bg-[#1a1a1a] data-[state=checked]:border-[#333] data-[state=checked]:text-white"
             />
             <label
               htmlFor="terms"
@@ -155,7 +178,8 @@ export const LoginFlow = ({ deviceId, state, user }: LoginFlowProps) => {
             </p>
           </div>
         </CardContent>
-      </Card>
+        </Card>
+      </div>
     </div>
   );
 };
