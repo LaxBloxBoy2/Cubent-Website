@@ -72,11 +72,11 @@ export const LoginFlow = ({ deviceId, state, user }: LoginFlowProps) => {
 
   if (isComplete) {
     return (
-      <div className="flex min-h-screen items-center justify-center p-4">
-        <Card className="w-full max-w-md">
+      <div className="flex min-h-screen items-center justify-center p-4 bg-[#1f1f1f]">
+        <Card className="w-full max-w-md bg-[#1a1a1a] border-[#333]">
           <CardHeader className="text-center">
             <CardTitle className="text-green-600">Login Successful!</CardTitle>
-            <CardDescription>
+            <CardDescription className="text-gray-400">
               Your VS Code extension has been authorized successfully.
             </CardDescription>
           </CardHeader>
@@ -88,7 +88,7 @@ export const LoginFlow = ({ deviceId, state, user }: LoginFlowProps) => {
                 </svg>
               </div>
             </div>
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-gray-400">
               You can now return to VS Code. The extension should automatically detect the authorization.
             </p>
           </CardContent>
@@ -98,22 +98,22 @@ export const LoginFlow = ({ deviceId, state, user }: LoginFlowProps) => {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center p-4">
-      <Card className="w-full max-w-md">
+    <div className="flex min-h-screen items-center justify-center p-4 bg-[#1f1f1f]">
+      <Card className="w-full max-w-md bg-[#1a1a1a] border-[#333]">
         <CardHeader>
-          <CardTitle>Authorize VS Code Extension</CardTitle>
-          <CardDescription>
-            Welcome, {user.name || user.email}! Please review and accept our terms to continue.
+          <CardTitle className="text-orange-500">Authorize VS Code Extension</CardTitle>
+          <CardDescription className="text-gray-400">
+            Welcome, <span className="text-orange-400">{user.name || user.email}</span>! Please review and accept our terms to continue.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="space-y-4">
-            <h3 className="font-semibold">Terms of Use</h3>
-            <div className="max-h-48 overflow-y-auto rounded border p-4 text-sm">
-              <p className="mb-4">
+            <h3 className="font-semibold text-white">Terms of Use</h3>
+            <div className="max-h-48 overflow-y-auto rounded border border-[#333] bg-[#0f0f0f] p-4 text-sm">
+              <p className="mb-4 text-gray-300">
                 By using the Cubent VS Code extension, you agree to the following terms:
               </p>
-              <ul className="list-disc space-y-2 pl-4">
+              <ul className="list-disc space-y-2 pl-4 text-gray-300">
                 <li>You will use the extension in accordance with our usage policies</li>
                 <li>You understand that AI-generated code should be reviewed before use</li>
                 <li>You agree to our data collection and processing practices</li>
@@ -131,10 +131,11 @@ export const LoginFlow = ({ deviceId, state, user }: LoginFlowProps) => {
               id="terms"
               checked={termsAccepted}
               onCheckedChange={(checked) => setTermsAccepted(checked as boolean)}
+              className="border-[#333] data-[state=checked]:bg-orange-500 data-[state=checked]:border-orange-500"
             />
             <label
               htmlFor="terms"
-              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-gray-300"
             >
               I accept the Terms of Use
             </label>
@@ -143,7 +144,7 @@ export const LoginFlow = ({ deviceId, state, user }: LoginFlowProps) => {
           <Button
             onClick={handleAcceptTerms}
             disabled={!termsAccepted || isLoading}
-            className="w-full"
+            className="w-full bg-orange-500 hover:bg-orange-600 text-white border-orange-500"
           >
             {isLoading ? 'Authorizing...' : 'Authorize Extension'}
           </Button>
