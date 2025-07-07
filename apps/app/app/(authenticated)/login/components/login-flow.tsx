@@ -72,7 +72,7 @@ export const LoginFlow = ({ deviceId, state, user }: LoginFlowProps) => {
 
   if (isComplete) {
     return (
-      <div className="relative min-h-screen w-full overflow-hidden" style={{background: 'linear-gradient(to bottom right, #000000, #1a1a1a, #0a0a0a)'}}>
+      <div className="relative min-h-full w-full overflow-hidden" style={{background: 'linear-gradient(to bottom right, #000000, #1a1a1a, #0a0a0a)'}}>
         {/* Orange ambient glow effects */}
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-orange-500/5 rounded-full blur-3xl" />
@@ -80,7 +80,7 @@ export const LoginFlow = ({ deviceId, state, user }: LoginFlowProps) => {
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-orange-400/3 rounded-full blur-2xl" />
         </div>
 
-        <div className="flex min-h-screen items-center justify-center p-4 relative z-10">
+        <div className="flex min-h-full items-center justify-center p-4 relative z-10">
           <Card className="w-full max-w-md bg-[#1a1a1a] border-[#333]">
             <CardHeader className="text-center">
               <CardTitle className="text-green-600">Login Successful!</CardTitle>
@@ -113,7 +113,7 @@ export const LoginFlow = ({ deviceId, state, user }: LoginFlowProps) => {
   }
 
   return (
-    <div className="relative min-h-screen w-full overflow-hidden" style={{background: 'linear-gradient(to bottom right, #000000, #1a1a1a, #0a0a0a)'}}>
+    <div className="relative min-h-full w-full overflow-hidden" style={{background: 'linear-gradient(to bottom right, #000000, #1a1a1a, #0a0a0a)'}}>
       {/* Orange ambient glow effects */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-orange-500/5 rounded-full blur-3xl" />
@@ -121,7 +121,7 @@ export const LoginFlow = ({ deviceId, state, user }: LoginFlowProps) => {
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-orange-400/3 rounded-full blur-2xl" />
       </div>
 
-      <div className="flex min-h-screen items-center justify-center p-4 relative z-10">
+      <div className="flex min-h-full items-center justify-center p-4 relative z-10">
         <Card className="w-full max-w-md bg-[#1a1a1a] border-[#333]">
           <CardHeader>
             <CardTitle className="text-white">Authorize VS Code Extension</CardTitle>
